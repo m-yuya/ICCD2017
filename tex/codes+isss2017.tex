@@ -89,15 +89,15 @@
 
 
 \section{Introduction}
-The next generation computing platform toward multi/many cores is becoming unavoidable to satisfy increasing a demand of computation with reasonable power consumption.
+The next generation computing platform toward multi/many cores is becoming unavoidable to satisfy a increasing demand of computation with reasonable power consumption.
 In recent years, computation amount of single core processor is constantly reaching its limit and persistence of Moore's law \cite{moore2006cramming} is unclear.
 Multi/many core architecture is a major trend of interest in the last years.
 Integrating cores, they realize high-performance and general-purpose computing with low power consumption.
 This high energy efficiency is the superior feature of multi/many core platforms.
 
-These factors drive the need for multi/many core architecture in many domains.
+Above increasing demand of computation with reasonable power consumption drives the need for multi/many core architecture in many domains.
 Real-time embedded systems are one example of adapting multi/many core platforms because they face increasing processing requirements.
-In this domain, countless opportunities of multi/many cores platforms are discussed \cite{becker2016contention}, \cite{saidi2015shift}, , \cite{perret2016temporal}, \cite{perret2016mapping}, \cite{becker2014mapping}.
+In this domain, countless opportunities of multi/many cores platforms are discussed \cite{becker2016contention}, \cite{saidi2015shift}, \cite{perret2016temporal}, \cite{perret2016mapping}, \cite{becker2014mapping}.
 
 For example, automotive systems contain various applications and some of their demands for high-performance computing.
 Automotive applications are responsible for many control systems such as the powertrain, the chassis, the steering, driver assistance and user interface.
@@ -113,15 +113,14 @@ In addition, flexible scalability of many-core platform assists development effi
 
 For another example, avionics systems are also responsible for various applications and a need of cost efficiency.
 With highly integrated trend and increasing demand of processing, multi/many core platforms have opportunities in the avionics domain.
-Low power consumption of cores leads to lower cooling requirements, which are critical issue for avionics.
+Low power consumption of cores leads to lower cooling requirements, which is the critical issue for avionics.
 Multi/many core platforms reduce not only energy consumption but also the costs and weight.
 The reduction of weight is the most important result for avionics.
 Integration with the multi/many core platform reduces the amount of processing board and cooling units.
 Thus, utilizing integrated platform saves space, weight and the costs.
 
-Considering above background, many multi/many core platforms are drawn up and released as commercial off-the-shelf (COTS) multi-core components.
+Considering above background, multi/many core platforms are drawn up and released as commercial off-the-shelf (COTS) multi-core components.
 They are delivered significant attention in recent years.
-Intel's Xeon Phi \cite{chrysos2014intel} \cite{chrysos2012intel} is one of high-performance computing (HPC) accelerators.
 Kalray's the Multi-Purpose Pro-cessing Array (MPPA) 256 \cite{de2013distributed}, \cite{de2013clustered}, \cite{de2014time},
 Intel's Single-chip Cloud Computer (SCC) \cite{intel2015scc},\cite{baron2010single}, and
 Tilera's Tile64 \cite{tilera2015tile64} have clustered many-core architectures,
@@ -129,6 +128,8 @@ where cores are mapped closely.
 Their clusters of cores are capable of separate independent applications with desired power envelope of embedded applications.
 Kalray's MPPA-256 packs 256 general-purpose cores, which is overwhelming the number of other COTS's cores.
 With high-performance per watt, it targets embedded systems, HPC, image processing, and networking.
+Intel's Xeon Phi \cite{chrysos2014intel} \cite{chrysos2012intel} is one of high-performance computing (HPC) accelerators.
+Xeon Phi is based on x86 architecture and targets use-case of data centers and workstation.
 
 Although the need of multi/many core platforms has emerged, there are several difficulties for adaptation of these platforms to real-time embedded systems \cite{becker2016contention}, \cite{saidi2015shift}.
 These difficulties are caused by their hardware architecture and strict requirements of embedded systems.
@@ -154,7 +155,7 @@ We believe that the contributions of this paper are useful for low-latency many-
 \textbf{Organization:}
 The remainder of this paper is organized as follows.
 First, Section \ref{sec:system_model} summarizes our considering system model for this paper.
-We present our hardware model, i.e, Kalray MPPA-256 Bostan, and our system model there.
+We present our hardware model, i.e., Kalray MPPA-256 Bostan, and our system model there.
 Second, Section \ref{sec:evaluations} illustrates our experimental evaluations.
 Then, Section \ref{sec:related work} presents related work about multi/many core systems.
 Finally, Section \ref{sec:conclusion} concludes this paper and suggests future work.
@@ -176,20 +177,20 @@ We present the architecture of Kalray MPPA-256 in this section.
 
 \subsubsection{I/O Subsystems (IOS)}
 \label{sec:ios}
-MPPA-256 has four I/O subsystem (IOS): North, South, East, and West IOS.
-The North and South IOS are connected to a DDR interface and an 8-lane PCIe controller.
-The East and West IOS are connected to a quad 10Gb/s Ethernet controller.
-Two pairs of IOSs organize two I/O clusters (IOCs) as shown in Figure \ref{fig:mppa_architecture}.
+MPPA-256 has four I/O subsystems (IOSes): North, South, East, and West IOSes.
+The North and South IOSes are connected to a DDR interface and an eight-lane PCIe controller.
+The East and West IOSes are connected to a quad 10Gb/s Ethernet controller.
+Two pairs of IOSes organize two I/O clusters (IOCs) as shown in Figure \ref{fig:mppa_architecture}.
 
 Each I/O subsystem (IOS) comprises quad core resource managers (RMs) and a network interface.
 \begin{itemize}
-\item \verb+Resource Managers (RMs)+: RM cores are connected to a 16-banked parallel shared memory of 2MB total capacity (IO SMEM), as shown in left side of Figure \ref{fig:mppa_architecture},
+\item \textbf{Resource Managers (RMs)}: RM cores are connected to a 16-banked parallel shared memory of 2MB total capacity (IO SMEM), as shown in left side of Figure \ref{fig:mppa_architecture},
 The four RMs have their own instruction cache 8-way associative of 32 ($8 \times 4$) KB and share a data cache 8-way associative of 128 KB and external DDR access.
 Sharing the data cache of 128KB makes it coherent between the RMs.
 RM cores operate controllers for the PCIe, Ethernet, Interlaken, and other I/O devices.
 They are able to operate the local peripherals, including the network interfaces with DMA.
 We can also make an application run on these RMs.
-\item \verb+A Network Interface+: A network interface contains four DMA engines (DMA0-3) and four NoC routers as shown in left side of Figure \ref{fig:mppa_architecture},
+\item \textbf{A Network Interface}: A network interface contains four DMA engines (DMA0-3) and four NoC routers as shown in left side of Figure \ref{fig:mppa_architecture},
 the IOS DMA engine manages transfers between the IO SMEM, the IOS DDR, and the IOS peripherals (e.g., PCIe interface and Ethernet controllers).
 Through NoC Routers, DMA engine transfers data between routers on NoC.
 The DMA engine has three NoC interfaces: a receive (Rx) interface, transmit (Tx) interface, and micro core (UC).
@@ -211,8 +212,8 @@ In MPPA-256, the 16 inner nodes of the NoC correspond to the CCs.
 Figure \ref{fig:cc_architecture} illustrates the architecture of each CC.
 
 \begin{itemize}
-\item \verb+Processing Elements (PEs) and a Resource Manager (RM)+:
-In a CC, 16 processing elements (PEs) and an RM share 2MB cluster local memory (SMEM) composed of 16 independent memory banks of 16 independent memory banks of $16384\times 64 $bit.
+\item \textbf{Processing Elements (PEs) and an RM}:
+In a CC, 16 processing elements (PEs) and one RM share 2MB cluster local memory (SMEM) composed of 16 independent memory banks of 16 independent memory banks of $16,384\times 64 $bit.
 Each bank of SMEM has a capacity of 128 KB.
 These PEs are mainly used by users for parallel processing.
 Developers spawn computing threads on PEs.
@@ -221,10 +222,10 @@ Each core is fitted with its own instruction and data caches.
 Each cache is 2-way associative with a capacity of 8KB.
 Thus, 17 k1-cores (a PE or the RM) share multi-banked 2MB SMEM.
 
-\item \verb+A Debug Support Unit (DSU) and a Network Interface+:
+\item \textbf{A Debug Support Unit (DSU) and a Network Interface}:
 In addition to PEs and an RM, bus masters on SMEM are the debug support unit (DSU) and a DMA engine in a network interface.
 A DMA engine and a NoC router are laid out in a network interface.
-Similar to IOS, the CC DMA engine has also three interfaces: a Rx, Tx, and UC. 
+Similar to IOS, the CC DMA engine has also three interfaces: an Rx, a Tx, and a UC. 
 It is instantiated in every cluster and connected to the SMEM.
 \end{itemize}
 
@@ -242,9 +243,9 @@ The 16 CCs and the 4 IOSs are connected by NoC as shown in Figure \ref{fig:noc_m
 NoC is constructed on the bus network and routers on each node.
 
 \begin{itemize}
-\item \verb+Bus Network+:
+\item \textbf{Bus Network}:
 Bus network connects nodes (CCs and IOSs) with torus topology \cite{dally2001route}
-which has twice band and takes a low average number of hops compared to mesh topology \cite{vangal200780}, \cite{taylor2002raw}.
+which has twice bands and takes a low average number of hops compared to mesh topology \cite{vangal200780}, \cite{taylor2002raw}.
 The network is actually composed two parallel NoC with bi-directional links (red lines in Figure \ref{fig:noc_map}):
 the data NoC (D-NoC), which is optimized for bulk data transfers, and the control NoC (C-NoC), which is optimized for small messages at low latency.
 Functionally, NoC is a packet switched network.
@@ -252,11 +253,11 @@ Data are packaged in variable length packets which circulate between routers in 
 packets are broken into small pieces called flits (flow control digits).
 NoC traffic is segmented into packets: each packet has 1 to 4 header flits and 0 to 62 payload data flits.
 
-\item \verb+NoC Routers+:
+\item \textbf{NoC Routers}:
 A node per compute cluster and four nodes per I/O subsystem hold two own routers: a D-NoC router and a C-NoC router
 Each RM on NoC node (CC or IOS) is associated with these two NoC routers.
 DMA engines in a network interface on CC/IOS send and receive flits through these D-NoC routers with the Rx interface, the Tx interface, and UC.
-A mailbox component which is the virtual interface for the C-NoC enables one-to-one, N-to-one, or one-to N low latency synchronizations.
+A mailbox component which is the virtual interface for the C-NoC enables one-to-one, N-to-one, or one-to-N low latency synchronizations.
 NoC routers shown in Figures \ref{fig:mppa_architecture} and \ref{fig:cc_architecture} illustrate nodes as R0-15, R128-131, R160-163, R224-227, and R192-195 in Figure \ref{fig:noc_map}).
 For simplicity, we illustrate D-NoC/C-NoC routers with one NoC router.
 In both D-NoC and C-NoC, each network node (CC or IOS) has 5-link NoC routers:
@@ -275,12 +276,12 @@ therefore, each tile can transmit/receive a total of 2.4GB/s or 3.2GB/s spread a
 
 \subsection{Software model}
 \label{sec:software_model}
-Software stack for Kalray MPPA-245 used in this paper is shown in Figure \ref{fig:software_stack}.
+A software stack for Kalray MPPA-245 used in this paper is shown in Figure \ref{fig:software_stack}.
 Kalray's MPPA system is an extensible and scalable array of computing cores and memory.
 On such a system, we can map several programming models or runtimes, e.g., Linux, real-time Operating System, POSIX API, OpenCL, OpenMP.
 We describe each layer in detail.
 
-In hardware abstraction layer, an abstraction package abstracts hardwares of a CC, IOS, and NoC.
+In hardware abstraction layer, an abstraction package abstracts hardware of a CC, IOS, and NoC.
 This abstraction package serves as a system that doesn't provide any services.
 The hardware abstraction is responsible for partitioning the hardware resources and controlling access to these resources from the user-space operating system libraries.
 Moreover, the abstraction package is able to retrieve the resources allocated to a partition at any time.
@@ -291,7 +292,7 @@ Consequently, each runtime or operating system implements its own required servi
 This is because each programming model or runtime has different requirements.
 Minimal kernel avoids the waste of resources and mismatched needs.
 
-In low level Library layer, Kalray also provides libraries for handling NoC.
+In low-level Library layer, Kalray also provides libraries for handling NoC.
 NoC features such as routing, quality of service are to be set by the programmer.
 The Libnoc allows direct access to memory mapped registers for their configurations and use.
 It is designed to cause a minimum amount of CPU overhead.
@@ -315,10 +316,10 @@ First, NodeOS runtime starts on PE0 before calling the user main function.
 Then, we can call \texttt{pthread} on other PEs.
 \item \verb+eMCOS+: On both CC and IOS, eMCOS provides minimal programming interfaces and libraries.
 eMCOS is a real-time embedded operating system developed by eSOL, a Japanese supplier for RTOS.
-eMCOS is the worlds first commercially available many-core RTOS for use in embedded systems.
+eMCOS is the world's first commercially available many-core RTOS for use in embedded systems.
 This OS implements a distributed micro-kernel architecture.
 This compact micro-kernel is equipped with only minimal functions.
-It enables applications to operate priority based massage passing, local thread scheduling, and thread management on not only IOS but also CC.
+It enables applications to operate priority based message passing, local thread scheduling, and thread management on not only IOS but also CC.
 \end{itemize}
 RTMES and NodeOS are provided by Kalray and eMCOS is released by eSOL.
 
