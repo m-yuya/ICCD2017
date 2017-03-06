@@ -337,6 +337,117 @@ RTMES and NodeOS are provided by Kalray and eMCOS is released by eSOL.
 \section{Evaluations}
 \label{sec:evaluations}
 
+\subsection{D-NoC Data Transfer}
+\label{sec:dnoc_ecal}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=1.0\linewidth]{../figure/noc_routes.eps}
+  \caption{\label{fig:noc_routes}
+    .}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=1.0\linewidth]{../../R/mppa/graph/eps/BoxPlot_UC-DDR_vs_IO_SMEM.eps}
+  \caption{\label{fig:noc_routes}
+    .}
+\end{figure}
+
+\begin{figure*}[t]
+  \tabcolsep = 0.5mm              % side-margin in column
+  \begin{tabular}{ccc}
+    \begin{minipage}[t]{0.32\textwidth}
+      \includegraphics[width=1.0\linewidth]{../../R/mppa/graph/eps/BoxPlot_IO_SMEM_tx.eps}
+      \vspace{-7mm}
+      \caption{.}
+      \label{fig:}
+    \end{minipage}   
+    &
+    % \setcounter{figure}{8}
+    \begin{minipage}[t]{0.32\textwidth}
+      \includegraphics[width=1.0\linewidth]{../../R/mppa/graph/eps/BoxPlot_DDR_uc.eps}
+      \vspace{-7mm}
+      \caption{.}
+      \label{fig:}
+    \end{minipage}
+    &
+    % \setcounter{figure}{10}
+    \begin{minipage}[t]{0.32\textwidth}
+      \includegraphics[width=1.0\linewidth]{../../R/mppa/graph/eps/BoxPlot_IO_SMEM_tx.eps}
+      \vspace{-7mm}
+      \caption{.}
+      \label{fig:}
+    \end{minipage}
+    \\  
+    % \setcounter{figure}{7}
+    \begin{minipage}[t]{0.32\textwidth}
+      \includegraphics[width=1.0\linewidth]{../../R/mppa/graph/eps/BoxPlot_IO_SMEM_uc.eps}
+      \vspace{-7mm}
+      \caption{.}
+      \label{fig:}
+    \end{minipage}
+    &
+    % \setcounter{figure}{9}
+    \begin{minipage}[t]{0.32\textwidth}
+      \includegraphics[width=1.0\linewidth]{../../R/mppa/graph/eps/BoxPlot_Tx_vs_UC.eps}
+      \vspace{-7mm}
+      \caption{.}
+      \label{fig:}
+    \end{minipage}
+    &
+    % \setcounter{figure}{11}
+    \begin{minipage}[t]{0.32\textwidth}
+      \includegraphics[width=1.0\linewidth]{../../R/mppa/graph/eps/BoxPlot_Tx-DDR_vs_IO_SMEM.eps}
+      \vspace{-7mm}
+      \caption{.}
+      \label{fig:}
+    \end{minipage}
+    \vspace{-3mm}
+  \end{tabular}
+  \vspace{-2mm}
+\end{figure*}
+
+
+\subsection{Matrix Calculation}
+\label{sec:dnoc_ecal}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=1.0\linewidth]{../figure/matrix_calculation.eps}
+  \caption{\label{fig:noc_routes}
+    .}
+\end{figure}
+
+\begin{figure*}[t]
+  \tabcolsep = 0.5mm              % side-margin in column
+  \begin{tabular}{cc}
+    \begin{minipage}[t]{0.49\textwidth}
+    \includegraphics[width=1.0\linewidth]{../figure/BarGraph_matrix_with_cache.eps}
+      % \vspace{-7mm}
+      \caption{.}
+      \label{fig:}
+    \end{minipage}   
+    &
+    % \setcounter{figure}{11}
+    \begin{minipage}[t]{0.49\textwidth}
+      \includegraphics[width=1.0\linewidth]{../figure/BarGraph_matrix_without_cache.eps}
+      % \vspace{-7mm}
+      \caption{.}
+      \label{fig:}
+    \end{minipage}
+    \vspace{-3mm}
+  \end{tabular}
+  \vspace{-2mm}
+\end{figure*}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=1.0\linewidth]{../figure/BarGraph_matrix_with_CCs.eps}
+  \caption{\label{fig:}
+    .}
+\end{figure}
+
 
 \section{Related Work}
 \label{sec:related work}
