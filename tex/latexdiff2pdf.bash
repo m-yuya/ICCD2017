@@ -12,4 +12,4 @@ pbibtex diff
 platex diff.tex
 platex diff.tex
 dvipdfmx diff.dvi
-rm diff.aux diff.bbl diff.blg diff.log
+mv diff.* ./diff/
