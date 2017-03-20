@@ -83,6 +83,7 @@
 % \setlength\floatsep{18pt}% between figures
 
 \begin{abstract}
+[TBD]
 \end{abstract}
 
 \keywords{Many-core; Multi-core; Network on Chip}
@@ -143,11 +144,13 @@ This is a critical issue because embedded systems have requirements for reliable
 
 \textbf{Contributions:}
 In this paper, we clarify the performance characteristics of currently-achievable data transfer methods for many-core computing based on NoC such as MPPA-256
-while unveiling several new data transfer methods other than ... % NoC以外の一般的な通信の話
-We reveal the advantage and disadvantage of ... in a quantitative way leading a conclusion that ... % 評価からわかったこと
+while unveiling several new data transfer methods. %other than ... % NoC以外の一般的な通信の話
+% We reveal the advantage and disadvantage of ... in a quantitative way leading a conclusion that ... % 評価からわかったこと
+
+[TBD]
 
 To the best of our knowledge, this is the first evidence of data transfer matters for many-core computing beyond an intuitive expectation,
-which allows system designers to choose appropriate data transfer methods and ..., % CCの配置など
+which allows system designers to choose appropriate data transfer methods. % and ..., % CCの配置など
 depending on the requirement of their latency-sensitive many-core applications.
 These findings are also applicable for same types of many-core architectures rather than MPPA-256.
 We believe that the contributions of this paper are useful for low-latency many-core computing.
@@ -168,7 +171,7 @@ We consider the many-core model of Kalray MPPA-256 Bostan.
 First, the hardware model is introduced in Section \ref{sec:hardware_model},
 followed by the software model in Section \ref{sec:software_model}.
 
-\subsection{Hardware model}
+\subsection{Hardware Model}
 \label{sec:hardware_model}
 The MPPA-256 processor is based on an array of compute clusters (CCs) and I/O subsystems (IOSs) that are connected to nodes of Network-on-Chip (NoC) with a toroidal 2D topology 
 (see Figures \ref{fig:mppa_architecture}, \ref{fig:cc_architecture}, and \ref{fig:noc_map}).
@@ -186,7 +189,7 @@ Each I/O subsystem (IOS) comprises quad core resource managers (RMs) and a netwo
 \begin{itemize}
 \item \textbf{Resource Managers (RMs)}: RM cores are connected to a 16-banked parallel shared memory of 2MB total capacity (IO SMEM), as shown in left side of Figure \ref{fig:mppa_architecture},
 The four RMs have their own instruction cache 8-way associative of 32 ($8 \times 4$) KB and share a data cache 8-way associative of 128 KB and external DDR access.
-Sharing the data cache of 128KB makes it coherent between the RMs.
+Sharing the data cache of 128 KB makes it coherent between the RMs.
 RM cores operate controllers for the PCIe, Ethernet, Interlaken, and other I/O devices.
 They are able to operate the local peripherals, including the network interfaces with DMA.
 We can also make an application run on these RMs.
@@ -219,7 +222,7 @@ These PEs are mainly used by users for parallel processing.
 Developers spawn computing threads on PEs.
 The PEs and an RM in CC are the Kalray-1 cores, which implement a 32-bit 5-issue Very Long Instruction Word (VLIW) architecture with 16W-600MHz (typical) or 24W-800MHz.
 Each core is fitted with its own instruction and data caches.
-Each cache is 2-way associative with a capacity of 8KB.
+Each cache is 2-way associative with a capacity of 8 KB.
 Thus, 17 k1-cores (a PE or the RM) share multi-banked 2MB SMEM.
 
 \item \textbf{A Debug Support Unit (DSU) and a Network Interface}:
@@ -274,7 +277,7 @@ therefore, each tile can transmit/receive a total of 2.4GB/s or 3.2GB/s spread a
     Network-on-Chip (NoC) connections (both D-NoC and C-NoC).}
 \end{figure}
 
-\subsection{Software model}
+\subsection{Software Model}
 \label{sec:software_model}
 A software stack for Kalray MPPA-245 used in this paper is shown in Figure \ref{fig:software_stack}.
 Kalray's MPPA system is an extensible and scalable array of computing cores and memory.
@@ -305,16 +308,16 @@ The Libpower enables spawning and waiting for the end of execution of a remote c
 In OS layer, various operating systems support the abstraction package.
 We introduce the following Real-Time Operating System (RTOS):
 \begin{itemize}
-\item \verb+RTEMS+: RTEMS, the Real-Time Executive for Multiprocessor Systems, is a full featured RTOS prepared for embedded platforms.
+\item \textbf{RTEMS}: RTEMS, the Real-Time Executive for Multiprocessor Systems, is a full featured RTOS prepared for embedded platforms.
 It supports several APIs and standards, and most notably the POSIX API.
 The system provides a rich set of features, and an RTEMS application is most of the time just a regular C or C++ program using the POSIX API.
 We are able to build RTEMS on IOC.
-\item \verb+NodeOS+: On CC, we can build the MPPAcluster operating system a runtime called NodeOS.
+\item \textbf{NodeOS}: On CC, we can build the MPPAcluster operating system a runtime called NodeOS.
 This OS addresses the need for a multicore OS conforming as much as possible to the standard POSIX API.
 The NodeOS enables user code using POSIX API to run on PEs on CC.
 First, NodeOS runtime starts on PE0 before calling the user main function.
 Then, we can call \texttt{pthread} on other PEs.
-\item \verb+eMCOS+: On both CC and IOS, eMCOS provides minimal programming interfaces and libraries.
+\item \textbf{eMCOS}: On both CC and IOS, eMCOS provides minimal programming interfaces and libraries.
 eMCOS is a real-time embedded operating system developed by eSOL, a Japanese supplier for RTOS.
 eMCOS is the world's first commercially available many-core RTOS for use in embedded systems.
 This OS implements a distributed micro-kernel architecture.
@@ -333,76 +336,145 @@ RTMES and NodeOS are provided by Kalray and eMCOS is released by eSOL.
 
 \section{Data Transfer Framework}
 \label{sec:framework}
+In this section, we explain data transfer methods in MPPA-256.
+For scalability, MPPA-256 accepts clustered architectures where each cluster contains own memory.
+16 cores are packed as a cluster and they share 2 MB memory (SMEM) as shown in \ref{fig:cc_architecture}.
+Avoiding frequent memory contention by numerous cores, this helps increment of the number of cores.
+However, this architectures constraints memory address which cores are able to access directly.
+To communicate with cores outside the cluster, we have to transfer data between clusters through D-NoC with network interfaces.
 
+In receiving side, there is Rx interface to receive data with DMA.
+We have to allocate a D-NoC Rx resource and configure it to wait receiving data.
+One DMA in a network interface contains 256 D-NoC Rx resources.
+In sending side, we have two interfaces for users to send data between clusters.
+One is Tx interface and the other is UC interface as explained in Sections \ref{sec:ios} and \ref{sec:cc}.
+UC is a network processor programmable to set threads sending data in DMA.
+It executes programmed pattern and sends data through D-NoC without a PE and an RM.
+UC interface provides faster data transfer than Tx interface.
+However, One DMA in a network interface contains only 8 D-NoC UC resources.
+Both interfaces use DMA engine to access memory and copy data.
+Regardless of using UC interface or not, we have to allocate a D-NoC Tx resource and configure it to send data.
+If we use UC interface, we additionally allocate and configure a D-NoC UC resources.
+
+% We list following two data transmit patterns.
+% \begin{itemize}
+% \item \textbf{Tx+PE}: 
+% \item \textbf{Tx+UC}:
+% \end{itemize}
 
 \section{Evaluations}
 \label{sec:evaluations}
+In this section, we have conducted two kinds of evaluations.
+One is D-NoC data transfer evaluation.
+We explore latency characteristics of interfaces and memory type.
+The other is matrix calculation evaluation.
+This test shows MPPA-256's parallelization potential and characteristics of memory access when dealing with large data.
 
 \subsection{D-NoC Data Transfer}
-\label{sec:dnoc_ecal}
+\label{sec:dnoc_eval}
+In this evaluation, we clarify end-to-end latency considering the relation among interfaces (Tx or UC) ,routing on NoC, and memory type (DDR or SMEM).
+To achieve above purpose, we prepare four routes as shown in Figure \ref{fig:noc_routes}.
+These routes on D-NoC map (Figure \ref{fig:noc_map}) contains various connections between routers; direct link, cross link, and flying link.
+In case of routes from the IOS routers to the CC routers, transmitted data is allocated in DDR or IO SMEM.
+CC has only SMEM as shown in Figure \ref{fig:cc_architecture}.
+We directly use low-level library to transfer data with D-NoC.
+Transferred data are 100 B, 1 KB, 10 KB, 100 KB, and 1 MB.
+These buffers are sequentially allocated in DDR or SRAM (IO SMEM or CC SMEM).
+Since the capacity of CC SMEM is 2 MB, we assume that appropriate communication buffer size is 1 MB.
+On our assumtion, the other memory area is own by application, library, and operating system.
+In many situations, we have measured end-to-end latencies 1,000 times and drow boxplots 
+in Figures \ref{fig:DDR_tx}, \ref{fig:DDR_uc}, \ref{fig:IO_SMEM_tx}, and \ref{fig:IO_SMEM_uc}, \ref{fig:tx_uc_log} and \ref{fig:tx_uc}.
+Following evaluations is conducted on eMCOS.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=1.0\linewidth]{../figure/noc_routes.eps}
   \caption{\label{fig:noc_routes}
-    .}
+    Four D-NoC routes used for evaluation.}
 \end{figure}
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=1.0\linewidth]{../../R/mppa/graph/eps/BoxPlot_UC-DDR_vs_IO_SMEM.eps}
-  \caption{\label{fig:noc_routes}
-    .}
-\end{figure}
+Data transfer latencies between IOS and CC is not influenced by routing.
+We prepare two interfaces (Tx and UC), three routes(direct link, cross link, and detour route), and two memory location where transferred data is allocated.
+As shown in Figures \ref{fig:DDR_tx}, \ref{fig:DDR_uc}, \ref{fig:IO_SMEM_tx}, and \ref{fig:IO_SMEM_uc}, 
+end-to-end latencies scales linearly with data size and three routes do not	produce differences in data transfer latency.
+This result is important in torus topology NoC because the number of its minimum step is larger than mesh topology's one.
+We can observe that queuing in NoC Routers and hardware distance on NoC is not dominant factor for latency.
+Transmitting and receiving transaction take much longer time than other transaction.
+In addition, we briefly recognize that UC is much faster than Tx.
+For precise analysis for interface and memory location, we arrage data in Figures \ref{fig:tx_uc_log} and \ref{fig:tx_uc}.
+In these figures, we accept only cross link from IOS to CC5 because routes do not influence latency.
+For intuitive recognition, we arrange two kinds of figures; logarithmic axis one and linear axis one.
 
 \begin{figure*}[t]
   \tabcolsep = 0.5mm              % side-margin in column
-  \begin{tabular}{ccc}
-    \begin{minipage}[t]{0.32\textwidth}
-      \includegraphics[width=1.0\linewidth]{../../R/mppa/graph/eps/BoxPlot_IO_SMEM_tx.eps}
+  \begin{tabular}{cccc}
+    \begin{minipage}[t]{0.24\textwidth}
+      \includegraphics[width=1.0\linewidth]{../../R/mppa/graph/eps/BoxPlot_DDR_tx.eps}
       \vspace{-7mm}
-      \caption{.}
-      \label{fig:}
-    \end{minipage}   
+      \caption{Data transfer with Tx from IO DDR to CC.}
+      \label{fig:DDR_tx}
+    \end{minipage}
     &
     % \setcounter{figure}{8}
-    \begin{minipage}[t]{0.32\textwidth}
+    \begin{minipage}[t]{0.24\textwidth}
       \includegraphics[width=1.0\linewidth]{../../R/mppa/graph/eps/BoxPlot_DDR_uc.eps}
       \vspace{-7mm}
-      \caption{.}
-      \label{fig:}
+      \caption{Data transfer with UC from IO DDR to CC.}
+      \label{fig:DDR_uc}
     \end{minipage}
     &
     % \setcounter{figure}{10}
-    \begin{minipage}[t]{0.32\textwidth}
+    \begin{minipage}[t]{0.24\textwidth}
       \includegraphics[width=1.0\linewidth]{../../R/mppa/graph/eps/BoxPlot_IO_SMEM_tx.eps}
       \vspace{-7mm}
-      \caption{.}
-      \label{fig:}
-    \end{minipage}
-    \\  
-    % \setcounter{figure}{7}
-    \begin{minipage}[t]{0.32\textwidth}
-      \includegraphics[width=1.0\linewidth]{../../R/mppa/graph/eps/BoxPlot_IO_SMEM_uc.eps}
-      \vspace{-7mm}
-      \caption{.}
-      \label{fig:}
+      \caption{Data transfer with Tx from IO SMEM to CC.}
+      \label{fig:IO_SMEM_tx}
     \end{minipage}
     &
-    % \setcounter{figure}{9}
-    \begin{minipage}[t]{0.32\textwidth}
-      \includegraphics[width=1.0\linewidth]{../../R/mppa/graph/eps/BoxPlot_Tx_vs_UC.eps}
+    % \setcounter{figure}{7}
+    \begin{minipage}[t]{0.24\textwidth}
+      \includegraphics[width=1.0\linewidth]{../../R/mppa/graph/eps/BoxPlot_IO_SMEM_uc.eps}
       \vspace{-7mm}
-      \caption{.}
-      \label{fig:}
+      \caption{Data transfer with UC from IO SMEM to CC.}
+      \label{fig:IO_SMEM_uc}
+    \end{minipage}
+    \vspace{-3mm}
+  \end{tabular}
+  \vspace{+2mm}
+\end{figure*}
+
+In Tx interface, DDR causes a large increase in latency.
+DDR takes twice time as long as IO SMEM as shown in Figure \ref{fig:tx_uc}.
+This is caused by memory access speed characteristics of DRAM and SRAM.
+In case of Tx interface, an RM (k1-core) on IOS has to operate DMA in network interface of IOS.
+It is thought that the fact that the core is involved in processing is causing this result.
+Data transfer latency between CCs is a little faster than that between IOS and CC.
+This result indicates that MPPA-256 is optimized for communication between CCs.
+
+In UC interface, whether transferred buffer is allocated on DDR or SMEM has not much effect on latency.
+Same latency characteristics is observed in Figures \ref{fig:tx_uc_log} and \ref{fig:tx_uc}.
+In case of UC interface, an RM (k1-core) on IOS does not involve DMA transaction.
+A micro core in network interface executes a programmed thread sending data.
+This evaluation result tells that there is no need to be conscious of the slow access speed of DDR in case of UC.
+As well as Tx interface, Data transfer latency between CCs is faster than that between IOS and CC.
+
+\begin{figure*}[t]
+  \tabcolsep = 0.5mm              % side-margin in column
+  \begin{tabular}{cc}
+    % \setcounter{figure}{9}
+    \begin{minipage}[t]{0.49\textwidth}
+      \includegraphics[width=1.0\linewidth]{../../R/mppa/graph/eps/BoxPlot_Tx_vs_UC_log.eps}
+      \vspace{-7mm}
+      \caption{Data transfer with Tx/UC (logarithmic axis).}
+      \label{fig:tx_uc_log}
     \end{minipage}
     &
     % \setcounter{figure}{11}
-    \begin{minipage}[t]{0.32\textwidth}
-      \includegraphics[width=1.0\linewidth]{../../R/mppa/graph/eps/BoxPlot_Tx-DDR_vs_IO_SMEM.eps}
+    \begin{minipage}[t]{0.49\textwidth}
+      \includegraphics[width=1.0\linewidth]{../../R/mppa/graph/eps/BoxPlot_Tx_vs_UC.eps}
       \vspace{-7mm}
-      \caption{.}
-      \label{fig:}
+      \caption{Data transfer with Tx/UC (linear axis).}
+      \label{fig:tx_uc}
     \end{minipage}
     \vspace{-3mm}
   \end{tabular}
@@ -411,14 +483,53 @@ RTMES and NodeOS are provided by Kalray and eMCOS is released by eSOL.
 
 
 \subsection{Matrix Calculation}
-\label{sec:dnoc_ecal}
+\label{sec:martix_eval}
+In this evaluation, we clarify matrix calculation time and parallelization potential of MPPA-256.
+We have conducted matrix calculation in IOS and CC.
+As shown in Figure \ref{fig:mat_calc}, three computing situations is considered.
+One is computing in IOS where four cores are available.
+To analyze memory access characteristics, we allocate matrix buffer in IO DDR and SMEM.
+Another is computing in CC where 16 cores are available.
+The other is offload-computing using an IOS and four CCs.
+Parallelized processing is executed with four CCs cores and there SMEM.
+Some cores in IOS and CC manage the parallelized transaction.
+This method is able to handle large data which one cluster cannot deal because buffer capacity is not limited to 2MB of SMEM.
+Parallelized processing and the total capacity of SMEM is superior to computation in IOS or CC.
+In IOS, application can handle large capacity data only in DDR.
+However, with this method, we can deal with large capacity data in SMEM by distributed memories.
+For faster data transfer, a part of matrix buffer is parallelly transmitted as shown in Figure \ref{fig:mat_calc}.
+To avoid cache coherency trouble, IOS and CC cores must access matrix buffers without cache.
+
+We analyze matrix calculation time with parallelization and memory allocation.
+In addition, we analyze the influence of cache because cache coherency is an important issue in many-core system.
+There are many cases that applications must access specific memory space without cache.
+Since maximum buffer size is 1 MB in our assumption, we prepare three matrices buffers and each size is 314 KB.
+The matrix A and the matrix B are multiplied, and the result is stored in the matrix C.
+We set the total of the three matrices to be approximately 1 MB.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=1.0\linewidth]{../figure/matrix_calculation.eps}
-  \caption{\label{fig:noc_routes}
-    .}
+  \caption{\label{fig:mat_calc}
+    Situations of matrix calculation.}
 \end{figure}
+
+First, matrix calculation time with cache in IOS and CC is shown in Figure \ref{fig:mat_calc_cash}.
+Thanks to cache, there is almost no difference between IO DDR, IO SMEM, and CC SMEM.
+128 KB data cache in IOS works well and compensates for the delay of DDR.
+Additionally, we can observe that calculation time scales linearly with the number of threads.
+This is ideal behavior with parallelization.
+
+Second, matrix calculation time without cache in IOS and CC is shown in Figure \ref{fig:mat_calc_uncash}.
+Due to the lack of cache, DDR has increased about fourfold and a big difference with SMEM has arisen.
+Another notable result is that calculation in CC SMEM is faster than that in IO SMEM.
+This characteristic hides in calculation with cache.
+Since computing cores are same k1-cores in IOS and CC, it is thought that the characteristics and physical arrangement of SMEM are affecting.
+This is a interesting result that there is a big difference that can not be ignored.
+We can also observe that calculation time scales linearly with the number of threads.
+The other notable result is that calculation without cache in CC SMEM is faster than that with cache.
+Although this result is contrary to intuition, two factors are conceivable.
+A small data cache (8 KB) in CC does not adequately work and direct assembly instruction for uncached access optimizes memory access.
 
 \begin{figure*}[t]
   \tabcolsep = 0.5mm              % side-margin in column
@@ -426,29 +537,60 @@ RTMES and NodeOS are provided by Kalray and eMCOS is released by eSOL.
     \begin{minipage}[t]{0.49\textwidth}
     \includegraphics[width=1.0\linewidth]{../figure/BarGraph_matrix_with_cache.eps}
       % \vspace{-7mm}
-      \caption{.}
-      \label{fig:}
+      \caption{Matrix calculation in IOS and CC with cache.}
+      \label{fig:mat_calc_cash}
     \end{minipage}   
     &
     % \setcounter{figure}{11}
     \begin{minipage}[t]{0.49\textwidth}
       \includegraphics[width=1.0\linewidth]{../figure/BarGraph_matrix_without_cache.eps}
       % \vspace{-7mm}
-      \caption{.}
-      \label{fig:}
+      \caption{Matrix calculation in IOS and CC without cache.}
+      \label{fig:mat_calc_uncash}
     \end{minipage}
     \vspace{-3mm}
   \end{tabular}
   \vspace{-2mm}
 \end{figure*}
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=1.0\linewidth]{../figure/BarGraph_matrix_with_CCs.eps}
-  \caption{\label{fig:}
-    .}
-\end{figure}
+Finally, matrix calculation with offload-computing in IOS and CCs is is shown in Figure \ref{fig:mat_calc_offload_314}.
+In this case, we suppose that large matrices calculation that total capacity is over 1 MB.
+Because of this assumption, the offloading result is compared with IO DDR (cashed).
+To offload a part of calculation onto four CCs and aggregate calculation result, overhead transaction (inverse matB and input matC) occurred.
+They produce constant overhead regardless of the number of threads as shown in Figure \ref{fig:mat_calc_offload_314}.
+However, offloading result is faster than that of IO DDR (cashed).
+This result proves several important facts.
+One is that D-NoC data transfer produce little overhead latency.
+The other is that DMA memory access to DDR is much faster than an RM (k1-core)'s memory access.
+In the offloading case, a DMA accesses matrix buffers on DDR and transfer them from IO DDR to each CC SMEM.
+Then, PEs in CC access matrix buffers for calculation without cache.
+Since the overhead of data transfer and DMA memory access is small, parallel data transmission and distributed memory are practical in MPPA-256.
+The impact of offloading becomes larger when the matrix size is large as shown in Figure \ref{fig:mat_calc_offload_640}.
+Since only a part of matrix is allocated in CC, we can handle larger matrices buffers.
+We prepare 640 KB matrices and evaluate matrix calculation with offload-computing.
+Compared to result of 314 KB matrices in Figure \ref{fig:mat_calc_offload_314}, offloading result is much faster than IO DDR result in Figure \ref{fig:mat_calc_offload_314}.
 
+\begin{figure*}[t]
+  \tabcolsep = 0.5mm              % side-margin in column
+  \begin{tabular}{cc}
+    \begin{minipage}[t]{0.49\textwidth}
+      \includegraphics[width=1.0\linewidth]{../figure/BarGraph_matrix_with_CCs_314.eps}
+      % \vspace{-7mm}
+      \caption{Matrix calculation with offload-computing (314 KB matrix x 3).}
+      \label{fig:mat_calc_offload_314}
+    \end{minipage}   
+    &
+    % \setcounter{figure}{11}
+    \begin{minipage}[t]{0.49\textwidth}
+      \includegraphics[width=1.0\linewidth]{../figure/BarGraph_matrix_with_CCs_640.eps}
+      % \vspace{-7mm}
+      \caption{Matrix calculation with offload-computing (640 KB matrix x 3).}
+      \label{fig:mat_calc_offload_640}
+    \end{minipage}
+    \vspace{-3mm}
+  \end{tabular}
+  \vspace{-2mm}
+\end{figure*}
 
 \section{Related Work}
 \label{sec:related work}
@@ -487,26 +629,26 @@ Kalray S.A \cite{de2013distributed}, \cite{de2013clustered}, \cite{de2014time} h
 (Precise hardware model is described in Section \ref{sec:hardware_model}.)
 It is often accepted for a target of many-core platforms and various previous work has considered this model \cite{perret2016temporal}, \cite{becker2016contention}, \cite{carle2014static}, \cite{perret2016mapping}.
 
+[TBD]
+% In \cite{saidi2015shift}, many opportunities and challenges of multi/many core platforms are discussed.
 
-In \cite{saidi2015shift}, many opportunities and challenges of multi/many core platforms are discussed.
+% [note]
 
-[note]
+% disussion: \cite{saidi2015shift}
 
-disussion: \cite{saidi2015shift}
+% mppa:
+%   architecture \cite{de2013distributed}, \cite{de2013clustered}, \cite{de2014time},
+%   report \cite{kanter2015kalray}, 
+%   slide(DSP->many-core) \cite{de2015kalray},  
+%   NoC \cite{denet2017work}, \cite{deDinechin2014GSN},
 
-mppa:
-  architecture \cite{de2013distributed}, \cite{de2013clustered}, \cite{de2014time},
-  report \cite{kanter2015kalray}, 
-  slide(DSP->many-core) \cite{de2015kalray},  
-  NoC \cite{denet2017work}, \cite{deDinechin2014GSN},
+% mapping: \cite{perret2016mapping}(DAG), \cite{puffitsch2015off}, \cite{carle2014static}, \cite{becker2014mapping}, \cite{faragardi2014communication}
 
-mapping: \cite{perret2016mapping}(DAG), \cite{puffitsch2015off}, \cite{carle2014static}, \cite{becker2014mapping}, \cite{faragardi2014communication}
+% memory: \cite{perret2016predictable}, \cite{becker2016contention}
 
-memory: \cite{perret2016predictable}, \cite{becker2016contention}
+% AUTOSAR mapping: \cite{becker2016contention}, \cite{faragardi2014communication}
 
-AUTOSAR mapping: \cite{becker2016contention}, \cite{faragardi2014communication}
-
-aircraft(airbus): \cite{perret2016temporal}, \cite{perret2016predictable}, \cite{perret2016mapping}. 
+% aircraft(airbus): \cite{perret2016temporal}, \cite{perret2016predictable}, \cite{perret2016mapping}. 
 
 \renewcommand{\arraystretch}{2.0}
 \begin{table*}[t]
@@ -532,33 +674,33 @@ aircraft(airbus): \cite{perret2016temporal}, \cite{perret2016predictable}, \cite
 \end{table*}
 
 
-\renewcommand{\arraystretch}{2.0}
-\begin{table*}[t]
-  \caption{\label{tb:comparison_relatedwork}
-    Comparison to Related Work}
-  \centering
-  \scriptsize	                    % text size
-  \tabcolsep = 1.5mm              % side-margin in column
-  \begin{tabular}{c|ccccccccc}
-    \hline
-    &  &  &  &  &  & \\
-    \hline
-    \hline
-    \cite{saidi2015shift} &  &  &  &  &  & \\
-    \cite{perret2016mapping} &  &  &  &  &  & \\
-    \cite{becker2016contention} &  &  &  &  &  & \\
-    this paper &  &  &  &  &  & \\
-    \hline
-  \end{tabular}
-  \vspace{-5mm}
-\end{table*}
+% \renewcommand{\arraystretch}{2.0}
+% \begin{table*}[t]
+%   \caption{\label{tb:comparison_relatedwork}
+%     Comparison to Related Work}
+%   \centering
+%   \scriptsize	                    % text size
+%   \tabcolsep = 1.5mm              % side-margin in column
+%   \begin{tabular}{c|ccccccccc}
+%     \hline
+%     &  &  &  &  &  & \\
+%     \hline
+%     \hline
+%     \cite{saidi2015shift} &  &  &  &  &  & \\
+%     \cite{perret2016mapping} &  &  &  &  &  & \\
+%     \cite{becker2016contention} &  &  &  &  &  & \\
+%     this paper &  &  &  &  &  & \\
+%     \hline
+%   \end{tabular}
+%   \vspace{-5mm}
+% \end{table*}
 
 
 \section{Conclusion}
 \label{sec:conclusion}
-
-[note]
-future work: \cite{maruyama2016ros2}
+[TBD]
+% [note]
+% future work: \cite{maruyama2016ros2}
 
 
 %%
