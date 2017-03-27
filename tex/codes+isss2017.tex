@@ -86,10 +86,11 @@
 The evolution of a next generation computing platform oriented toward multi/many cores is unavoidable because the demand of high-performance computation is increasing with reasonable power consumption even in embedded real-time systems.
 The Multi-Purpose Processing Array (MPPA) 256 developed by Kalray is one of many-core processors platforms and packs 256 general-purpose cores with high energy efficiency.
 The clusters of cores share a local memory, and a DMA-capable network-on-chip (NoC) connects the clusters.
-The cores communicate with each other by NoC parallelly to manage numerous tasks and optimize the potential of this architecture.
-However, the transport latencies are not quantitatively examined, and previous work has not clarified the potential and constraints for low-latency many-core computing.
+In this paper, we investigate and characterize currently-achievable data transfer methods of cutting-edge many-core technology based on NoC.
+% The cores communicate with each other by NoC parallelly to manage numerous tasks and optimize the potential of this architecture.
+Previous work has not quantitatively examined the transport latencies and not clarified the potential and constraints for low-latency many-core computing.
 In order to address this problem, we illustrate the evaluations of end-to-end latencies and the calculation potential of many-core computing with parallel data transfer.
-These results allow system designers to choose appropriate data transfer methods based on the requirement of their latency-sensitive many-core applications beyond an intuitive expectation.
+Our experimental results allow system designers to choose appropriate data transfer methods based on the requirement of their latency-sensitive many-core applications beyond an intuitive expectation.
 By highlighting the many-core computing capabilities, we explore the performance characteristics of currently-achievable data transfer methods for many-core computing based on NoC.
 \end{abstract}
 
