@@ -94,7 +94,7 @@ Our experimental results allow system designers to choose appropriate data trans
 By highlighting the many-core computing capabilities, we explore the performance characteristics of currently-achievable data transfer methods for many-core computing based on NoC.
 \end{abstract}
 
-\keywords{Many-core; Multicore; Network on Chip}
+\keywords{Many-core; Multicore; Network-on-Chip}
 
 
 \section{Introduction}
@@ -145,11 +145,13 @@ The impact of integrating real-time applications in multi/many core platforms, i
 This is a critical issue because embedded systems have requirements for reliable and predictable behavior.
 
 \textbf{Contributions:}
-This study focused on clarifying performance characteristics of currently-achievable data transfer methods for many-core computing based on Network-on-Chips (NoC), such as MPPA-256
-while examining several new data transfer methods. %other than ... % NoC以外の一般的な通信の話
-% We reveal the advantage and disadvantage of ... in a quantitative way leading a conclusion that ... % 評価からわかったこと
-
-[TBD]
+This study focused on clarifying performance characteristics of currently-achievable data transfer methods for many-core computing based on Network-on-Chips (NoC), such as MPPA-256 while examining parallel data transfer methods.
+We reveal the advantage and disadvantage of many-core computing based on NoC in a quantitative way leading the following contributions:
+\begin{itemize}
+\item Evaluations of data transfer on DMA-capable NoC quantitatively characterize end-to-end latencies, which depend on routing and DMA configurations.
+\item The scalability of parallelization in many-core processors based NoC is observed in evaluations of matrix calculation in several situations and a real complex application such as a part of autonomous driving systems.
+\item Evaluations of parallel processing clarify the characteristics of memory access speed which is varied by where data is allocated and what accesses the memory.
+\end{itemize}
 
 To the best of the authors' knowledge, this is the first study that examines data transfer matters for many-core computing beyond an intuitive expectation to allow system designers to choose appropriate data transfer methods based on the requirement of their latency-sensitive many-core applications.
 It is expected that the findings of the study are potentially applicable for several types of many-core architectures as opposed to solely for MPPA-256.
@@ -437,7 +439,7 @@ In the Tx interface, DDR causes a large increase in latency.
 The time taken by the DDR is twice as that of the IO SMEM as shown in Figure \ref{fig:tx_uc}.
 This is due to the memory access speed characteristics of DRAM and SRAM.
 In the case of the Tx interface, it is necessary for an RM (k1-core) on IOS to operate the DMA in the IOS network interface.
-This is attributed to that the fact that the core is involved in processing.
+This is attributed to the fact that the core is involved in processing.
 The speed of the data transfer latency between CCs exceeds that between IOS and CC.
 This result indicates that the MPPA-256 is optimized for communication between the CCs.
 
