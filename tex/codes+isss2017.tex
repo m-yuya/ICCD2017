@@ -83,7 +83,14 @@
 % \setlength\floatsep{18pt}% between figures
 
 \begin{abstract}
-[TBD]
+The evolution of a next generation computing platform oriented toward multi/many cores is unavoidable because the demand of high-performance computation is increasing with reasonable power consumption even in embedded real-time systems.
+The Multi-Purpose Processing Array (MPPA) 256 developed by Kalray is one of many-core processors platforms and packs 256 general-purpose cores with high energy efficiency.
+The clusters of cores share a local memory, and a DMA-capable network-on-chip (NoC) connects the clusters.
+The cores communicate with each other by NoC parallelly to manage numerous tasks and optimize the potential of this architecture.
+However, the transport latencies are not quantitatively examined, and previous work has not clarified the potential and constraints for low-latency many-core computing.
+In order to address this problem, we illustrate the evaluations of end-to-end latencies and the calculation potential of many-core computing with parallel data transfer.
+These results allow system designers to choose appropriate data transfer methods based on the requirement of their latency-sensitive many-core applications beyond an intuitive expectation.
+By highlighting the many-core computing capabilities, we explore the performance characteristics of currently-achievable data transfer methods for many-core computing based on NoC.
 \end{abstract}
 
 \keywords{Many-core; Multicore; Network on Chip}
@@ -118,8 +125,7 @@ Weight reduction is the most important factor for avionics, and integration with
 Thus, the utilization of an integrated platform results in space, weight and cost reductions.
 
 Hence, multi/many core platforms are fabricated and released as commercial off-the-shelf (COTS) multicore components.
-Increasing research attention has focused
-on multi/many core platforms.
+Increasing research attention has focused on multi/many core platforms.
 The Multi-Purpose Processing Array (MPPA) 256 developed by Kalray \cite{de2013distributed}, \cite{de2013clustered}, \cite{de2014time}, Single-chip Cloud Computer (SCC) developed by Intel \cite{intel2015scc},\cite{baron2010single}, and Tile64 developed by Tilera \cite{tilera2015tile64} include the clustering of many-core architectures in which cores are mapped closely.
 The clusters of cores are capable of performing separate independent applications with respect to the desired power envelope of embedded applications.
 Kalray's MPPA-256 packs 256 general-purpose cores.
