@@ -131,7 +131,7 @@ The Multi-Purpose Processing Array (MPPA) 256 developed by Kalray \cite{de2013di
 The clusters of cores are capable of performing separate independent applications with respect to the desired power envelope of embedded applications.
 Kalray's MPPA-256 packs 256 general-purpose cores.
 This significantly exceeds the number of cores in other COTS, and it targets embedded systems, high-performance computing (HPC), image processing, and networking due to the high-performance per watt.
-Intel's Xeon Phi \cite{chrysos2014intel} \cite{chrysos2012intel} is an HPC accelerator.
+Intel's Xeon Phi \cite{chrysos2014intel}, \cite{chrysos2012intel} is an HPC accelerator.
 Xeon Phi is based on x86 architecture and its targeted use
 corresponds to data centers and workstations.
 
@@ -664,6 +664,26 @@ This is typicall accepted with respect to many-core platforms and the model is u
   \vspace{-5mm}
 \end{table*}
 
+\renewcommand{\arraystretch}{2.0}
+\begin{table*}[t]
+  \caption{\label{tb:comparison_relatedwork}
+    Comparison of Many-core Processors Platforms}
+  \centering
+  \scriptsize	                    % text size
+  \tabcolsep = 1.5mm              % side-margin in column
+  \begin{tabular}{c|cccc}
+    \hline
+    & scalability & power efficiency & code transplant & \\
+    \hline
+    \hline
+    Kalray MPPA-256 \cite{de2013distributed}, \cite{de2013clustered}, \cite{de2014time} & \(\checkmark\) & \(\checkmark\) & \(\bigtriangleup\) & \\
+    Tilera Tile series \cite{tilera2015tile64} &  & \(\bigtriangleup\) & \(\checkmark\) & \\
+    Intel Xeon Phi \cite{chrysos2014intel} \cite{chrysos2012intel} &  &  & \(\checkmark\) & \\
+    Intel SCC \cite{intel2015scc}, \cite{baron2010single} &  &  & \(\checkmark\) & \\
+    \hline
+  \end{tabular}
+  \vspace{-5mm}
+\end{table*}
 
 \renewcommand{\arraystretch}{2.0}
 \begin{table*}[t]
