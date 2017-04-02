@@ -127,13 +127,12 @@ Thus, the utilization of an integrated platform results in space, weight and cos
 
 Hence, multi/many core platforms are fabricated and released as commercial off-the-shelf (COTS) multicore components.
 Increasing research attention has focused on multi/many core platforms.
-The Multi-Purpose Processing Array (MPPA) 256 developed by Kalray \cite{de2013distributed}, \cite{de2013clustered}, \cite{de2014time}, Single-chip Cloud Computer (SCC) developed by Intel \cite{intel2015scc},\cite{baron2010single}, and Tile64 developed by Tilera \cite{tilera2015tile64} include the clustering of many-core architectures in which cores are mapped closely.
+The Multi-Purpose Processing Array (MPPA) 256 developed by Kalray \cite{de2013distributed}, \cite{de2013clustered}, \cite{de2014time}, Single-chip Cloud Computer (SCC) developed by Intel \cite{baron2010single}, and Tile64 developed by Tilera \cite{bell2008tile64} include the clustering of many-core architectures in which cores are mapped closely.
 The clusters of cores are capable of performing separate independent applications with respect to the desired power envelope of embedded applications.
 Kalray's MPPA-256 packs 256 general-purpose cores.
 This significantly exceeds the number of cores in other COTS, and it targets embedded systems, high-performance computing (HPC), image processing, and networking due to the high-performance per watt.
 Intel's Xeon Phi \cite{chrysos2014intel}, \cite{chrysos2012intel} is an HPC accelerator.
-Xeon Phi is based on x86 architecture and its targeted use
-corresponds to data centers and workstations.
+Xeon Phi and SCC are based on x86 architecture and its targeted use corresponds to data centers and workstations.
 
 Despite the emergence of the need for multi/many core platforms, several difficulties persist in the adaptation of these platforms to real-time embedded systems \cite{becker2016contention}, \cite{saidi2015shift}.
 These difficulties are caused by the hardware architecture and strict requirements of embedded systems.
@@ -588,13 +587,17 @@ The speed of the offloading result exceeds that of IO DDR result with respect to
 \section{Related Work}
 \label{sec:related work}
 This section compares many-core platforms and discusses previous studies related to multi/many cores.
+First, needs of high-performance computation and comparison of many-core platforms to other platforms are discussed.
+Second, the Kalray MPPA-256 which this study focuses on is compared to other COTS COTS many/multicore components, and we summarize the features of MPPA-256.
+Finally, discussions of previous studies and comparison to them are described.
 
 Recently, studies indicate that the single core processors are characterized by limited computation performance.
 Pollack stated that a single core is inefficient \cite{pollack1999new} and thar Moore's law \cite{moore2006cramming} is no longer applicable. 
 Therefore, extant CPUs are not sufficient to satisfy increasing computation demands.
+The shift from a single core in real-Time and embedded systems has occurred \cite{saidi2015shift}. 
 Many other platforms including many-core are developed and researched by current studies.
 
-Table \ref{tb:comparison_manu-core} summarizes the features of many-core platforms with that of other platforms.
+Table \ref{tb:comparison_platforms} summarizes the features of many-core platforms with that of other platforms.
 For instance, the GPU is a powerful device to enhance computing performance and it has great potential in specific areas (for e.g., image processing, and learning).
 However, it is mainly used for a specific purpose and its reliability is not suitable for real-time systems.
 It is difficult to use a GPU for a global purpose and to guarantee its reliability due to the GPU architecture.
@@ -610,48 +613,56 @@ However, DSPs cannot be used for global purpose and programing.
 Furthermore, FPGAs are difficult for software developers since their software model is ignificantly different from that of CPU and is not a substitute for CPU.
 Many-core platforms can potentially replace single/multi core CPU as they possess ease of programing and scalability with high acceleration.
 
-Based on the fore-mentioned background, several extant studies examined real-time applications on many-core platforms.
-Many COTS multicore components are developed and released by several vendors 
-(e.g., Kalray's the Multi-Purpose Processing Array (MPPA) 256 \cite{de2013distributed}, \cite{de2013clustered}, \cite{de2014time},
-Intel's Single-chip Cloud Computer (SCC) \cite{intel2015scc},\cite{baron2010single}, Tilera's Tile64 \cite{tilera2015tile64}, and
-Intel's Xeon Phi \cite{chrysos2014intel} \cite{chrysos2012intel}).
+Based on the fore-mentioned background, many COTS many/multicore components are developed and released by several vendors.
+(e.g., Kalray's the Multi-Purpose Processing Array (MPPA) 256 \cite{de2013distributed}, \cite{de2013clustered}, \cite{de2014time}, \cite{baron2010single}, Tilera's Tile-Gx \cite{schooler2010tile}, \cite{ramey2011tile}, Tilera's Tile64 \cite{bell2008tile64}, and Intel's Xeon Phi \cite{chrysos2014intel}, \cite{chrysos2012intel}, Intel's Single-chip Cloud Computer (SCC) \cite{baron2010single}).
 The present study focuses on the Kalray MPPA-256 that is designed for real-time embedded applications.
-Kalray S.A \cite{de2013distributed}, \cite{de2013clustered}, \cite{de2014time} presented clustered many-core architectures on the NoC.
+Kalray S.A. \cite{de2013distributed}, \cite{de2013clustered}, \cite{de2014time} presented clustered many-core architectures on the NoC which pack 256 general-purpose cores with high energy efficiency.
+
+MPPA-256 is superior to other COTS many/multicore components in terms of the scalability of the number of cores and power efficiency as shown in Table \ref{tb:comparison_manycore}.
+In terms of the scalability, MPPA-256 adopts 256 cores while other COTS many/multicore components pack 64 cores or the number of cores around it.
+This scalability of cores is attributed to the memory architecture that each cluster per 16 cores contains its own local shared memory.
 The precise hardware model is described in Section \ref{sec:hardware_model}.
-This is typicall accepted with respect to many-core platforms and the model is used in several previous studies \cite{perret2016temporal}, \cite{becker2016contention}, \cite{carle2014static}, \cite{perret2016mapping}.
+When all cores share global DDR memory like other platforms besides MPPA-256, specific bus route receives extremely much load and memory access contention frequently occurs.
+Local shared memories reduce above problems and help the scalability of the number of cores.
+This is the reason why MPPA-256 ha succeeded in scaling the number of cores up to  256 cores.
+However, the local shared memory architecture restricts the capacity of memory and needs a data copy from DDR with NoC.
+This restriction makes use of extant applications difficult especially in the case of the applications which require more memory.
+In terms of power efficiency, MPPA-256 realizes high energy efficiency despite a large number of cores.
+Total clock frequency per watt is the highest in the current COTS many/multicore components.
+While MPPA-256 and TILE64 \cite{bell2008tile64} target embedded systems, other COTS components consider HPC accelerator.
+Their clock frequency per core exceeds embedded solutions' one.
+We need to distinguish the COTS many/multicore components according to requirements with reference to Table \ref{tb:comparison_manycore}.
+MPPA-256 is typicall accepted with respect to many-core platforms and the model is used in several previous studies \cite{perret2016temporal}, \cite{becker2016contention}, \cite{carle2014static}, \cite{perret2016mapping} \cite{perret2016predictable}.
 
-[TBD]
-% In \cite{saidi2015shift}, many opportunities and challenges of multi/many core platforms are discussed.
+Several extant studies examined real-time applications on many-core platforms including MPPA-256.
+In \cite{saidi2015shift}, many opportunities and challenges of many/multicore platforms are discussed.
+The shift to many/multicore in real-Time and embedded systems is described. 
 
-% [note]
+Based on the above background, several taks mapping algorithms for many/multicore systems are proposed \cite{perret2016mapping}, \cite{puffitsch2015off}, \cite{carle2014static}, \cite{becker2014mapping}, \cite{faragardi2014communication}.
+Airbus S.A.S. \cite{perret2016mapping} proposes the method of Directed Acyclic Graph (DAG) scheduling for hard real-time applications using MPPA-256.
+In \cite{faragardi2014communication}, mapping framework is proposed based on AUTOSAR which is applied as a standard architecture to develop automotive embedded software systems \cite{furst2009autosar}.
+AUTOSAR tasks scheduling considering contention in shared resources is presented in \cite{becker2016contention}.
 
-% disussion: \cite{saidi2015shift}
+Examining the above mapping algorithms of real-time applications, several previous studies \cite{kanter2015kalray}, \cite{denet2017work}, \cite{deDinechin2014GSN}, \cite{perret2016predictable} analyze the potential of MPPA-256 and data transfer with NoC as shown in Table \ref{tb:comparison_relatedwork}.
+First, MPPA-256 is introduced, and its performance and energy consumption are reported in \cite{kanter2015kalray}.
+However, the report contains few evaluations and does not refer to data transfer with NoC and memory access characteristics.
+Second, data transfer with NoC in MPPA-256 is described, and NoC guaranteed services is analyzed in \cite{denet2017work} and \cite{deDinechin2014GSN}.
+While theoretical analysis is done thoroughly, practical evaluations are poor and parallel data transfer does not be refered.
+Finally, the authors of \cite{perret2016predictable} focus on predictable composition of memory accesses.
+Analysis of this study identifies the external DDR and the NoC to be the main bottlenecks for both average performance and predictability in platforms like MPPA-256.
+Though the analysis clarifies memory access characteristics of the external DDR and provides notable lessons, a solution for DDR bottleneck is not examined and practical evaluations are lacked.
 
-% mppa:
-%   architecture \cite{de2013distributed}, \cite{de2013clustered}, \cite{de2014time},
-%   report \cite{kanter2015kalray}, 
-%   slide(DSP->many-core) \cite{de2015kalray},  
-%   NoC \cite{denet2017work}, \cite{deDinechin2014GSN},
-
-% mapping: \cite{perret2016mapping}(DAG), \cite{puffitsch2015off}, \cite{carle2014static}, \cite{becker2014mapping}, \cite{faragardi2014communication}
-
-% memory: \cite{perret2016predictable}, \cite{becker2016contention}
-
-% AUTOSAR mapping: \cite{becker2016contention}, \cite{faragardi2014communication}
-
-% aircraft(airbus): \cite{perret2016temporal}, \cite{perret2016predictable}, \cite{perret2016mapping}. 
-
-\renewcommand{\arraystretch}{2.0}
+\renewcommand{\arraystretch}{1.5}
 \begin{table*}[t]
-  \caption{\label{tb:comparison_manu-core}
+  \caption{\label{tb:comparison_platforms}
     Comparison of Many-core to CPU, GPU, DSP, and FPGA}
   \centering
   \scriptsize	                    % text size
   \tabcolsep = 1.5mm              % side-margin in column
   \begin{tabular}{c|cccccccccc}
     \hline
-    & \multirow{2}{*}{\textbf{performance}} & \multirow{2}{*}{\textbf{power/heat}} & \multirow{2}{*}{\textbf{reliability}} & \multirow{2}{*}{\textbf{real-time}} & \textbf{software} & \multirow{2}{*}{\textbf{costs}} & \textbf{multiple}\\
-    &&&&& \textbf{development} && \textbf{instruction} \\
+    & \multirow{2}{*}{performance} & \multirow{2}{*}{power/heat} & \multirow{2}{*}{reliability} & \multirow{2}{*}{real-time} & software & \multirow{2}{*}{costs} & multiple\\
+    &&&&& development && instruction \\
     \hline
     \hline
     CPU & & \(\bigtriangleup\) & \(\checkmark\) & \(\checkmark\) & \(\checkmark\) & \(\checkmark\) & \(\bigtriangleup\) \\
@@ -664,9 +675,9 @@ This is typicall accepted with respect to many-core platforms and the model is u
   \vspace{-5mm}
 \end{table*}
 
-\renewcommand{\arraystretch}{2.0}
+\renewcommand{\arraystretch}{1.5}
 \begin{table*}[t]
-  \caption{\label{tb:comparison_relatedwork}
+  \caption{\label{tb:comparison_manycore}
     Comparison of Many-core Processors Platforms}
   \centering
   \scriptsize	                    % text size
@@ -677,30 +688,31 @@ This is typicall accepted with respect to many-core platforms and the model is u
     \hline
     \hline
     Kalray MPPA-256 \cite{de2013distributed}, \cite{de2013clustered}, \cite{de2014time} & \(\checkmark\) & \(\checkmark\) & \(\bigtriangleup\) & \\
-    Tilera Tile series \cite{tilera2015tile64} &  & \(\bigtriangleup\) & \(\checkmark\) & \\
+    Tilera Tile series \cite{bell2008tile64} &  & \(\bigtriangleup\) & \(\checkmark\) & \\
     Intel Xeon Phi \cite{chrysos2014intel} \cite{chrysos2012intel} &  &  & \(\checkmark\) & \\
-    Intel SCC \cite{intel2015scc}, \cite{baron2010single} &  &  & \(\checkmark\) & \\
+    Intel SCC \cite{baron2010single} &  &  & \(\checkmark\) & \\
     \hline
   \end{tabular}
   \vspace{-5mm}
 \end{table*}
 
-\renewcommand{\arraystretch}{2.0}
+\renewcommand{\arraystretch}{1.5}
 \begin{table*}[t]
   \caption{\label{tb:comparison_relatedwork}
-    A comparison to Related Work}
+    Comparison of Related Work}
   \centering
   \scriptsize	                    % text size
   \tabcolsep = 1.5mm              % side-margin in column
   \begin{tabular}{c|ccccccccc}
     \hline
-    &  &  &  &  &  & \\
+    & performance & data transfer & memory access & \multirow{2}{*}{real applications} & parallel data & \\
+    & analysis & analysis with NoC & characteristics & & transfer & \\
     \hline
     \hline
-    \cite{saidi2015shift} &  &  &  &  &  & \\
-    \cite{perret2016mapping} &  &  &  &  &  & \\
-    \cite{becker2016contention} &  &  &  &  &  & \\
-    this paper &  &  &  &  &  & \\
+    Kalray clusters calculate quickly \cite{kanter2015kalray} & \(\bigtriangleup\) &  &  &  &  & \\
+    Network-on-Chip Service Guarantees \cite{denet2017work} &  & \(\checkmark\) &  &  &  & \\
+    Predictable composition of memory accesses \cite{perret2016predictable} &  & \(\checkmark\) & \(\checkmark\) &  &  & \\
+    this paper & \(\checkmark\) & \(\checkmark\) & \(\checkmark\) & \(\checkmark\) & \(\checkmark\) & \\
     \hline
   \end{tabular}
   \vspace{-5mm}
