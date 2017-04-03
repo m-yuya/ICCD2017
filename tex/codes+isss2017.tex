@@ -359,7 +359,7 @@ Additionally, it is necessary to allocate and configure D-NoC UC resources if a 
 
 \section{Evaluations}
 \label{sec:evaluations}
-This section, involves examining two types of evaluations,namely a D-NoC data transfer evaluation in which latency characteristics of interfaces and memory type are explored and a matrix calculation evaluation that demonstrates the parallelization potential of the MPPA-256 and its memory access characteristics while dealing with large data.
+This section involves examining two types of evaluations, namely a D-NoC data transfer evaluation in which latency characteristics of interfaces and memory type are explored and a matrix calculation evaluation that demonstrates the parallelization potential of the MPPA-256 and its memory access characteristics while dealing with large data.
 
 \subsection{D-NoC Data Transfer}
 \label{sec:dnoc_eval}
@@ -431,7 +431,7 @@ In order to facilitate intuitive recognition, two kinds of figures are arranged,
     \end{minipage}
     \vspace{-3mm}
   \end{tabular}
-  \vspace{+2mm}
+  \vspace{+3mm}
 \end{figure*}
 
 In the Tx interface, DDR causes a large increase in latency.
@@ -469,12 +469,15 @@ In a manner similar to the Tx interface, the speed of the data transfer latency 
     \end{minipage}
     \vspace{-3mm}
   \end{tabular}
-  \vspace{-2mm}
+  \vspace{+2mm}
 \end{figure*}
 
 
 \subsection{Matrix Calculation}
 \label{sec:martix_eval}
+
+\subsubsection{Situations and Assumptions}
+\label{sec:situations_and_assumptions}
 In the evaluation, matrix calculation time and parallelization potential of MPPA-256 are clarified.
 Matrix calculations are conducted in IOS and CC.
 Three computing situations are considered as shown in Figure \ref{fig:mat_calc}.
@@ -482,7 +485,7 @@ The first situation involves computing in IOS where four cores are available.
 In order to analyze memory access characteristics, a matrix buffer is allocated in IO DDR and SMEM.
 The second situation involves computing in CC in which 16 cores are available.
 The third situation involves offload-computing by using an IOS and four CCs.
-Parallelized processing is executed with four CCs cores and three SMEMs.
+Parallelized processing is executed with four CCs' cores and SMEMs.
 A few cores in IOS and CC manage the parallelized transaction.
 The method can handle large data in which one cluster is not
 sufficient because buffer capacity is not limited to 2MB in SMEM.
@@ -495,9 +498,11 @@ In order to facilitate faster data transfer, a part of the matrix buffer is tran
 Matrix calculation time is analyzed with parallelization and memory allocation.
 Additionally, the influence of cache is analyzed because cache coherency is an important issue in many-core system.
 There are several cases in which applications must access specific memory space without a cache.
-With respect to the given assumptions, maximum buffer size orresponds to 1 MB, and thus three matrices buffers are prepared, and each size corresponds to 314 KB.
+With respect to the given assumptions, maximum total buffer size corresponds to 1 MB, and thus three matrices buffers are prepared, and each size corresponds to 314 KB.
 Matrix A and matrix B are multiplied, and the result is stored in matrix C.
 The total of the three matrices is set as approximately 1 MB.
+In CC, we assume that the remainder of SMEM (1 MB) is occupied with system software and applications.
+The following evaluations are conducted on eMCOS.
 
 \begin{figure}[t]
   \centering
@@ -506,6 +511,8 @@ The total of the three matrices is set as approximately 1 MB.
     Matrix calculation situations.}
 \end{figure}
 
+\subsubsection{Influence of Cache and Memory}
+\label{sec:cache_and_memory}
 First, matrix calculation time with the cache in IOS and CC is depicted in Figure \ref{fig:mat_calc_cash}.
 There are almost no differences between IO DDR, IO SMEM, and CC SMEM due to the cache.
 Furthermore, 128 KB data cache in the IOS works well and compensates for the DDR delay.
@@ -542,9 +549,11 @@ A small data cache (8 KB) in CC does not function adequately and direct assembly
     \end{minipage}
     \vspace{-3mm}
   \end{tabular}
-  \vspace{-2mm}
+  \vspace{+2mm}
 \end{figure*}
 
+\subsubsection{Four CCs Parallelization}
+\label{sec:four_CCs}
 Finally, matrix calculation with offload-computing in IOS and CCs is shown in Figure \ref{fig:mat_calc_offload_314}.
 In this case, it is assumed with respect to the calculation of large matrices that the total capacity exceeds 1 MB.
 The offloading result is compared with IO DDR (cached) due to the fore-mentioned assumption. 
@@ -583,6 +592,30 @@ The speed of the offloading result exceeds that of IO DDR result with respect to
   \end{tabular}
   \vspace{-2mm}
 \end{figure*}
+
+\subsection{Case Study}
+\label{sec:case_study}
+The application in this case study is a part of autonomous driving systems and this section demonstrates the parallelization potential of the MPPA-256.
+We port a algorithm of vehicle self-localization written in C++ in Autoware, namely open-source software for urban autonomous driving \cite{autoware}, \cite{kato2015open}, and parallelize a part of it.
+The self-localization adopts normal-distributions transform matching algorithm \cite{magnusson2009three} implemented in Point Cloud Library \cite{pcl}.
+
+The self-localization algorithm used in this case study is mainly divided into two processes; \emph{RadiusSearch} that searches for several nearest neighbor points for each query and calculates the distance, \emph{Derivatives} in which the derivative is calculated necessary to determine the convergence of the matching operation.
+This evaluation parallelize \emph{Derivatives} in 16 CCs and the remainder of the algorithm is executed on IOS.
+In order to parallelize \emph{RadiusSearch}, the algorithm of nearest neighbor search has to be redesigned necessary since the data to be searched exceeds 1 MB.
+Redesigning the algorithm of nearest neighbor search is future work for this study.
+Figure \ref{fig:ndt_matching} shows the average execution time for each convergence and clarifies that the parallelization accelerates the process of \emph{Derivatives}.
+This acceleration clarifies parallelization potential of the MPPA-256.
+Since the reduction of execution time of \emph{derivatives} involves reducing the number of the loop for convergence, execution times of \emph{RadiusSearch} and other parts are also shortened.
+The query can be assumed to be 10 Hz in many automated driving systems.
+Hence, if we succeed the parallelization of \emph{RadiusSearch}, the goal will be able to achieve.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=1.0\linewidth]{../figure/BarGraph_ndt_matching.eps}
+  \caption{\label{fig:ndt_matching}
+   Vehicle self-localization of autonomous driving application with a part of parallelization.}
+\end{figure}
+
 
 \section{Related Work}
 \label{sec:related work}
@@ -624,15 +657,15 @@ This scalability of cores is attributed to the memory architecture that each clu
 The precise hardware model is described in Section \ref{sec:hardware_model}.
 When all cores share global DDR memory like other platforms besides MPPA-256, specific bus route receives extremely much load and memory access contention frequently occurs.
 Local shared memories reduce above problems and help the scalability of the number of cores.
-This is the reason why MPPA-256 ha succeeded in scaling the number of cores up to  256 cores.
+This is the reason why MPPA-256 has succeeded in scaling the number of cores up to  256 cores.
 However, the local shared memory architecture restricts the capacity of memory and needs a data copy from DDR with NoC.
-This restriction makes use of extant applications difficult especially in the case of the applications which require more memory.
-In terms of power efficiency, MPPA-256 realizes high energy efficiency despite a large number of cores.
+This restriction makes use of extant applications difficult especially in the case of applications which require more memory.
+In terms of power efficiency, MPPA-256 realizes superior energy efficiency despite a large number of cores.
 Total clock frequency per watt is the highest in the current COTS many/multicore components.
 While MPPA-256 and TILE64 \cite{bell2008tile64} target embedded systems, other COTS components consider HPC accelerator.
 Their clock frequency per core exceeds embedded solutions' one.
 We need to distinguish the COTS many/multicore components according to requirements with reference to Table \ref{tb:comparison_manycore}.
-MPPA-256 is typicall accepted with respect to many-core platforms and the model is used in several previous studies \cite{perret2016temporal}, \cite{becker2016contention}, \cite{carle2014static}, \cite{perret2016mapping} \cite{perret2016predictable}.
+MPPA-256 is typically accepted with respect to many-core platforms and the model are used in several previous studies \cite{perret2016temporal}, \cite{becker2016contention}, \cite{carle2014static}, \cite{perret2016mapping}, \cite{perret2016predictable}.
 
 Several extant studies examined real-time applications on many-core platforms including MPPA-256.
 In \cite{saidi2015shift}, many opportunities and challenges of many/multicore platforms are discussed.
@@ -647,7 +680,7 @@ Examining the above mapping algorithms of real-time applications, several previo
 First, MPPA-256 is introduced, and its performance and energy consumption are reported in \cite{kanter2015kalray}.
 However, the report contains few evaluations and does not refer to data transfer with NoC and memory access characteristics.
 Second, data transfer with NoC in MPPA-256 is described, and NoC guaranteed services is analyzed in \cite{denet2017work} and \cite{deDinechin2014GSN}.
-While theoretical analysis is done thoroughly, practical evaluations are poor and parallel data transfer does not be refered.
+While theoretical analysis is done thoroughly, practical evaluations are poor and parallel data transfer does not be referred.
 Finally, the authors of \cite{perret2016predictable} focus on predictable composition of memory accesses.
 Analysis of this study identifies the external DDR and the NoC to be the main bottlenecks for both average performance and predictability in platforms like MPPA-256.
 Though the analysis clarifies memory access characteristics of the external DDR and provides notable lessons, a solution for DDR bottleneck is not examined and practical evaluations are lacked.
@@ -721,14 +754,16 @@ Though the analysis clarifies memory access characteristics of the external DDR 
 
 \section{Conclusions}
 \label{sec:conclusion}
-[TBD]
-% [note]
-% future work: \cite{maruyama2016ros2}
+This paper has conducted quantitative evaluations which clarify end-to-end latencies with many-core computing based on NoC, the scalability of parallelization, and the characteristics of memory access speed.
+From various experiments, we have evaluated the capabilities of the currently available data transfer methods and parallelization potential for many-core computing base on NoC.
+Our experimental results allow system designers to choose appropriate system design based on the requirement of their latency-sensitive many-core applications beyond an intuitive expectation.
+
+In future work, we will port real-time systems software such as \cite{maruyama2016ros2} and propose the parallelization of memory intensive algorithms such as nearest neighbor search in Section \ref{sec:case_study}.
 
 \section{acknowledgements}
 \label{sec:acknowledgements}
 We acknowledge the support by eSOL and Kalray.
-The authors like to thank Atsushi Matsuo and Masaki Gondo from eSOL and xxx from Kalray for their support which helped to improve this work.
+The authors like to thank Atsushi Matsuo and Masaki Gondo from eSOL, and Gilbert Richard and Stéphane Cordova from Kalray for their support which helped to improve this work.
 
 %%
 \bibliographystyle{abbrv}       % ACM
