@@ -269,7 +269,7 @@ The data links are four bytes wide in each direction and operate at the CPU cloc
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=1.0\linewidth]{../figure/noc_map.eps}
+  \includegraphics[width=0.9\linewidth]{../figure/noc_map.eps}
   \caption{\label{fig:noc_map}
     NoC connections (both D-NoC and C-NoC).}
 \end{figure}
@@ -323,7 +323,7 @@ RTMES and NodeOS are provided by Kalray and eMCOS is released by eSOL.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=1.0\linewidth]{../figure/softwarestack.eps}
+  \includegraphics[width=0.9\linewidth]{../figure/softwarestack.eps}
   \caption{\label{fig:software_stack}
     The software stack of Kalray MPPA-256.}
 \end{figure}
@@ -378,7 +378,7 @@ The following evaluations are conducted on eMCOS.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=1.0\linewidth]{../figure/noc_routes.eps}
+  \includegraphics[width=0.9\linewidth]{../figure/noc_routes.eps}
   \caption{\label{fig:noc_routes}
     Four D-NoC routes used in the evaluation.}
 \end{figure}
@@ -506,7 +506,7 @@ The following evaluations are conducted on eMCOS.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=1.0\linewidth]{../figure/matrix_calculation.eps}
+  \includegraphics[width=0.9\linewidth]{../figure/matrix_calculation.eps}
   \caption{\label{fig:mat_calc}
     Matrix calculation situations.}
 \end{figure}
@@ -604,26 +604,32 @@ This evaluation parallelized \emph{Derivatives} onto 16 CCs and the remainder of
 To parallelize \emph{RadiusSearch}, the algorithm of the nearest neighbor search needs to be redesigned because the data to be searched exceeds 1 MB.
 Redesigning this algorithm will be part of a future study..
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=0.7\linewidth]{../figure/ndt_matching.eps}
-  \caption{\label{fig:ndt_matching}
-   A situation of vehicle self-localization execution.}
-\end{figure}
-
 As shown in Figure \ref{fig:ndt_matching}, the evaluation of parallelized self-localization algorithm indicates the average execution time for each convergence and demonstrates that the parallelization accelerates the \emph{Derivatives} process.
 This acceleration shows the parallelization potential of the MPPA-256.
 Because the reduction of the execution time of \emph{Derivatives} involves reducing the number of loops for convergence, the execution times of \emph{RadiusSearch} and other parts are also shortened.
 The query can be assumed to be 10 Hz in many automated driving systems.
 Therefore, if we succeed in the parallelization of \emph{RadiusSearch}, this goal can be achieved.
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=1.0\linewidth]{../figure/BarGraph_ndt_matching.eps}
-  \caption{\label{fig:ndt_matching}
-   Vehicle self-localization of the partially parallelized autonomous driving application.}
-\end{figure}
-
+\begin{figure*}[t]
+  \tabcolsep = 0.5mm              % side-margin in column
+  \begin{tabular}{cc}
+    \begin{minipage}[t]{0.49\textwidth}
+      \centering
+      \includegraphics[width=0.7\linewidth]{../figure/ndt_matching.eps}
+      \caption{\label{fig:ndt_matching}
+      A situation of vehicle self-localization execution.}
+    \end{minipage}   
+    &
+    % \setcounter{figure}{11}
+    \begin{minipage}[t]{0.49\textwidth}
+      \includegraphics[width=1.0\linewidth]{../figure/BarGraph_ndt_matching.eps}
+      \caption{\label{fig:ndt_matching}
+      Vehicle self-localization of the partially parallelized autonomous driving application.}
+    \end{minipage}
+    \vspace{-3mm}
+  \end{tabular}
+  \vspace{-2mm}
+\end{figure*}
 
 \section{Related Work}
 \label{sec:related work}
@@ -693,7 +699,7 @@ The authors of Ref. \cite{perret2016predictable} focused on the predictable comp
 An analysis of their study identified the external DDR and the NoC as main bottlenecks for both the average performance and the predictability on platforms such as MPPA-256.
 Although the analysis examined the memory access characteristics of the external DDR and provided notable lessons, a solution for the DDR bottleneck was not examined and practical evaluations were lacking.
 
-\renewcommand{\arraystretch}{1.5}
+% \renewcommand{\arraystretch}{1.2}
 \begin{table*}[t]
   \caption{\label{tb:comparison_platforms}
     Comparison of Many-core to CPU, GPU, DSP, and FPGA}
@@ -716,8 +722,8 @@ Although the analysis examined the memory access characteristics of the external
   \vspace{-5mm}
 \end{table*}
 
-\renewcommand{\arraystretch}{1.5}
-\begin{table*}[t]
+% \renewcommand{\arraystretch}{1.2}
+\begin{table}[t]
   \caption{\label{tb:comparison_manycore}
     Comparison of Many-core Processor Platforms}
   \centering
@@ -725,19 +731,20 @@ Although the analysis examined the memory access characteristics of the external
   \tabcolsep = 1.5mm              % side-margin in column
   \begin{tabular}{c|cccc}
     \hline
-    & scalability & power efficiency & code transplant & \\
+    & \multirow{2}{*}{scalability} & power  & code & \\
+    & & efficiency & transplant & \\
     \hline
     \hline
-    Kalray MPPA-256 \cite{de2013distributed}, \cite{de2013clustered}, \cite{de2014time} & \(\checkmark\) & \(\checkmark\) & \(\bigtriangleup\) & \\
+    Kalray MPPA-256 \cite{de2014time} & \(\checkmark\) & \(\checkmark\) & \(\bigtriangleup\) & \\
     Tilera Tile series \cite{bell2008tile64} &  & \(\bigtriangleup\) & \(\checkmark\) & \\
     Intel Xeon Phi \cite{chrysos2014intel} \cite{chrysos2012intel} &  &  & \(\checkmark\) & \\
     Intel SCC \cite{baron2010single} &  &  & \(\checkmark\) & \\
     \hline
   \end{tabular}
   \vspace{-5mm}
-\end{table*}
+\end{table}
 
-\renewcommand{\arraystretch}{1.5}
+% \renewcommand{\arraystretch}{1.2}
 \begin{table*}[t]
   \caption{\label{tb:comparison_relatedwork}
     Comparison of Related Work}
