@@ -83,15 +83,15 @@
 % \setlength\floatsep{18pt}% between figures
 
 \begin{abstract}
-The evolution of a next generation computing platform oriented toward multi/many cores is unavoidable because the demand of high-performance computation is increasing with reasonable power consumption even in embedded real-time systems.
-The Multi-Purpose Processing Array (MPPA) 256 developed by Kalray is one of many-core processors platforms and packs 256 general-purpose cores with high energy efficiency.
-The clusters of cores share a local memory, and a DMA-capable network-on-chip (NoC) connects the clusters.
-In this paper, we investigate and characterize currently-achievable data transfer methods of cutting-edge many-core technology based on NoC.
+The evolution of a next generation computing platform oriented toward multi/many cores is inevitable because the demand for high-performance computation with reasonable power consumption even in embedded real-time systems is increasing.
+The Multi-Purpose Processing Array 256 developed by Kalray is a many-core processor platform that includes 256 general-purpose cores with high energy efficiency.
+The clusters of the cores share a local memory, and a DMA-capable network-on-chip (NoC) connects the clusters.
+In this paper, we investigate and characterize currently achievable data transfer methods of cutting-edge many-core technologies based on NoC.
 % The cores communicate with each other by NoC parallelly to manage numerous tasks and optimize the potential of this architecture.
-Previous work has not quantitatively examined the transport latencies and not clarified the potential and constraints for low-latency many-core computing.
-In order to address this problem, we illustrate the evaluations of end-to-end latencies and the calculation potential of many-core computing with parallel data transfer.
-Our experimental results allow system designers to choose appropriate data transfer methods based on the requirement of their latency-sensitive many-core applications beyond an intuitive expectation.
-By highlighting the many-core computing capabilities, we explore the performance characteristics of currently-achievable data transfer methods for many-core computing based on NoC.
+Previous studies have not quantitatively examined the transport latencies nor have they clarified the potential and constraints for low-latency many-core computing.
+To address this problem, we illustrate evaluations of end-to-end latencies and the calculation potential of many-core computing with parallel data transfer.
+Our experimental results will allow system designers to choose appropriate data transfer methods based on the requirements of their latency-sensitive many-core applications as opposed to just intuitive expectations.
+By highlighting many-core computing capabilities, we explore the performance characteristics of currently achievable data transfer methods for many-core computing based on NoC.
 \end{abstract}
 
 \keywords{Many-core; Multicore; Network-on-Chip; Parallelization; Embedded software}
@@ -144,17 +144,17 @@ The impact of integrating real-time applications in multi/many core platforms, i
 This is a critical issue because embedded systems have requirements for reliable and predictable behavior.
 
 \textbf{Contributions:}
-This study focused on clarifying performance characteristics of currently-achievable data transfer methods for many-core computing based on Network-on-Chips (NoC), such as MPPA-256 while examining parallel data transfer methods.
-We reveal the advantage and disadvantage of many-core computing based on NoC in a quantitative way leading the following contributions:
+This study focuses on examining the performance characteristics of currently achievable data transfer methods for many-core computing based on network-on-chips (NoC), such as MPPA-256, while examining parallel data transfer methods.
+We reveal the advantages and disadvantages of many-core computing based on NoC in a quantitative way by leading the following contributions:
 \begin{itemize}
-\item Evaluations of data transfer on DMA-capable NoC quantitatively characterize end-to-end latencies, which depend on routing and DMA configurations.
-\item The scalability of parallelization in many-core processors based NoC is observed in evaluations of matrix calculation in several situations and a real complex application such as a part of autonomous driving systems.
-\item Evaluations of parallel processing clarify the characteristics of memory access speed which is varied by where data is allocated and what accesses the memory.
+\item The evaluations of the data transfer on DMA-capable NoC quantitatively characterize the end-to-end latencies, which depend on the routing and DMA configurations.
+\item The scalability of parallelization in many-core processors based on NoC is observed in evaluations of matrix calculations in several situations and a real complex application as a part of an autonomous driving system.
+\item The evaluations of the parallel processing examine the characteristics of the memory access speed which varies according to where data is allocated and what accesses the memory.
 \end{itemize}
 
-To the best of the authors' knowledge, this is the first study that examines data transfer matters for many-core computing beyond an intuitive expectation to allow system designers to choose appropriate data transfer methods based on the requirement of their latency-sensitive many-core applications.
-It is expected that the findings of the study are potentially applicable for several types of many-core architectures as opposed to solely for MPPA-256.
-The contributions of this study can be used in low-latency many-core computing.
+To the best of our knowledge, this is the first study that examines data transfer matters for many-core computing beyond an intuitive expectation to allow system designers to choose appropriate data transfer methods based on the requirements of their latency-sensitive many-core applications.
+It is expected that the findings of this study will potentially be applicable to several types of many-core architectures as opposed to just MPPA-256.
+Therefore, the contributions of this study can be used in low-latency many-core computing.
 
 \textbf{Organization:}
 The remainder of this study is organized as follows.
@@ -595,26 +595,26 @@ The speed of the offloading result exceeds that of IO DDR result with respect to
 
 \subsection{Case Study}
 \label{sec:case_study}
-The application in this case study is a part of autonomous driving systems and this section demonstrates the parallelization potential of the MPPA-256.
-We port a algorithm of vehicle self-localization written in C++ in Autoware, namely open-source software for urban autonomous driving \cite{autoware}, \cite{kato2015open}, and parallelize a part of it.
-The self-localization adopts normal-distributions transform matching algorithm \cite{magnusson2009three} implemented in Point Cloud Library \cite{pcl}.
+The application in this case study is a part of an autonomous driving system and this section demonstrates the parallelization potential of the MPPA-256.
+We took an algorithm for vehicle self-localization written in C++ in Autoware, namely an open-source software for urban autonomous driving \cite{autoware}, \cite{kato2015open}, and parallelized part of it.
+The self-localization adopts the normal-distribution transform matching algorithm \cite{magnusson2009three} implemented in the Point Cloud Library \cite{pcl}.
 
-The self-localization algorithm used in this case study is mainly divided into two processes; \emph{RadiusSearch} that searches for several nearest neighbor points for each query and calculates the distance, \emph{Derivatives} in which the derivative is calculated necessary to determine the convergence of the matching operation.
-This evaluation parallelize \emph{Derivatives} in 16 CCs and the remainder of the algorithm is executed on IOS.
-In order to parallelize \emph{RadiusSearch}, the algorithm of nearest neighbor search has to be redesigned necessary since the data to be searched exceeds 1 MB.
-Redesigning the algorithm of nearest neighbor search is future work for this study.
+The self-localization algorithm used in this case study is primarily divided into two processes: \emph{RadiusSearch} which searches for several nearest neighbor points for each query and calculates the distance, and \emph{Derivatives} which calculates the derivative to determine the convergence of the matching operation.
+This evaluation parallelized \emph{Derivatives} onto 16 CCs and the remainder of the algorithm was executed on the IOS.
+To parallelize \emph{RadiusSearch}, the algorithm of the nearest neighbor search needs to be redesigned because the data to be searched exceeds 1 MB.
+Redesigning this algorithm will be part of a future study..
 
-As shown in Figure \ref{fig:ndt_matching}, the evaluation of parallelized self-localization algorithm indicates the average execution time for each convergence and clarifies that the parallelization accelerates the process of \emph{Derivatives}.
-This acceleration clarifies parallelization potential of the MPPA-256.
-Since the reduction of execution time of \emph{derivatives} involves reducing the number of the loop for convergence, execution times of \emph{RadiusSearch} and other parts are also shortened.
+As shown in Figure \ref{fig:ndt_matching}, the evaluation of parallelized self-localization algorithm indicates the average execution time for each convergence and demonstrates that the parallelization accelerates the \emph{Derivatives} process.
+This acceleration shows the parallelization potential of the MPPA-256.
+Because the reduction of the execution time of \emph{Derivatives} involves reducing the number of loops for convergence, the execution times of \emph{RadiusSearch} and other parts are also shortened.
 The query can be assumed to be 10 Hz in many automated driving systems.
-Hence, if we succeed the parallelization of \emph{RadiusSearch}, the goal will be able to achieve.
+Therefore, if we succeed in the parallelization of \emph{RadiusSearch}, this goal can be achieved.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=1.0\linewidth]{../figure/BarGraph_ndt_matching.eps}
   \caption{\label{fig:ndt_matching}
-   Vehicle self-localization of autonomous driving application with a part of parallelization.}
+   Vehicle self-localization of the partially parallelized autonomous driving application.}
 \end{figure}
 
 
@@ -626,7 +626,7 @@ Second, the Kalray MPPA-256 which this study focuses on is compared to other COT
 Finally, discussions of previous studies and comparison to them are described.
 
 Recently, studies indicate that the single core processors are characterized by limited computation performance.
-Pollack stated that a single core is inefficient \cite{pollack1999new} and thar Moore's law \cite{moore2006cramming} is no longer applicable. 
+Pollack stated that a single core is inefficient \cite{pollack1999new} and that Moore's law \cite{moore2006cramming} is no longer applicable. 
 Therefore, extant CPUs are not sufficient to satisfy increasing computation demands.
 The shift from a single core in real-Time and embedded systems has occurred \cite{saidi2015shift}. 
 Many other platforms including many-core are developed and researched by current studies.
@@ -652,39 +652,39 @@ Based on the fore-mentioned background, many COTS many/multicore components are 
 The present study focuses on the Kalray MPPA-256 that is designed for real-time embedded applications.
 Kalray S.A. \cite{de2013distributed}, \cite{de2013clustered}, \cite{de2014time} presented clustered many-core architectures on the NoC which pack 256 general-purpose cores with high energy efficiency.
 
-MPPA-256 is superior to other COTS many/multicore components in terms of the scalability of the number of cores and power efficiency as shown in Table \ref{tb:comparison_manycore}.
-In terms of the scalability, MPPA-256 adopts 256 cores while other COTS many/multicore components pack 64 cores or the number of cores around it.
-This scalability of cores is attributed to the memory architecture that each cluster per 16 cores contains its own local shared memory.
+MPPA-256 is superior to other COTS many/multicore components in terms of the scalability of the number of cores and the power efficiency as shown in Table \ref{tb:comparison_manycore}.
+In terms of the scalability, MPPA-256 adopts 256 cores while other COTS many/multicore components have 64 cores or the number of cores around it.
+This scalability of cores is attributed to the memory architecture; each cluster of 16 cores contains its own local shared memory.
 The precise hardware model is described in Section \ref{sec:hardware_model}.
-When all cores share global DDR memory like other platforms besides MPPA-256, specific bus route receives extremely much load and memory access contention frequently occurs.
-Local shared memories reduce above problems and help the scalability of the number of cores.
-This is the reason why MPPA-256 has succeeded in scaling the number of cores up to  256 cores.
-However, the local shared memory architecture restricts the capacity of memory and needs a data copy from DDR with NoC.
-This restriction makes use of extant applications difficult especially in the case of applications which require more memory.
-In terms of power efficiency, MPPA-256 realizes superior energy efficiency despite a large number of cores.
-Total clock frequency per watt is the highest in the current COTS many/multicore components.
-While MPPA-256 and TILE64 \cite{bell2008tile64} target embedded systems, other COTS components consider HPC accelerator.
-Their clock frequency per core exceeds embedded solutions' one.
-We need to distinguish the COTS many/multicore components according to requirements with reference to Table \ref{tb:comparison_manycore}.
-MPPA-256 is typically accepted with respect to many-core platforms and the model are used in several previous studies \cite{perret2016temporal}, \cite{becker2016contention}, \cite{carle2014static}, \cite{perret2016mapping}, \cite{perret2016predictable}.
+When all cores share the global DDR memory as in other platforms excluding MPPA-256, specific bus routes receives extremely large loads and memory access contention frequently occurs.
+Local shared memory reduces the above problems and helps the scalability of the number of cores.
+This is why MPPA-256 has succeeded in scaling up to 256 cores.
+However, the local shared memory architecture restricts the capacity of the memory and requires a data copy from DDR with NoC.
+This restriction makes the use of existing applications difficult especially in the case of applications that require more memory.
+In terms of power efficiency, MPPA-256 realizes superior energy efficiency despite its large number of cores.
+The total clock frequency per watt is the highest of the current COTS many/multicore components.
+While MPPA-256 and TILE64 \cite{bell2008tile64} target the embedded systems, other COTS components consider the HPC accelerator.
+Their clock frequency per core exceeds that of embedded solutions.
+We need to distinguish the COTS many/multicore components according to their requirements with reference to Table \ref{tb:comparison_manycore}.
+MPPA-256 is typically accepted with respect to many-core platforms and the model has been used in several previous studies \cite{perret2016temporal}, \cite{becker2016contention}, \cite{carle2014static}, \cite{perret2016mapping}, \cite{perret2016predictable}.
 
-Several extant studies examined real-time applications on many-core platforms including MPPA-256.
-In \cite{saidi2015shift}, many opportunities and challenges of many/multicore platforms are discussed.
-The shift to many/multicore in real-Time and embedded systems is described. 
+Several studies have examined real-time applications on many-core platforms including MPPA-256.
+In Ref. \cite{saidi2015shift}, multiple opportunities and challenges of many/multicore platforms are discussed.
+The shift to many/multicore in real-time and embedded systems is also described. 
 
-Based on the above background, several taks mapping algorithms for many/multicore systems are proposed \cite{perret2016mapping}, \cite{puffitsch2015off}, \cite{carle2014static}, \cite{becker2014mapping}, \cite{faragardi2014communication}.
-Airbus S.A.S. \cite{perret2016mapping} proposes the method of Directed Acyclic Graph (DAG) scheduling for hard real-time applications using MPPA-256.
-In \cite{faragardi2014communication}, mapping framework is proposed based on AUTOSAR which is applied as a standard architecture to develop automotive embedded software systems \cite{furst2009autosar}.
-AUTOSAR tasks scheduling considering contention in shared resources is presented in \cite{becker2016contention}.
+Based on the above background, several task mapping algorithms for many/multicore systems have been proposed \cite{perret2016mapping}, \cite{puffitsch2015off}, \cite{carle2014static}, \cite{becker2014mapping}, \cite{faragardi2014communication}.
+Airbus S.A.S. \cite{perret2016mapping} proposes a method of directed acyclic graph (DAG) scheduling for hard real-time applications using MPPA-256.
+In Ref. \cite{faragardi2014communication}, a mapping framework is proposed on the basis of AUTOSAR which is applied as a standard architecture to develop automotive embedded software systems \cite{furst2009autosar}.
+AUTOSAR task scheduling considering contention in shared resources is presented in Ref. \cite{becker2016contention}.
 
-Examining the above mapping algorithms of real-time applications, several previous studies \cite{kanter2015kalray}, \cite{denet2017work}, \cite{deDinechin2014GSN}, \cite{perret2016predictable} analyze the potential of MPPA-256 and data transfer with NoC as shown in Table \ref{tb:comparison_relatedwork}.
-First, MPPA-256 is introduced, and its performance and energy consumption are reported in \cite{kanter2015kalray}.
-However, the report contains few evaluations and does not refer to data transfer with NoC and memory access characteristics.
-Second, data transfer with NoC in MPPA-256 is described, and NoC guaranteed services is analyzed in \cite{denet2017work} and \cite{deDinechin2014GSN}.
-While theoretical analysis is done thoroughly, practical evaluations are poor and parallel data transfer does not be referred.
-Finally, the authors of \cite{perret2016predictable} focus on predictable composition of memory accesses.
-Analysis of this study identifies the external DDR and the NoC to be the main bottlenecks for both average performance and predictability in platforms like MPPA-256.
-Though the analysis clarifies memory access characteristics of the external DDR and provides notable lessons, a solution for DDR bottleneck is not examined and practical evaluations are lacked.
+By examining the above mapping algorithms of real-time applications, several previous studies \cite{kanter2015kalray}, \cite{denet2017work}, \cite{deDinechin2014GSN}, \cite{perret2016predictable} have analyzed the potential of MPPA-256 and data transfer with NoC as shown in Table \ref{tb:comparison_relatedwork}.
+MPPA-256 is introduced, and its performance and energy consumption are reported in Ref. \cite{kanter2015kalray}.
+However, this report contains few evaluations and does not refer to data transfer with NoC and memory access characteristics.
+Data transfer with NoC in MPPA-256 is described, and NoC guaranteed services are analyzed in Refs. \cite{denet2017work} and \cite{deDinechin2014GSN}.
+While the theoretical analysis is thorough in these studies, the practical evaluations are poor and parallel data transfer is not referred to.
+The authors of Ref. \cite{perret2016predictable} focused on the predictable composition of memory accesses.
+An analysis of their study identified the external DDR and the NoC as main bottlenecks for both the average performance and the predictability on platforms such as MPPA-256.
+Although the analysis examined the memory access characteristics of the external DDR and provided notable lessons, a solution for the DDR bottleneck was not examined and practical evaluations were lacking.
 
 \renewcommand{\arraystretch}{1.5}
 \begin{table*}[t]
@@ -712,7 +712,7 @@ Though the analysis clarifies memory access characteristics of the external DDR 
 \renewcommand{\arraystretch}{1.5}
 \begin{table*}[t]
   \caption{\label{tb:comparison_manycore}
-    Comparison of Many-core Processors Platforms}
+    Comparison of Many-core Processor Platforms}
   \centering
   \scriptsize	                    % text size
   \tabcolsep = 1.5mm              % side-margin in column
@@ -755,16 +755,16 @@ Though the analysis clarifies memory access characteristics of the external DDR 
 
 \section{Conclusions}
 \label{sec:conclusion}
-This paper has conducted quantitative evaluations which clarify end-to-end latencies with many-core computing based on NoC, the scalability of parallelization, and the characteristics of memory access speed.
-From various experiments, we have evaluated the capabilities of the currently available data transfer methods and parallelization potential for many-core computing base on NoC.
-Our experimental results allow system designers to choose appropriate system design based on the requirement of their latency-sensitive many-core applications beyond an intuitive expectation.
+This paper has conducted quantitative evaluations that examined end-to-end latencies with many-core computing based on NoC, the scalability of parallelization, and the characteristics of the memory access speed.
+From various experiments, we have evaluated the capabilities of the currently available data transfer methods and the parallelization potential for many-core computing based on NoC.
+Our experimental results will allow system designers to choose appropriate system designs based on the requirements of their latency-sensitive many-core applications beyond an intuitive expectation.
 
-In future work, we will port real-time systems software such as \cite{maruyama2016ros2} and propose the parallelization of memory intensive algorithms such as nearest neighbor search in Section \ref{sec:case_study}.
+In future studies, we will port real-time systems software such as that in Ref. \cite{maruyama2016ros2} and propose the parallelization of memory intensive algorithms such as the nearest neighbor search in Section \ref{sec:case_study}.
 
 \section{acknowledgements}
 \label{sec:acknowledgements}
-We acknowledge the support by eSOL and Kalray.
-The authors would like to thank Atsushi Matsuo and Masaki Gondo from eSOL, and Gilbert Richard and Stéphane Cordova from Kalray for their support which helped to improve this work.
+We acknowledge support from eSOL and Kalray.
+The authors would like to thank Atsushi Matsuo and Masaki Gondo from eSOL, and Gilbert Richard and Stéphane Cordova from Kalray for their support that helped improve this study.
 
 %%
 \bibliographystyle{abbrv}       % ACM
