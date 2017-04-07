@@ -604,6 +604,13 @@ This evaluation parallelized \emph{Derivatives} onto 16 CCs and the remainder of
 To parallelize \emph{RadiusSearch}, the algorithm of the nearest neighbor search needs to be redesigned because the data to be searched exceeds 1 MB.
 Redesigning this algorithm will be part of a future study..
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.7\linewidth]{../figure/ndt_matching.eps}
+  \caption{\label{fig:ndt_matching}
+   A situation of vehicle self-localization execution.}
+\end{figure}
+
 As shown in Figure \ref{fig:ndt_matching}, the evaluation of parallelized self-localization algorithm indicates the average execution time for each convergence and demonstrates that the parallelization accelerates the \emph{Derivatives} process.
 This acceleration shows the parallelization potential of the MPPA-256.
 Because the reduction of the execution time of \emph{Derivatives} involves reducing the number of loops for convergence, the execution times of \emph{RadiusSearch} and other parts are also shortened.
