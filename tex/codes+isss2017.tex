@@ -604,7 +604,7 @@ We took an algorithm for vehicle self-localization written in C++ in Autoware, n
 The self-localization adopts the normal-distribution transform matching algorithm \cite{magnusson2009three} implemented in the Point Cloud Library \cite{pcl}.
 
 The self-localization algorithm used in this case study is primarily divided into two processes: \emph{RadiusSearch} which searches for several nearest neighbor points for each query and calculates the distance, and \emph{Derivatives} which calculates the derivative to determine the convergence of the matching operation.
-This evaluation parallelized \emph{Derivatives} onto 16 CCs and the remainder of the algorithm was executed on the IOS.
+As shown in Figure \ref{fig:ndt_matching_situation}, this evaluation parallelized \emph{Derivatives} onto 16 CCs and the remainder of the algorithm was executed on the IOS.
 To parallelize \emph{RadiusSearch}, the algorithm of the nearest neighbor search needs to be redesigned because the data to be searched exceeds 1 MB.
 Redesigning this algorithm will be part of a future study..
 
@@ -620,7 +620,7 @@ Therefore, if we succeed in the parallelization of \emph{RadiusSearch}, this goa
     \begin{minipage}[t]{0.49\textwidth}
       \centering
       \includegraphics[width=0.7\linewidth]{../figure/ndt_matching.eps}
-      \caption{\label{fig:ndt_matching}
+      \caption{\label{fig:ndt_matching_situation}
       A situation of vehicle self-localization execution.}
     \end{minipage}   
     &
