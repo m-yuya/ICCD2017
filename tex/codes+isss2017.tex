@@ -184,20 +184,20 @@ The North and South IOSes are connected to a DDR interface and an eight-lane PCI
 The East and West IOSes are connected to a quad 10Gb/s Ethernet controller.
 Two pairs of IOSes organize two I/O clusters (IOCs) as shown in Figure \ref{fig:mppa_architecture}.
 
-Each IOS comprises of quad core resource managers (RMs) and a network interface.
+Each IOS comprises of quad IO cores and a NoC interface.
 \begin{itemize}
-\item \textbf{Resource Managers}: RM cores are connected to a 16-banked parallel shared memory with a total capacity (IO SMEM) of 2MB, as shown in the left side of Figure \ref{fig:mppa_architecture},
-The four RMs have their own instruction cache 8-way associative corresponding to 32 ($8 \times 4$) KB and share a data cache 8-way with 128 KB and external DDR access.
-The sharing of the data cache of 128 KB allows coherency between the RMs.
-Additionally, RM cores operate controllers for the PCIe, Ethernet, Interlaken, and other I/O devices.
-They operate the local peripherals, including the network interfaces with DMA.
-It is also possible to conduct an application run on the RMs.
-\item \textbf{Network Interface}: The network interface contains four DMA engines (DMA0-3) and four NoC routers as shown in the left side of Figure \ref{fig:mppa_architecture}, and the IOS DMA engine manages transfers between the IO SMEM, the IOS DDR, and the IOS peripherals (e.g., PCIe interface and Ethernet controllers).
+\item \textbf{IO cores}: IO cores are connected to a 16-banked parallel shared memory with a total capacity (IO SMEM) of 2MB, as shown in the left side of Figure \ref{fig:mppa_architecture},
+The four IO cores have their own instruction cache 8-way associative corresponding to 32 ($8 \times 4$) KB and share a data cache 8-way with 128 KB and external DDR access.
+The sharing of the data cache of 128 KB allows coherency between the IO coress.
+Additionally, IO cores operate controllers for the PCIe, Ethernet, Interlaken, and other I/O devices.
+They operate the local peripherals, including the NoC interfaces with DMA.
+It is also possible to conduct an application run on the IO cores.
+\item \textbf{NoC Interface}: The NoC interface contains four DMA engines (DMA0-3) and four NoC routers as shown in the left side of Figure \ref{fig:mppa_architecture}, and the IOS DMA engine manages transfers between the IO SMEM, the IOS DDR, and the IOS peripherals (e.g., PCIe interface and Ethernet controllers).
 The DMA engine transfers data between routers on NoC through NoC routers.
 The DMA engine has the following three NoC interfaces: a receive (Rx) interface, a transmit (Tx) interface, and a micro core (UC).
-A micro core is a network processor that can be programed to set threads sending data with a Tx interface.
+A micro core is a fine-grained multi-threaded engine that can be programed to set threads sending data with a Tx interface
 A UC can extract data from memory by using a programed pattern and send the data on the NoC.
-After it is initiated, this continues in an autonomous fashion without using a Processing Elements (PE) and an RM.
+After it is initiated, this continues in an autonomous fashion without using a Processing Elements (PE) and an IO cores.
 \end{itemize}
 
 \begin{figure}[t]
@@ -214,18 +214,18 @@ Figure \ref{fig:cc_architecture} illustrates the architecture of each CC.
 
 \begin{itemize}
 \item \textbf{Processing Elements and an RM}:
-In a CC, 16 processing elements (PEs) and a RM share 2 MB cluster local memory (SMEM) that is composed with 16 independent memory banks with $384\times 64 $bit.
+In a CC, 16 processing elements (PEs) and a RM share 2 MB cluster local memory (SMEM) that is composed with 16 independent memory banks.
 The capacity of each SMEM bank corresponds to 128 KB.
 The PEs are mainly used by users for parallel processing.
 Developers spawn computing threads on PEs.
-The PEs and an RM in CC correspond to the Kalray-1 cores, which implement a 32-bit 5-issue Very Long Instruction Word architecture with 16 W-600 MHz (typical) or 24 W-800 MHz.
+The PEs and an RM in CC correspond to the Kalray-1 cores, which implement a 32-bit 5-issue Very Long Instruction Word architecture with 600 MHz (typical) or 800 MHz.
 Each core is fitted with its own instruction and data caches.
 Each cache is a 2-way associative with a capacity of 8 KB.
 Thus, 17 k1-cores (a PE or the RM) share a multi-banked 2 MB SMEM.
 
-\item \textbf{A Debug Support Unit (DSU) and a Network Interface}:
-In addition to PEs and an RM, bus masters on SMEM correspond to a DSU and a DMA engine in a network interface.
-A DMA engine and a NoC router are laid out in a network interface.
+\item \textbf{A Debug Support Unit (DSU) and a NoC Interface}:
+In addition to PEs and an RM, bus masters on SMEM correspond to a DSU and a DMA engine in a NoC interface.
+A DMA engine and a NoC router are laid out in a NoC interface.
 In a manner similar to IOS, the CC DMA engine also has the following three interfaces: an Rx, a Tx, and a UC. 
 It is instantiated in every cluster and connected to the SMEM.
 \end{itemize}
@@ -249,15 +249,15 @@ Bus network connects nodes (CCs and IOSs) with torus topology \cite{dally2001rou
 which has dual bands and involves a low average number of hops when compared to mesh topology \cite{vangal200780}, \cite{taylor2002raw}.
 The network is actually composed of the following two parallel NoCs with bi-directional links (denoted by red lines in Figure \ref{fig:noc_map}):
 the data NoC (D-NoC) that is optimized for bulk data transfers and the control NoC (C-NoC) that is optimized for small messages at low latency.
-Functionally, NoC corresponds to a packet switched network.
+The NoC is implemented with wormhole switching and source routing.
 Data are packaged in variable length packets that circulate between routers in a wormhole manner in which packets are broken into small pieces called flits (flow control digits).
 The NoC traffic is segmented into packets, and each packet includes 1 to 4 header flits and 0 to 62 payload data flits.
 
 \item \textbf{NoC routers}:
 A node per compute cluster and four nodes per I/O subsystem holds the following two routers of its
 own: a D-NoC router and a C-NoC router
-Each RM on NoC node (CC or IOS) is associated with the fore-mentioned two NoC routers.
-Furthermore, DMA engines in a network interface on the CC/IOS send and receive flits through the D-NoC routers with the Rx interface, the Tx interface, and the UC.
+Each RM or IO core on NoC node is associated with the fore-mentioned two NoC routers.
+Furthermore, DMA engines in a NoC interface on the CC/IOS send and receive flits through the D-NoC routers with the Rx interface, the Tx interface, and the UC.
 A mailbox component corresponds to the virtual interface for the C-NoC and enables one-to-one, N-to-one, or one-to-N low-latency synchronizations.
 The NoC routers shown in Figures \ref{fig:mppa_architecture} and \ref{fig:cc_architecture} illustrate nodes as R0-15, R128-131, R160-163, R224-227, and R192-195 in Figure \ref{fig:noc_map}.
 For purposes of simplicity, D-NoC/C-NoC routers are illustrated with a NoC router.
@@ -269,7 +269,7 @@ The data links are four bytes wide in each direction and operate at the CPU cloc
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.9\linewidth]{../figure/noc_map.eps}
+  \includegraphics[width=1.0\linewidth]{../figure/noc_map.eps}
   \caption{\label{fig:noc_map}
     NoC connections (both D-NoC and C-NoC).}
 \end{figure}
@@ -323,7 +323,7 @@ RTMES and NodeOS are provided by Kalray and eMCOS is released by eSOL.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.9\linewidth]{../figure/softwarestack.eps}
+  \includegraphics[width=1.0\linewidth]{../figure/softwarestack.eps}
   \caption{\label{fig:software_stack}
     The software stack of Kalray MPPA-256.}
 \end{figure}
@@ -336,17 +336,17 @@ For scalability purposes, MPPA-256 accepts clustered architectures in which each
 16 cores are packed as a cluster and they share 2 MB memory (SMEM) as shown in Figure \ref{fig:cc_architecture}.
 This avoids frequent memory contention due to numerous cores and helps in increasing the number of cores.
 However, the architecture constraints memory sthat can be directly accessed by the cores.
-In order to communicate with cores outside the cluster, it is necessary to transfer data between clusters through the D-NoC with network interfaces.
+In order to communicate with cores outside the cluster, it is necessary to transfer data between clusters through the D-NoC with NoC interfaces.
 
 A Rx interface exists in the receiving side to receive data with DMA.
 It is necessary to allocate a D-NoC Rx resource and configure it to wait to receive the data.
-A DMA in a network interface contains 256 D-NoC Rx resources.
+A DMA in a NoC interface contains 256 D-NoC Rx resources.
 Two interfaces, namely a Tx interface and a UC interface as explained in Sections \ref{sec:ios} and \ref{sec:cc},
 are present with respect to the sending side for users to send data between clusters.
 The UC is a network processor that is programmed to set threads to send data in DMA.
 It executes programed pattern and sends data through the D-NoC without a PE and an RM.
-The UC interface results in faster data transfer when compared to that in the Tx interface.
-However, a DMA in a network interface contains only 8 D-NoC UC resources.
+The UC interface results in higher data transfer throughput compared to the direct activation of the Tx interface by a RM or PE core.
+However, a DMA in a NoC interface contains only 8 D-NoC UC resources.
 Both interfaces use a DMA engine to access memory and copy data.
 Irrespective of whether or not a UC interface is used, it is necessary to allocate a D-NoC Tx resource and configure it to send data.
 Additionally, it is necessary to allocate and configure D-NoC UC resources if a UC interface is used.
@@ -378,7 +378,7 @@ The following evaluations are conducted on eMCOS.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.9\linewidth]{../figure/noc_routes.eps}
+  \includegraphics[width=1.0\linewidth]{../figure/noc_routes.eps}
   \caption{\label{fig:noc_routes}
     Four D-NoC routes used in the evaluation.}
 \end{figure}
@@ -437,15 +437,15 @@ In order to facilitate intuitive recognition, two kinds of figures are arranged,
 In the Tx interface, DDR causes a large increase in latency.
 The time taken by the DDR is twice as that of the IO SMEM as shown in Figure \ref{fig:tx_uc}.
 This is due to the memory access speed characteristics of DRAM and SRAM.
-In the case of the Tx interface, it is necessary for an RM (k1-core) on IOS to operate the DMA in the IOS network interface.
+In the case of the Tx interface, it is necessary for an IO core on IOS to operate the DMA in the IOS NoC interface.
 This is attributed to the fact that the core is involved in processing.
 The speed of the data transfer latency between CCs exceeds that between IOS and CC.
 This result indicates that the MPPA-256 is optimized for communication between the CCs.
 
 With respect to the UC interface, the latency is not significantly affected by the location at which the transferred buffer is allocated (i.e., the DDR or SMEM).
 Similar latency characteristics are observed in Figures \ref{fig:tx_uc_log} and \ref{fig:tx_uc}.
-In the case of the UC interface, an RM (k1-core) on the IOS does not involve a DMA transaction.
-A micro core in the network interface executes a programed thread sending data.
+In the case of the UC interface, an IO core on the IOS does not involve a DMA transaction.
+A micro core in the NoC interface executes a programed thread sending data.
 This evaluation result suggests that the slow access speed of the DDR is not significant in the case of the UC.
 In a manner similar to the Tx interface, the speed of the data transfer latency between CCs exceeds that between IOS and CC.
 
@@ -506,7 +506,7 @@ The following evaluations are conducted on eMCOS.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.9\linewidth]{../figure/matrix_calculation.eps}
+  \includegraphics[width=1.0\linewidth]{../figure/matrix_calculation.eps}
   \caption{\label{fig:mat_calc}
     Matrix calculation situations.}
 \end{figure}
@@ -556,20 +556,24 @@ A small data cache (8 KB) in CC does not function adequately and direct assembly
 \label{sec:four_CCs}
 Finally, matrix calculation with offload-computing in IOS and CCs is shown in Figure \ref{fig:mat_calc_offload_314}.
 In this case, it is assumed with respect to the calculation of large matrices that the total capacity exceeds 1 MB.
-The offloading result is compared with IO DDR (cached) due to the fore-mentioned assumption. 
-An overhead transactio (inverse matB and input matC) is performed to offload a part of calculation on the four CCs and aggregate calculation result.
-This produces a overhead irrespective of the number of threads as shown in Figure \ref{fig:mat_calc_offload_314}.
+The offloading result is compared with IO DDR (cached) due to the fore-mentioned assumption.
+The aggregate calculation is obtained by offloading on the four CC to perform a multiplication of a tile of the transpose of matB and a tile of matC.
+This produces a overhead irrespective of the number of threads as shown in Figures \ref{fig:mat_calc_offload_314} and \ref{fig:mat_calc_offload_640}.
 However, the speed involved in offloading result exceeds that of IO DDR (cached).
 The result indicates several important facts.
 First, D-NoC data transfer produces little overhead latency.
-Second, the speed of DMA memory access to DDR exceeds that of RM (k1-core)'s memory access.
+Second, the speed of DMA memory access to DDR exceeds that of IO core's memory access.
 In the offloading case, a DMA accesses matrix buffers on DDR and transfers the buffers from IO DDR to each CC SMEM.
-Subsequentl, PEs in the CC access matrix buffer the calculation without cache.
+Subsequently, PEs in the CC access matrix buffer the calculation without cache.
 The overhead of data transfer and DMA memory access is small, and thus parallel data transmission and distributed memory are practical in the case of MPPA-256.
 The impact of offloading increases when the matrix size is large as shown in Figure \ref{fig:mat_calc_offload_640}.
 Only a part of matrix is allocated in CC, and thus it is possible to handle larger matrices buffers.
 Additionally, 640 KB matrices are prepared, and matrix calculation calculations are evaluated with offload-computing.
 The speed of the offloading result exceeds that of IO DDR result with respect to the 314 KB matrices in Figure \ref{fig:mat_calc_offload_314}.
+In these offloading evaluations, each CC concurrently transmits calculation results to the IOS.
+When matrix C in which calculation results are stored is allocated in DDR, NoC router's FIFOs sometimes overflow and cause an error.
+To avoid this error, matrix C should be allocated in IO SMEM.
+Note that above evaluation results when matrix C is allocated in DDR.
 
 \begin{figure*}[t]
   \tabcolsep = 0.5mm              % side-margin in column
@@ -648,7 +652,7 @@ Table \ref{tb:comparison_platforms} summarizes the features of many-core platfor
 For instance, the GPU is a powerful device to enhance computing performance and it has great potential in specific areas (for e.g., image processing, and learning).
 However, it is mainly used for a specific purpose and its reliability is not suitable for real-time systems.
 It is difficult to use a GPU for a global purpose and to guarantee its reliability due to the GPU architecture.
-Many-core is significantly superior to GPU with respect to a global purpose and multiple instructions.
+Many-core processors based on CPU or DSP cores are significantly superior to GPU with respect to software programmability and timing predictability.
 Additionally, it is commonly known that many-core involves a reasonable power consumption.
 In contrast, the GPU consumes a significant amount of power and generates considerable heat.
 This is a critical problem for embedded systems.
@@ -676,6 +680,7 @@ However, the local shared memory architecture restricts the capacity of the memo
 This restriction makes the use of existing applications difficult especially in the case of applications that require more memory.
 In terms of power efficiency, MPPA-256 realizes superior energy efficiency despite its large number of cores.
 The total clock frequency per watt is the highest of the current COTS many/multicore components.
+The power consumption of the MPPA processor ranges between 16W at 600 MHz and 24W at 800 MHz.
 While MPPA-256 and TILE64 \cite{bell2008tile64} target the embedded systems, other COTS components consider the HPC accelerator.
 Their clock frequency per core exceeds that of embedded solutions.
 We need to distinguish the COTS many/multicore components according to their requirements with reference to Table \ref{tb:comparison_manycore}.
@@ -775,6 +780,7 @@ Our experimental results will allow system designers to choose appropriate syste
 
 In future studies, we will port real-time systems software such as that in Ref. \cite{maruyama2016ros2} and propose the parallelization of memory intensive algorithms such as the nearest neighbor search in Section \ref{sec:case_study}.
 
+\vspace{-5mm}
 \section{acknowledgements}
 \label{sec:acknowledgements}
 We acknowledge support from eSOL and Kalray.
