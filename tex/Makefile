@@ -28,7 +28,7 @@ BIBOBJS := $(TARGET).bbl $(TARGET).blg
 #
 
 .PHONY: all
-all: dvi pdf
+all: dvi adjust pdf
 
 .PHONY: dvi
 dvi: $(OBJS)
@@ -37,13 +37,17 @@ $(OBJS): $(TARGET).tex $(REF)
 	$(PLATEX) $(TARGET).tex
 	$(PBIBTEX) $(TARGET)
 	$(PLATEX) $(TARGET).tex
-	$(PLATEX) $(TARGET).tex
 
 .PHONY: pdf
 pdf: $(PDFOBJ)
 
-$(PDFOBJ): $(TARGET).dvi
+$(PDFOBJ): $(TARGET).dvi $(BIBOBJS)
+	$(PLATEX) $(TARGET).tex
 	$(DVIPDFMX) $(TARGET).dvi
+
+.PHONY: adjust
+adjust: 
+	sed -i -e '2i \\\footnotesize' $(TARGET).bbl
 
 .PHONY: simple
 simple: 
