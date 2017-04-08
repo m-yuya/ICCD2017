@@ -63,11 +63,11 @@
 \begin{document}
 
 %% ACM copyright information
-\CopyrightYear{2016}
-\setcopyright{othergov}
-\conferenceinfo{EMSOFT'16,}{October 01-07, 2016, Pittsburgh, PA, USA}
-\isbn{978-1-4503-4485-2/16/10}\acmPrice{\$15.00}
-\doi{http://dx.doi.org/10.1145/2968478.2968502}
+% \CopyrightYear{2016}
+% \setcopyright{othergov}
+% \conferenceinfo{EMSOFT'16,}{October 01-07, 2016, Pittsburgh, PA, USA}
+% \isbn{978-1-4503-4485-2/16/10}\acmPrice{\$15.00}
+% \doi{http://dx.doi.org/10.1145/2968478.2968502}
 
 \maketitle
 
@@ -116,13 +116,13 @@ Although modern automotive systems are composed of several Electronic Control Un
 there is a shift from numerous scattered ECUs to hierarchical multi/many core Domain Controllers (DC).
 Evidently, a hybrid scenario is also applicable. 
 Specifically, DCs combine performance with low power consumption to realize high parallel processing and efficient data transport.
-Furthermore, flexible scalability of a many-core platform acilitates development efficiency.
+Furthermore, flexible scalability of a many-core platform facilitates development efficiency.
 
 A related example involves avionics systems that also include various applications and require cost efficiency.
 Multi/many core platforms can be applied in the avionics domain due to their highly integrated characteristics and increasing processing demands.
 Low power consumption of cores leads to lower cooling requirements, and this is a critical issue for avionics.
 Multi/many core platforms reduce energy consumption as well as the costs and weight.
-Weight reduction is the most important factor for avionics, and integration with a multi/many core platform reduces the amount of processing boards and cooling units.
+Weight reduction is the most important factor for avionics, and integration with a multi/many core platform reduces the number of processing boards and cooling units.
 Thus, the utilization of an integrated platform results in space, weight and cost reductions.
 
 Hence, multi/many core platforms are fabricated and released as commercial off-the-shelf (COTS) multicore components.
@@ -132,7 +132,7 @@ The clusters of cores are capable of performing separate independent application
 Kalray's MPPA-256 packs 256 general-purpose cores.
 This significantly exceeds the number of cores in other COTS, and it targets embedded systems, high-performance computing (HPC), image processing, and networking due to the high-performance per watt.
 Intel's Xeon Phi \cite{chrysos2014intel}, \cite{chrysos2012intel} is an HPC accelerator.
-Xeon Phi and SCC are based on x86 architecture and its targeted use corresponds to data centers and workstations.
+Xeon Phi and SCC are based on x86 architecture, and its targeted use corresponds to data centers and workstations.
 
 Despite the emergence of the need for multi/many core platforms, several difficulties persist in the adaptation of these platforms to real-time embedded systems \cite{becker2016contention}, \cite{saidi2015shift}.
 These difficulties are caused by the hardware architecture and strict requirements of embedded systems.
@@ -188,7 +188,7 @@ Each IOS comprises of quad IO cores and a NoC interface.
 \begin{itemize}
 \item \textbf{IO cores}: IO cores are connected to a 16-banked parallel shared memory with a total capacity (IO SMEM) of 2MB, as shown in the left side of Figure \ref{fig:mppa_architecture},
 The four IO cores have their own instruction cache 8-way associative corresponding to 32 ($8 \times 4$) KB and share a data cache 8-way with 128 KB and external DDR access.
-The sharing of the data cache of 128 KB allows coherency between the IO coress.
+The sharing of the data cache of 128 KB allows coherency between the IO cores.
 Additionally, IO cores operate controllers for the PCIe, Ethernet, Interlaken, and other I/O devices.
 They operate the local peripherals, including the NoC interfaces with DMA.
 It is also possible to conduct an application run on the IO cores.
@@ -214,7 +214,7 @@ Figure \ref{fig:cc_architecture} illustrates the architecture of each CC.
 
 \begin{itemize}
 \item \textbf{Processing Elements and an RM}:
-In a CC, 16 processing elements (PEs) and a RM share 2 MB cluster local memory (SMEM) that is composed with 16 independent memory banks.
+In a CC, 16 processing elements (PEs) and an RM share 2 MB cluster local memory (SMEM) that is composed of 16 independent memory banks.
 The capacity of each SMEM bank corresponds to 128 KB.
 The PEs are mainly used by users for parallel processing.
 Developers spawn computing threads on PEs.
@@ -254,7 +254,7 @@ Data are packaged in variable length packets that circulate between routers in a
 The NoC traffic is segmented into packets, and each packet includes 1 to 4 header flits and 0 to 62 payload data flits.
 
 \item \textbf{NoC routers}:
-A node per compute cluster and four nodes per I/O subsystem holds the following two routers of its
+A node per compute cluster and four nodes per I/O subsystem hold the following two routers of its
 own: a D-NoC router and a C-NoC router
 Each RM or IO core on NoC node is associated with the fore-mentioned two NoC routers.
 Furthermore, DMA engines in a NoC interface on the CC/IOS send and receive flits through the D-NoC routers with the Rx interface, the Tx interface, and the UC.
@@ -278,7 +278,7 @@ The data links are four bytes wide in each direction and operate at the CPU cloc
 \label{sec:software_model}
 Figure \ref{fig:software_stack} shows the software stack used for Kalray MPPA-245 in the present study.
 The Kalray system is an extensible and scalable array of computing cores and memory.
-With respect to this type of a system, it is possible to map several programing models or runtimes such Linux, real-time operating system, POSIX API, OpenCL, and OpenMP.
+With respect to this type of a system, it is possible to map several programming models or runtimes such Linux, real-time operating system, POSIX API, OpenCL, and OpenMP.
 Each layer is described in detail.
 
 In the hardware abstraction layer, an abstraction package abstracts hardware of a CC, IOS, and NoC.
@@ -289,7 +289,7 @@ It sets-up and controls inter-partition communications as a virtual machine abst
 The hardware abstraction runs on the dedicated RM core.
 All the services are commonly provided by a rich operating system (for e.g., virtual memory, interrupts, and schedule) that must be provided by user-space libraries.
 Consequently, each runtime or operating system implements its own services that are optimized to specific needs.
-This is because each programing model or runtime involves different requirements.
+This is because each programming model or runtime involves different requirements.
 A minimal kernel avoids wastage of resources and mismatched needs.
 
 In a low-level library layer, the Kalray system also provides libraries for handling NoC.
@@ -313,7 +313,7 @@ The OS addresses the need for a multicore OS to conform to the maximum possible 
 The NodeOS enables a user code by using POSIX API to run on PEs on CC.
 First, NodeOS runtime starts on PE0 prior to before calling the user main function.
 Subsequently, \texttt{pthread} is called on other PEs.
-\item \textbf{eMCOS}: On both CC and IOS, eMCOS provides minimal programing interfaces and libraries.
+\item \textbf{eMCOS}: On both CC and IOS, eMCOS provides minimal programming interfaces and libraries.
 Specifically, eMCOS is a real-time embedded operating system developed by eSOL (a Japanese supplier for RTOS), and eMCOS is the world's first commercially available many-core RTOS for use in embedded systems.
 The OS implements a distributed micro-kernel architecture.
 This compact micro-kernel is equipped with only minimal functions.
@@ -335,10 +335,10 @@ In this section, data transfer methods in MPPA-256 are explained.
 For scalability purposes, MPPA-256 accepts clustered architectures in which each cluster contains its own memory.
 16 cores are packed as a cluster and they share 2 MB memory (SMEM) as shown in Figure \ref{fig:cc_architecture}.
 This avoids frequent memory contention due to numerous cores and helps in increasing the number of cores.
-However, the architecture constraints memory sthat can be directly accessed by the cores.
+However, the architecture constraints memory that can be directly accessed by the cores.
 In order to communicate with cores outside the cluster, it is necessary to transfer data between clusters through the D-NoC with NoC interfaces.
 
-A Rx interface exists in the receiving side to receive data with DMA.
+An Rx interface exists on the receiving side to receive data with DMA.
 It is necessary to allocate a D-NoC Rx resource and configure it to wait to receive the data.
 A DMA in a NoC interface contains 256 D-NoC Rx resources.
 Two interfaces, namely a Tx interface and a UC interface as explained in Sections \ref{sec:ios} and \ref{sec:cc},
@@ -365,8 +365,8 @@ This section involves examining two types of evaluations, namely a D-NoC data tr
 \label{sec:dnoc_eval}
 This evaluation involves clarifying end-to-end latency by considering the relation among interfaces (Tx or UC), routing on NoC, and memory type (DDR or SMEM).
 This is achieved by preparing four routes as shown in Figure \ref{fig:noc_routes}.
-The routes on D-NoC map (Figure \ref{fig:noc_map}) contains various connections between routers, namely a direct link, a cross link, and a flying link.
-With respect to case of routes from the IOS routers to the CC routers, transmitted data is allocated in DDR or IO SMEM.
+The routes on D-NoC map (Figure \ref{fig:noc_map}) contains various connections between routers, namely a direct link, a cross-link, and a flying link.
+With respect to the case of routes from the IOS routers to the CC routers, transmitted data is allocated in DDR or IO SMEM.
 The CC only includes SMEM as shown in Figure \ref{fig:cc_architecture}.
 A low-level library is directly used to transfer data with D-NoC.
 The transferred data correspond to 100 B, 1 KB, 10 KB, 100 KB, and 1 MB.
@@ -384,7 +384,7 @@ The following evaluations are conducted on eMCOS.
 \end{figure}
 
 Data transfer latencies between IOS and CC are not influenced by routing.
-This involved preparing two interfaces (Tx and UC), three routes(direct link, cross link, and detour route), and two memory locations in which the transferred data is allocated.
+This involved preparing two interfaces (Tx and UC), three routes(direct link, cross-link, and detour route), and two memory locations in which the transferred data is allocated.
 As shown in Figures \ref{fig:DDR_tx}, \ref{fig:DDR_uc}, \ref{fig:IO_SMEM_tx}, and \ref{fig:IO_SMEM_uc}, 
 end-to-end latency scales exhibit a linear relation with data size, and there are no significant differences between the three routes with respect to data transfer latency.
 This result is important in torus topology NoC because the number of minimum steps exceeds those in the mesh topology. 
@@ -393,7 +393,7 @@ The time taken by transmitting and receiving transactions exceeds those of other
 Additionally, it is briefly recognized that the speed of UC exceeds that of Tx.
 The data is arranged as shown in Figures \ref{fig:tx_uc_log} and \ref{fig:tx_uc} to facilitate a precise analysis with
 respect to the interface and memory location.
-In the figures, only the cross link from IOS to CC5 is accepted because routes do not influence latency.
+In the figures, only the cross-link from IOS to CC5 is accepted because routes do not influence latency.
 In order to facilitate intuitive recognition, two kinds of figures are arranged, namely a logarithmic axis and a linear axis.
 
 \begin{figure*}[t]
@@ -496,7 +496,7 @@ Thus, it is necessary for IOS and CC cores to access matrix buffers without cach
 In order to facilitate faster data transfer, a part of the matrix buffer is transmitted in parallel as shown in Figure \ref{fig:mat_calc}.
 
 Matrix calculation time is analyzed with parallelization and memory allocation.
-Additionally, the influence of cache is analyzed because cache coherency is an important issue in many-core system.
+Additionally, the influence of cache is analyzed because cache coherency is an important issue in many-core systems.
 There are several cases in which applications must access specific memory space without a cache.
 With respect to the given assumptions, maximum total buffer size corresponds to 1 MB, and thus three matrices buffers are prepared, and each size corresponds to 314 KB.
 Matrix A and matrix B are multiplied, and the result is stored in matrix C.
@@ -519,7 +519,7 @@ Furthermore, 128 KB data cache in the IOS works well and compensates for the DDR
 Additionally, it is observed that calculation time scales exhibit a linear relation with the number of threads.
 This corresponds to ideal behavior with respect to parallelization.
 
-Second, matrix calculation time without cache in the IOS and CC is shown in Figure \ref{fig:mat_calc_uncash}.
+Second, matrix calculation time without a cache in the IOS and CC is shown in Figure \ref{fig:mat_calc_uncash}.
 The absence of a cache, results in a fourfold increase in the DDR and a high difference arises with respect to the SMEM.
 Another notable result is that calculation speed in CC SMEM exceeds that of the IO SMEM.
 This characteristic is hidden in the calculation with the cache.
@@ -558,7 +558,7 @@ Finally, matrix calculation with offload-computing in IOS and CCs is shown in Fi
 In this case, it is assumed with respect to the calculation of large matrices that the total capacity exceeds 1 MB.
 The offloading result is compared with IO DDR (cached) due to the fore-mentioned assumption.
 The aggregate calculation is obtained by offloading on the four CC to perform a multiplication of a tile of the transpose of matB and a tile of matC.
-This produces a overhead irrespective of the number of threads as shown in Figures \ref{fig:mat_calc_offload_314} and \ref{fig:mat_calc_offload_640}.
+This produces an overhead irrespective of the number of threads as shown in Figures \ref{fig:mat_calc_offload_314} and \ref{fig:mat_calc_offload_640}.
 However, the speed involved in offloading result exceeds that of IO DDR (cached).
 The result indicates several important facts.
 First, D-NoC data transfer produces little overhead latency.
@@ -606,7 +606,7 @@ The self-localization adopts the normal-distribution transform matching algorith
 The self-localization algorithm used in this case study is primarily divided into two processes: \emph{RadiusSearch} which searches for several nearest neighbor points for each query and calculates the distance, and \emph{Derivatives} which calculates the derivative to determine the convergence of the matching operation.
 As shown in Figure \ref{fig:ndt_matching_situation}, this evaluation parallelized \emph{Derivatives} onto 16 CCs and the remainder of the algorithm was executed on the IOS.
 To parallelize \emph{RadiusSearch}, the algorithm of the nearest neighbor search needs to be redesigned because the data to be searched exceeds 1 MB.
-Redesigning this algorithm will be part of a future study..
+Redesigning this algorithm will be part of a future study.
 
 As shown in Figure \ref{fig:ndt_matching}, the evaluation of parallelized self-localization algorithm indicates the average execution time for each convergence and demonstrates that the parallelization accelerates the \emph{Derivatives} process.
 This acceleration shows the parallelization potential of the MPPA-256.
@@ -660,9 +660,9 @@ Furthermore, DSPs and FPGAs are also high-performance devices when compared to C
 They are efficient in terms of power consumption.
 A DSP is often used for real-time systems and FPGAs guarantee reliability and efficient processing.
 They are suitable for time-critical computing \cite{de2015kalray}.
-However, DSPs cannot be used for global purpose and programing.
-Furthermore, FPGAs are difficult for software developers since their software model is ignificantly different from that of CPU and is not a substitute for CPU.
-Many-core platforms can potentially replace single/multi core CPU as they possess ease of programing and scalability with high acceleration.
+However, DSPs cannot be used for global purpose and programming.
+Furthermore, FPGAs are difficult for software developers since their software model is significantly different from that of CPU and is not a substitute for CPU.
+Many-core platforms can potentially replace single/multi core CPU as they possess ease of programming and scalability with high acceleration.
 
 Based on the fore-mentioned background, many COTS many/multicore components are developed and released by several vendors.
 (e.g., Kalray's the Multi-Purpose Processing Array (MPPA) 256 \cite{de2013distributed}, \cite{de2013clustered}, \cite{de2014time}, \cite{baron2010single}, Tilera's Tile-Gx \cite{schooler2010tile}, \cite{ramey2011tile}, Tilera's Tile64 \cite{bell2008tile64}, and Intel's Xeon Phi \cite{chrysos2014intel}, \cite{chrysos2012intel}, Intel's Single-chip Cloud Computer (SCC) \cite{baron2010single}).
@@ -784,7 +784,7 @@ In future studies, we will port real-time systems software such as that in Ref. 
 \section{acknowledgements}
 \label{sec:acknowledgements}
 We acknowledge support from eSOL and Kalray.
-The authors would like to thank Atsushi Matsuo and Masaki Gondo from eSOL, and Gilbert Richard, Stéphane Cordova, and Benoît De Dinechin from Kalray for their support that helped improve this study.
+The authors would like to thank Atsushi Matsuo and Masaki Gondo from eSOL, and Gilbert Richard, St\'ephane Cordova, and Beno\^\i t Dupont de Dinechin from Kalray for their support that helped improve this study.
 
 %%
 \bibliographystyle{abbrv}       % ACM

@@ -1636,12 +1636,14 @@
 % ISBN
 %
 \def\isbn#1{\global\acmcopyr={#1}}
-\isbn{978-1-4503-2138-9}
+% \isbn{978-1-4503-2138-9}
+\isbn{xxx-x-xxxx-xxxx-x}
 
 \RequirePackage{url}
 \urlstyle{rm}
 \def\doi#1{\def\@doi{#1}}
-\doi{10.1145/1235}
+% \doi{10.1145/1235}
+\doi{xx.xxxx/xxxx}
 \def\printdoi#1{\url{#1}}
 
 
