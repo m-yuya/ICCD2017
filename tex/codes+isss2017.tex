@@ -1,34 +1,75 @@
-% \documentclass[conference,compsoc]{IEEEtran}
-\documentclass{sig-alternate-05-2015}                
+\documentclass[conference,compsoc]{IEEEtran}
+% \documentclass{sig-alternate-05-2015}                
 
 % \usepackage[dvipdfmx]{graphicx} \usepackage{amssymb} \usepackage{multirow} \usepackage{threeparttable} \usepackage{array} \usepackage{color} \usepackage{nidanfloat}
 \usepackage{graphicx} \usepackage{amssymb} \usepackage{multirow} \usepackage{threeparttable} \usepackage{array} \usepackage{color} \usepackage{nidanfloat}\usepackage{setspace} 
 
+% *** CITATION PACKAGES ***
+%
+\ifCLASSOPTIONcompsoc
+  % IEEE Computer Society needs nocompress option
+  % requires cite.sty v4.0 or later (November 2003)
+  \usepackage[nocompress]{cite}
+\else
+  % normal IEEE
+  \usepackage{cite}
+\fi
+% cite.sty was written by Donald Arseneau
+% V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
+% \cite{} output to follow that of the IEEE. Loading the cite package will
+% result in citation numbers being automatically sorted and properly
+% "compressed/ranged". e.g., [1], [9], [2], [7], [5], [6] without using
+% cite.sty will become [1], [2], [5]--[7], [9] using cite.sty. cite.sty's
+% \cite will automatically add leading space, if needed. Use cite.sty's
+% noadjust option (cite.sty V3.8 and later) if you want to turn this off
+% such as if a citation ever needs to be enclosed in parenthesis.
+% cite.sty is already installed on most LaTeX systems. Be sure and use
+% version 5.0 (2009-03-20) and later if using hyperref.sty.
+% The latest version can be obtained at:
+% http://www.ctan.org/pkg/cite
+% The documentation is contained in the cite.sty file itself.
+%
+% Note that some packages require special options to format as the Computer
+% Society requires. In particular, Computer Society  papers do not use
+% compressed citation ranges as is done in typical IEEE papers
+% (e.g., [1]-[4]). Instead, they list every citation separately in order
+% (e.g., [1], [2], [3], [4]). To get the latter we need to load the cite
+% package with the nocompress option which is supported by cite.sty v4.0
+% and later.
 
-% \author{\IEEEauthorblockN{Yuya Maruyama}\IEEEauthorblockA{School of Engineering Science\\Osaka University}\and\IEEEauthorblockN{Shinpei Kato}\IEEEauthorblockA{Graduate School of Information Science\\Nagoya University}\and\IEEEauthorblockN{Takuya Azumi}\IEEEauthorblockA{Graduate School of Engineering Science\\Osaka University }}
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
 
-\numberofauthors{2}
 \author{
-% 1st. author
-\alignauthor Yuya Maruyama\\
-\affaddr{Graduate School of Engineering Science}\\
-\affaddr{Osaka University}\\
-       % \affaddr{Institute for Clarity in Documentation}\\
-       % \affaddr{1932 Wallamaloo Lane}\\
-       % \affaddr{Wallamaloo, New Zealand}\\
-       % \email{trovato@corporation.com}
-% 2nd. author
-% \alignauthor Shinpei Kato\\
-% \affaddr{Graduate School of Information Science and Technology}\\
-% \affaddr{The University of Tokyo}\\
-       % \affaddr{P.O. Box 1212}\\
-       % \affaddr{Dublin, Ohio 43017-6221}\\
-       % \email{webmaster@marysville-ohio.com}
-% 3rd. author
-\alignauthor Takuya Azumi\\
-\affaddr{Graduate School of Engineering Science}\\
-\affaddr{Osaka University}\\
-}
+\IEEEauthorblockN{Yuya Maruyama}
+\IEEEauthorblockA{Graduate School of Engineering Science\\Osaka University}
+\and
+\IEEEauthorblockN{Takuya Azumi}
+\IEEEauthorblockA{Graduate School of Engineering Science\\Osaka University 
+}}
+
+% \numberofauthors{2}
+% \author{
+% % 1st. author
+% \alignauthor Yuya Maruyama\\
+% \affaddr{Graduate School of Engineering Science}\\
+% \affaddr{Osaka University}\\
+%        % \affaddr{Institute for Clarity in Documentation}\\
+%        % \affaddr{1932 Wallamaloo Lane}\\
+%        % \affaddr{Wallamaloo, New Zealand}\\
+%        % \email{trovato@corporation.com}
+% % 2nd. author
+% % \alignauthor Shinpei Kato\\
+% % \affaddr{Graduate School of Information Science and Technology}\\
+% % \affaddr{The University of Tokyo}\\
+%        % \affaddr{P.O. Box 1212}\\
+%        % \affaddr{Dublin, Ohio 43017-6221}\\
+%        % \email{webmaster@marysville-ohio.com}
+% % 3rd. author
+% \alignauthor Takuya Azumi\\
+% \affaddr{Graduate School of Engineering Science}\\
+% \affaddr{Osaka University}\\
+% }
 
 
 % Copyright
@@ -94,7 +135,7 @@ Our experimental results will allow system designers to choose appropriate data 
 By highlighting many-core computing capabilities, we explore the performance characteristics of currently achievable data transfer methods for many-core computing based on NoC.
 \end{abstract}
 
-\keywords{Many-core; Multicore; Network-on-Chip (NoC); Parallelization; Embedded software}
+% \keywords{Many-core; Multicore; Network-on-Chip (NoC); Parallelization; Embedded software}
 
 
 \section{Introduction}
@@ -799,7 +840,7 @@ Our experimental results will allow system designers to choose appropriate syste
 In future studies, we will port real-time systems software such as that in Ref. \cite{maruyama2016ros2} and propose the parallelization of memory intensive algorithms such as the nearest neighbor search in Section \ref{sec:case_study}.
 
 
-\section{acknowledgements}
+\section*{Acknowledgements}
 \label{sec:acknowledgements}
 We acknowledge support from eSOL and Kalray.
 The authors would like to thank Atsushi Matsuo and Masaki Gondo from eSOL, and Gilbert Richard, St\'ephane Cordova, and Beno\^\i t Dupont de Dinechin from Kalray for their support that helped improve this study.
