@@ -173,7 +173,7 @@ Thus, an integrated platform results in space, weight and cost reductions.
 
 Hence, multi/many core platforms are fabricated and released as commercial off-the-shelf (COTS) multicore components.
 Increasing research attention has focused on multi/many core platforms.
-The Multi-Purpose Processing Array (MPPA) 256 developed by Kalray \cite{de2013distributed}, \cite{de2013clustered}, \cite{de2014time}, Single-chip Cloud Computer (SCC) developed by Intel \cite{baron2010single}, and Tile64 developed by Tilera \cite{bell2008tile64} include the clustering of many-core architectures in which cores are \colorbox{green}{1-7} allocated closely.
+The Multi-Purpose Processing Array (MPPA) 256 developed by Kalray, \cite{de2014time}, Single-chip Cloud Computer (SCC) developed by Intel \cite{baron2010single}, and Tile64 developed by Tilera \cite{bell2008tile64} include the clustering of many-core architectures in which cores are \colorbox{green}{1-7} allocated closely.
 The clusters of cores are capable of performing separate independent applications with respect to the desired power envelope of embedded applications.
 Kalray's MPPA-256 packs 256 general-purpose cores.
 This significantly exceeds the number of cores in other COTS, and it targets embedded systems, high-performance computing (HPC), image processing, and networking due to the high-performance per watt.
@@ -235,20 +235,20 @@ The East and West IOSes are connected to a quad 10Gb/s Ethernet controller.
 Two pairs of IOSes organize two I/O clusters (IOCs) as shown in Figure \ref{fig:mppa_architecture}.
 
 Each IOS comprises of quad IO cores and a NoC interface.
-\begin{itemize}
-\item \textbf{IO cores}: IO cores are connected to a 16-banked parallel shared memory with a total capacity (IO SMEM) of 2 MB, as shown on the left-hand side of Figure \ref{fig:mppa_architecture},
+
+\textbf{IO cores}: IO cores are connected to a 16-banked parallel shared memory with a total capacity (IO SMEM) of 2 MB, as shown on the left-hand side of Figure \ref{fig:mppa_architecture},
 The four IO cores have their own instruction cache 8-way associative corresponding to 32 ($8 \times 4$) KB and share a data cache 8-way with 128 KB and external DDR access.
 The sharing of the data cache of 128 KB allows coherency between the IO cores.
 Additionally, IO cores operate controllers for the PCIe, Ethernet, \colorbox{green}{1-11} and other I/O devices.
 They operate the local peripherals, including the NoC interfaces with DMA.
 It is also possible to conduct an application run on the IO cores.
-\item \textbf{NoC Interface}: The NoC interface contains four DMA engines (DMA0-3) and four NoC routers as shown in the left side of Figure \ref{fig:mppa_architecture}, and the IOS DMA engine manages transfers between the IO SMEM, the IOS DDR, and the IOS peripherals (e.g., PCIe interface and Ethernet controllers).
+
+\textbf{NoC Interface}: The NoC interface contains four DMA engines (DMA0-3) and four NoC routers as shown in the left side of Figure \ref{fig:mppa_architecture}, and the IOS DMA engine manages transfers between the IO SMEM, the IOS DDR, and the IOS peripherals (e.g., PCIe interface and Ethernet controllers).
 The DMA engine transfers data between routers on NoC through NoC routers.
 The DMA engine has the following three NoC interfaces: a receive (Rx) interface, a transmit (Tx) interface, and a micro core (UC).
 A micro core is a fine-grained multi-threaded engine that can be programed to set threads sending data with a Tx interface
 A UC can extract data from memory by using a programed pattern and send the data on the NoC.
 After it is initiated, this continues in an autonomous fashion without using a Processing Element (PE) and an IO core.
-\end{itemize}
 
 \begin{figure}[t]
   \centering
@@ -262,8 +262,7 @@ After it is initiated, this continues in an autonomous fashion without using a P
 In MPPA-256, the 16 inner nodes of the NoC correspond to the CCs.
 Figure \ref{fig:cc_architecture} illustrates the architecture of each CC.
 
-\begin{itemize}
-\item \textbf{Processing Elements and an RM}:
+\textbf{Processing Elements and an RM}:
 In a CC, 16 processing elements (PEs) and an RM share 2 MB cluster local memory (SMEM) that is composed of 16 independent memory banks.
 The capacity of each SMEM bank is 128 KB.
 The PEs are mainly used by users for parallel processing.
@@ -273,12 +272,11 @@ Each core is fitted with its own instruction and data caches.
 Each cache is a 2-way associative with a capacity of 8 KB.
 Thus, 17 k1-cores (a PE or the RM) share a multi-banked 2 MB SMEM.
 
-\item \textbf{A Debug Support Unit (DSU) and a NoC Interface}:
+\textbf{A Debug Support Unit (DSU) and a NoC Interface}:
 In addition to PEs and an RM, bus masters on SMEM correspond to a DSU and a DMA engine in a NoC interface.
 A DMA engine and a NoC router are laid out in a NoC interface.
 In a manner similar to IOS, the CC DMA engine also has the following three interfaces: an Rx, a Tx, and a UC. 
 It is instantiated in every cluster and connected to the SMEM.
-\end{itemize}
 
 \begin{figure}[t]
   \centering
@@ -293,8 +291,7 @@ It is instantiated in every cluster and connected to the SMEM.
 The 16 CCs and the 4 IOSs are connected by a NoC as shown in Figure \ref{fig:noc_map}.
 Furthermore, a NoC is constructed \colorbox{green}{1-12} as the bus network and has routers on each node.
 
-\begin{itemize}
-\item \textbf{Bus Network}:
+\textbf{Bus Network}:
 Bus network connects nodes (CCs and IOSs) with torus topology \cite{dally2001route}
 which \colorbox{green}{1-13} involves a low average number of hops when compared to mesh topology \cite{vangal200780}, \cite{taylor2002raw}.
 The network is actually composed of the following two parallel NoCs with bi-directional links (denoted by red lines in Figure \ref{fig:noc_map}):
@@ -303,7 +300,7 @@ The NoC is implemented with wormhole switching and source routing.
 Data is packaged in variable length packets that circulate between routers in a wormhole manner in which packets are broken into small pieces called flits (flow control digits).
 The NoC traffic is segmented into packets, and each packet includes 1 to 4 header flits and 0 to 62 payload data flits.
 
-\item \textbf{NoC routers}:
+\textbf{NoC routers}:
 A node per compute cluster and four nodes per I/O subsystem hold the following two routers of its
 own: a D-NoC router and a C-NoC router
 Each RM or IO core on NoC node is associated with the fore-mentioned two NoC routers.
@@ -315,7 +312,6 @@ In both D-NoC and C-NoC, each network node (CC or IOS)  includes the following 5
 four duplexed links for north/east/west and south neighbors and a duplexed link for local address space attached to the NoC router.
 The NoC routers include FIFOs queuing flits for each direction.
 The data links are four bytes wide in each direction and operate at the CPU clock rate of 600 MHz or 800 MHz, and therefore each tile can transmit/receive a total of 2.4 GB/s or 3.2 GB/s, which is spread across the four directions (i.e., north, south, east, and west).
-\end{itemize}
 
 \begin{figure}[t]
   \centering
@@ -355,23 +351,24 @@ The Libpower enables spawning and waiting for the end of execution of a remote c
 
 Various operating systems support the abstraction package in the OS layer.
 The following Real-Time Operating System (RTOS) is introduced:
-\begin{itemize}
-\item \textbf{RTEMS}: RTEMS (Real-Time Executive for Multiprocessor Systems) is a full featured RTOS prepared for embedded platforms.
+
+\textbf{RTEMS}: RTEMS (Real-Time Executive for Multiprocessor Systems) is a full featured RTOS prepared for embedded platforms.
 It supports several APIs and standards, and most notably supports the POSIX API.
 The system provides a rich set of features, and an RTEMS application mostly is a regular C or C++ program that uses the POSIX API.
 \colorbox{green}{1-18}
 Additionally, RTEMS runs on the IOC except for the CC.
-\item \textbf{NodeOS}: On CC, the MPPA cluster operating system utilizes a runtime called NodeOS.
+
+\textbf{NodeOS}: On CC, the MPPA cluster operating system utilizes a runtime called NodeOS.
 The OS addresses the need for a multicore OS to conform to the maximum possible extent to the standard POSIX API.
 The NodeOS enables a user code by using POSIX API to run on PEs on CC.
 First, NodeOS runtime starts on PE0 prior to calling the user main function.
 Subsequently, \texttt{pthread} is called on other PEs.
-\item \textbf{eMCOS}: On both CC and IOS, eMCOS provides minimal programming interfaces and libraries.
+
+\textbf{eMCOS}: On both CC and IOS, eMCOS provides minimal programming interfaces and libraries.
 Specifically, eMCOS is a real-time embedded operating system developed by eSOL (a Japanese supplier for RTOS), and eMCOS is the world's first commercially available many-core RTOS for use in embedded systems.
 The OS implements a distributed micro-kernel architecture.
 This compact micro-kernel is equipped with only minimal functions.
 It enables applications to operate priority based message passing, local thread scheduling, and thread management on IOS as well as CC.
-\end{itemize}
 RTMES and NodeOS are provided by Kalray and eMCOS is released by eSOL.
 
 \begin{figure}[t]
@@ -561,7 +558,7 @@ The following evaluations are conducted on eMCOS.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=1.0\linewidth]{../figure/matrix_calculation.eps}
+  \includegraphics[width=0.8\linewidth]{../figure/matrix_calculation.eps}
   \caption{\label{fig:mat_calc}
     Matrix calculation situations.}
 \end{figure}
@@ -724,9 +721,9 @@ Furthermore, FPGAs are difficult for software developers since their software mo
 Many-core platforms can potentially replace single/multi core CPU as they possess ease of programming and scalability with high acceleration.
 
 Based on the fore-mentioned background, many COTS many/multicore components are developed and released by several vendors.
-(e.g., Kalray's the Multi-Purpose Processing Array (MPPA) 256 \cite{de2013distributed}, \cite{de2013clustered}, \cite{de2014time}, \cite{baron2010single}, Tilera's Tile-Gx \cite{schooler2010tile}, \cite{ramey2011tile}, Tilera's Tile64 \cite{bell2008tile64}, and Intel's Xeon Phi \cite{chrysos2014intel}, \cite{chrysos2012intel}, Intel's Single-chip Cloud Computer (SCC) \cite{baron2010single}).
+(e.g., Kalray's the Multi-Purpose Processing Array (MPPA) 256, \cite{de2014time}, Tilera's Tile-Gx \cite{schooler2010tile}, \cite{ramey2011tile}, Tilera's Tile64 \cite{bell2008tile64}, and Intel's Xeon Phi \cite{chrysos2014intel}, \cite{chrysos2012intel}, Intel's Single-chip Cloud Computer (SCC) \cite{baron2010single}).
 The present study focuses on the Kalray MPPA-256 that is designed for real-time embedded applications.
-Kalray S.A. \cite{de2013distributed}, \cite{de2013clustered}, \cite{de2014time} presented clustered many-core architectures on the NoC which pack 256 general-purpose cores with high energy efficiency.
+Kalray S.A., \cite{de2014time} presented clustered many-core architectures on the NoC which pack 256 general-purpose cores with high energy efficiency.
 
 MPPA-256 is superior to other COTS many/multicore components in terms of the scalability of the number of cores and the power efficiency as shown in Table \ref{tb:comparison_manycore}.
 In terms of the scalability, MPPA-256 adopts 256 cores while other COTS many/multicore components have 64 cores or the number of cores around it.
