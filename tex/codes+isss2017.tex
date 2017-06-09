@@ -125,22 +125,28 @@
 % \setlength\floatsep{18pt}% between figures
 
 \begin{abstract}
-The evolution of a next generation computing platform oriented toward multi/many cores is inevitable because the demand for high-performance computation with reasonable power consumption even in embedded real-time systems is increasing.
-The Multi-Purpose Processing Array 256 developed by Kalray is a many-core processor platform that includes 256 general-purpose cores with high energy efficiency.
-The clusters of the cores share a local memory, and a DMA-capable network-on-chip (NoC) connects the clusters.
-In this paper, we investigate and characterize currently achievable data transfer methods of cutting-edge many-core technologies based on NoC.
+In embedded systems, high processing requirements and reasonable power consumption needs heterogeneous computing platforms in several domains such as automobiles.
+The evolution of a next generation computing platform oriented toward multi/many cores is inevitable.
+Considering embedded requirements, applications need to be designed based on scalable data allocation and parallel computing with many cores.
+In this paper, we investigate currently achievable data transfer between distributed memories on NoC, memory access characteristics, and parallelization potential with many cores.
+Finally, we run a practical application, the core of the autonomous driving system, on many-core processors and indicate acceleration by parallelization.
+By highlighting many-core computing capabilities, we explore the scalable data allocation and parallel computing on NoC-based embedded many cores.
+% The evolution of a next generation computing platform oriented toward multi/many cores is inevitable because the demand for high-performance computation with reasonable power consumption even in embedded real-time systems is increasing.
+% The Multi-Purpose Processing Array 256 developed by Kalray is a many-core processor platform that includes 256 general-purpose cores with high energy efficiency.
+% The clusters of the cores share a local memory, and a DMA-capable network-on-chip (NoC) connects the clusters.
+% In this paper, we investigate and characterize currently achievable data transfer methods of cutting-edge many-core technologies based on NoC.
 % The cores communicate with each other by NoC parallelly to manage numerous tasks and optimize the potential of this architecture.
-Previous studies have not quantitatively examined the transport latencies nor have they clarified the potential and constraints for low-latency many-core computing.
-To address this problem, we illustrate evaluations of end-to-end latencies and the calculation potential of many-core computing with parallel data transfer.
-Our experimental results will allow system designers to choose appropriate data transfer methods based on the requirements of their latency-sensitive many-core applications as opposed to just intuitive expectations.
-By highlighting many-core computing capabilities, we explore the performance characteristics of currently achievable data transfer methods for many-core computing based on NoC.
+% Previous studies have not quantitatively examined the transport latencies nor have they clarified the potential and constraints for low-latency many-core computing.
+% To address this problem, we illustrate evaluations of end-to-end latencies and the calculation potential of many-core computing with parallel data transfer.
+% Our experimental results will allow system designers to choose appropriate data transfer methods based on the requirements of their latency-sensitive many-core applications as opposed to just intuitive expectations.
+% By highlighting many-core computing capabilities, we explore the performance characteristics of currently achievable data transfer methods for many-core computing based on NoC.
 \end{abstract}
 
 % \keywords{Many-core; Multicore; Network-on-Chip (NoC); Parallelization; Embedded software}
 
 
 \section{Introduction}
-\colorbox{green}{TBD: 2-1: To be reduced}
+\colorbox{green}{2-1: To be reduced}
 \colorbox{green}{1-4, 1-5, 1-6}
 
 The evolution of a next generation computing platform oriented toward multi/many cores is unavoidable to satisfy the demand for increasing computation in conjunction with reasonable power consumption.
