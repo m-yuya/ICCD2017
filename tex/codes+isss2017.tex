@@ -101,7 +101,7 @@
 %\crdata{0-12345-67-8/90/01}  % Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
 % --- End of Author Metadata ---
 
-\title{\colorbox{green}{TBD: 1-2, 3-2} Scalable data allocation and parallel computing on NoC-based embedded many cores}
+\title{\colorbox{green}{TBD: 1-2, 3-2} Scalable Data Allocation and Parallel Computing on NoC-based Embedded Many Cores}
 \begin{document}
 
 %% ACM copyright information
@@ -125,11 +125,12 @@
 % \setlength\floatsep{18pt}% between figures
 
 \begin{abstract}
-In embedded systems, high processing requirements and reasonable power consumption needs heterogeneous computing platforms in several domains such as automobiles.
-The evolution of a next generation computing platform oriented toward multi/many cores is inevitable.
-Considering embedded requirements, applications need to be designed based on scalable data allocation and parallel computing with many cores.
-In this paper, we investigate currently achievable data transfer between distributed memories on NoC, memory access characteristics, and parallelization potential with many cores.
-Finally, we run a practical application, the core of the autonomous driving system, on many-core processors and indicate acceleration by parallelization.
+In embedded systems, high processing requirements and low power consumption need heterogeneous computing platforms.
+% The evolution of a next generation computing platform oriented toward multi/many cores is inevitable.
+Considering embedded requirements, applications need to be designed based on scalable data allocation and parallel computing with non-uniform memory access (NUMA) many cores.
+In this paper, we use one of the embedded commercial off-the-shelf (COTS) multi/many-core components, the Multi-Purpose Processing Array (MPPA) 256 developed by Kalray, and conduct evaluations of data transfer and parallelization micro benchmark.
+We investigate currently achievable data transfer latencies between distributed memories on networks-on-chip (NoC), memory access characteristics, and parallelization potential with many cores.
+Subsequently, we run a practical application, the core of the autonomous driving system, on many-core processors and indicate acceleration by parallelization.
 By highlighting many-core computing capabilities, we explore the scalable data allocation and parallel computing on NoC-based embedded many cores.
 % The evolution of a next generation computing platform oriented toward multi/many cores is inevitable because the demand for high-performance computation with reasonable power consumption even in embedded real-time systems is increasing.
 % The Multi-Purpose Processing Array 256 developed by Kalray is a many-core processor platform that includes 256 general-purpose cores with high energy efficiency.
@@ -148,13 +149,12 @@ By highlighting many-core computing capabilities, we explore the scalable data a
 \section{Introduction}
 \colorbox{green}{2-1: To be reduced}
 \colorbox{green}{1-4, 1-5, 1-6}
-
-The evolution of a next generation computing platform oriented toward multi/many cores is unavoidable to satisfy the demand for increasing computation in conjunction with reasonable power consumption.
-In embedded systems, this trend is also adapted because high processing requirements are also required in several embedded systems.
-For example, autonomous driving system involve various applications and are sometimes characterized by demands for high-performance computing.
-Considering requirements of high processing, predictability, and significant energy efficiency for automotive systems, its system needs a heterogeneous computing system such as multi/many cores and GPUs. (This is discussed in Section \ref{sec:related_work}.)
-Multi/many core architecture is an important trend \colorbox{green}{1-3} as it integrates cores to realize high-performance and general-purpose computing with low power consumption.
-Extant studies have examined numerous applications of multi/many cores platforms \cite{becker2016contention}, \cite{saidi2015shift}, \cite{perret2016temporal}, \cite{perret2016mapping}, \cite{becker2014mapping}.
+The evolution of a next generation computing platform oriented toward multi/many cores is unavoidable to satisfy the demand for increasing computation in conjunction with reasonable power consumption in several domains such as automobiles.
+In embedded systems, this trend is also adapted because high processing requirements are also required.
+For example, an autonomous driving system involves various applications and are sometimes characterized by demands for high-performance computing.
+Considering requirements of high processing, predictability, and significant energy efficiency for autonomous driving systems, its system needs a heterogeneous computing system such as multi/many cores and GPUs. (This is discussed in Section \ref{sec:related_work}.)
+Multi/many-core architecture is an important trend \colorbox{green}{1-3} as it integrates cores to realize high-performance and general-purpose computing with low power consumption.
+% Extant studies have examined several applications of multi/many-core platforms \cite{becker2016contention}, \cite{saidi2015shift}, \cite{perret2016temporal}, \cite{perret2016mapping}, \cite{becker2014mapping}.
 % Recently, the computational ability of single core processors has reached its limit \colorbox{green}{1-3} and thus the applicability of Moore's law \cite{moore2006cramming} is unclear.
 % Multi/many core architecture is an important trend in \colorbox{green}{1-3} recent years as it integrates cores to realize high-performance and general-purpose computing with low power consumption.
 % Hence, high energy efficiency is a superior feature of multi/many core platforms.
@@ -191,30 +191,28 @@ Extant studies have examined numerous applications of multi/many cores platforms
 % Intel's Xeon Phi \cite{chrysos2014intel}, \cite{chrysos2012intel} is an HPC accelerator.
 % Xeon Phi and SCC are based on x86 architecture, and its targeted use are data centers and workstations.
 
-Despite the emergence of the need for multi/many core platforms, several difficulties persist in the adaptation of these platforms to embedded systems \cite{becker2016contention}, \cite{saidi2015shift}.
-These difficulties are caused by the hardware architecture and strict requirements of embedded systems.
-A difficulty involves the sharing of numerous resources (e.g. memory subsystems and I/O devices) by many cores.
-Parallelized complex processes share some resources, and this leads to the frequent occurrence of conflicts.
-Cache coherency is also a critical problem owing to their numerous cores.
+Despite the emergence of the need for multi/many-core platforms, several difficulties persist in the adaptation of these platforms to embedded systems \cite{becker2016contention}, \cite{saidi2015shift}.
+These difficulties are caused by strict requirements of embedded systems and the hardware architecture shares resources (e.g. memory subsystems and I/O devices) by many cores.
+Parallelized processes share memories, which leads to the frequent occurrence of conflicts.
+Shared resources also disturb predictable timing behavior and software analysis.
+% Cache coherency is also a critical problem owing to their numerous cores.
 Although it is possible to connect a large memory and all the cores with wide-bandwidth buses, it will lose its scaleability due to bus competition and it will require a large power consumption.
-For instance, the Multi-Purpose Processing Array (MPPA) 256 developed by Kalray \cite{de2014time} adopt Non-Uniform Memory Access (NUMA) using network-on-chip (NoC).
-Numerous shared resources disturb predictable timing behavior and software analysis.
-The timing requirement of real-time embedded systems continues to warrant solutions.
-The impact of integrating applications in multi/many core platforms is not completely understood to date.
-This is a critical issue because embedded systems have requirements for reliable and predictable behavior.
+For instance, the Multi-Purpose Processing Array (MPPA) 256 developed by Kalray \cite{de2014time} adopt non-uniform memory access (NUMA) using network-on-chip (NoC), and realize numerous cores and low power consumption.
+% The timing requirement of real-time embedded systems continues to warrant solutions.
+% The impact of integrating applications in multi/many-core platforms is not completely understood to date.
+% This is a critical issue because embedded systems have requirements for reliable and predictable behavior.
 
 Considering embedded requirements, multi/many cores need NUMA because of scalability of the number of cores and reasonable power consumption.
 Scalable data allocation enhances parallelized high-performance and general-purpose computing with low power consumption.
-MPPA-256 developed by Kalray \cite{de2014time} is one of the commercial off-the-shelf (COTS) multicore components targeting embedded system and adopts distributed memory architecture with NoC. (We discusses comparison to other platforms in Section \ref{sec:related_work}.)
-However, its data transfer between distributed memories with NoC, parallelization potential, and memory access characteristics are not completely understood.
+MPPA-256 is one of the commercial off-the-shelf (COTS) multi/many-core components targeting embedded system and adopts distributed memory architecture with NoC. (We discusses comparison to other platforms in Section \ref{sec:related_work}.)
+However, its data transfer between distributed memories with NoC, parallelization potential, and memory access characteristics are not fully unrvealed for application developers.
 This study explores above issues with quantitative evaluations and a practical case study.
 
 \textbf{Contributions:}
 \colorbox{green}{1-1, 3-3: To be clarified}
-
-This study focuses on examining embedded many-core computing based on networks-on-chip (NoCs), such as MPPA-256.
+This study focuses on examining embedded many-core computing based on NoCs, such as MPPA-256.
 We conduct evaluations of data transfer methods on NoCs and micro benchmark with matrix calculation to clarify latency characteristics of data transfer, parallel computing, and an influence of data allocation.
-Finally, we parallelize and accelerate localization algorithm which becomes the core of autonomous driving system.
+Subsequently, we parallelize localization algorithm which becomes the core of the autonomous driving system.
 We reveal the advantages and disadvantages of embedded many-core computing based on NoC in a quantitative way by leading the following contributions:
 
 \begin{itemize}
@@ -223,9 +221,8 @@ We reveal the advantages and disadvantages of embedded many-core computing based
 \item The evaluations of the parallel processing examine the characteristics of the memory access speed which varies according to where data is allocated and what accesses the memory.
 \end{itemize}
 
-To the best of our knowledge, this is the first study that examines data transfer and data allocation matters for many-core computing beyond an intuitive expectation to allow system designers to choose appropriate data transfer methods based on the requirements of their latency-sensitive many-core applications.
+To the best of our knowledge, this is the first study that examines data transfer and data allocation matters for many-core computing beyond an intuitive expectation to allow system designers to choose appropriate data transfer methods.
 Additionally, the speed-up result of autonomous driving case study indicates a practical potential for NoC-based embedded many-core computing.
-
 \colorbox{green}{1-8, 1-9}
 % It is expected that the findings of this study will potentially be applicable to several types of many-core architectures as opposed to just MPPA-256.
 % Therefore, the contributions of this study can be used in low-latency many-core computing.
@@ -235,7 +232,7 @@ The remainder of this study is organized as follows.
 First, the system model considered in this study is discussed in Section \ref{sec:system_model} in which the hardware model, namely Kalray MPPA-256 Bostan, and the system model are presented.
 \colorbox{green}{1-10}
 Second, Section \ref{sec:framework} explains evaluation setup and approach and Section \ref{sec:evaluations} illustrates experimental evaluations.
-Subsequently, Section \ref{sec:related work} examines related studies that focus on multi/many core systems.
+Subsequently, Section \ref{sec:related_work} examines related studies that focus on multi/many-core systems.
 Finally, Section \ref{sec:conclusion} presents the conclusions and directions for future research.
 
 
@@ -718,7 +715,7 @@ Therefore, if we succeed in the parallelization of \emph{RadiusSearch}, this goa
   \vspace{-2mm}
 \end{figure*}
 
-\subsection{lessons leared}
+\subsection{Lessons Leared}
 \label{sec:lessons}
 \colorbox{green}{TBD: 3-4}
 
@@ -726,7 +723,7 @@ Therefore, if we succeed in the parallelization of \emph{RadiusSearch}, this goa
 \label{sec:related_work}
 This section compares many-core platforms and discusses previous studies related to multi/many cores.
 First, needs of high-performance computation and comparison of many-core platforms to other platforms are discussed.
-Second, the Kalray MPPA-256 which this study focuses on is compared to other COTS COTS many/multicore components, and we summarize the features of MPPA-256.
+Second, the Kalray MPPA-256 which this study focuses on is compared to other COTS COTS multi/many-core components, and we summarize the features of MPPA-256.
 Finally, discussions of previous studies and comparison to them are described.
 
 Recently, studies indicate that the single core processors are characterized by limited computation performance.
@@ -751,13 +748,13 @@ However, DSPs cannot be used for global purpose and programming.
 Furthermore, FPGAs are difficult for software developers since their software model is significantly different from that of CPU and is not a substitute for CPU.
 Many-core platforms can potentially replace single/multi core CPU as they possess ease of programming and scalability with high acceleration.
 
-Based on the fore-mentioned background, many COTS many/multicore components are developed and released by several vendors.
+Based on the fore-mentioned background, many COTS multi/many-core components are developed and released by several vendors.
 (e.g., Kalray's the Multi-Purpose Processing Array (MPPA) 256, \cite{de2014time}, Tilera's Tile-Gx \cite{schooler2010tile}, \cite{ramey2011tile}, Tilera's Tile64 \cite{bell2008tile64}, and Intel's Xeon Phi \cite{chrysos2014intel}, \cite{chrysos2012intel}, Intel's Single-chip Cloud Computer (SCC) \cite{baron2010single}).
 The present study focuses on the Kalray MPPA-256 that is designed for real-time embedded applications.
 Kalray S.A., \cite{de2014time} presented clustered many-core architectures on the NoC which pack 256 general-purpose cores with high energy efficiency.
 
-MPPA-256 is superior to other COTS many/multicore components in terms of the scalability of the number of cores and the power efficiency as shown in Table \ref{tb:comparison_manycore}.
-In terms of the scalability, MPPA-256 adopts 256 cores while other COTS many/multicore components have 64 cores or the number of cores around it.
+MPPA-256 is superior to other COTS multi/many-core components in terms of the scalability of the number of cores and the power efficiency as shown in Table \ref{tb:comparison_manycore}.
+In terms of the scalability, MPPA-256 adopts 256 cores while other COTS multi/many-core components have 64 cores or the number of cores around it.
 This scalability of cores is attributed to the memory architecture; each cluster of 16 cores contains its own local shared memory.
 The precise hardware model is described in Section \ref{sec:hardware_model}.
 When all cores share the global DDR memory as in other platforms excluding MPPA-256, specific bus routes receives extremely large loads and memory access contention frequently occurs.
@@ -766,18 +763,18 @@ This is why MPPA-256 has succeeded in scaling up to 256 cores.
 However, the local shared memory architecture restricts the capacity of the memory and requires a data copy from DDR with NoC.
 This restriction makes the use of existing applications difficult especially in the case of applications that require more memory.
 In terms of power efficiency, MPPA-256 realizes superior energy efficiency despite its large number of cores.
-The total clock frequency per watt is the highest of the current COTS many/multicore components.
+The total clock frequency per watt is the highest of the current COTS multi/many-core components.
 The power consumption of the MPPA processor ranges between 16W at 600 MHz and 24W at 800 MHz.
 While MPPA-256 and TILE64 \cite{bell2008tile64} target the embedded systems, other COTS components consider the HPC accelerator.
 Their clock frequency per core exceeds that of embedded solutions.
-We need to distinguish the COTS many/multicore components according to their requirements with reference to Table \ref{tb:comparison_manycore}.
+We need to distinguish the COTS multi/many-core components according to their requirements with reference to Table \ref{tb:comparison_manycore}.
 MPPA-256 is typically accepted with respect to many-core platforms and the model has been used in several previous studies \cite{perret2016temporal}, \cite{becker2016contention}, \cite{carle2014static}, \cite{perret2016mapping}, \cite{perret2016predictable}.
 
 Several studies have examined real-time applications on many-core platforms including MPPA-256.
-In Ref. \cite{saidi2015shift}, multiple opportunities and challenges of many/multicore platforms are discussed.
-The shift to many/multicore in real-time and embedded systems is also described. 
+In Ref. \cite{saidi2015shift}, multiple opportunities and challenges of multi/many-core platforms are discussed.
+The shift to multi/many cores in real-time and embedded systems is also described. 
 
-Based on the above background, several task mapping algorithms for many/multicore systems have been proposed \cite{perret2016mapping}, \cite{puffitsch2015off}, \cite{carle2014static}, \cite{becker2014mapping}, \cite{faragardi2014communication}.
+Based on the above background, several task mapping algorithms for multi/many-core systems have been proposed \cite{perret2016mapping}, \cite{puffitsch2015off}, \cite{carle2014static}, \cite{becker2014mapping}, \cite{faragardi2014communication}.
 Airbus S.A.S. \cite{perret2016mapping} proposes a method of directed acyclic graph (DAG) scheduling for hard real-time applications using MPPA-256.
 In Ref. \cite{faragardi2014communication}, a mapping framework is proposed on the basis of AUTOSAR which is applied as a standard architecture to develop automotive embedded software systems \cite{furst2009autosar}.
 AUTOSAR task scheduling considering contention in shared resources is presented in Ref. \cite{becker2016contention}.
@@ -792,12 +789,12 @@ An analysis of their study identified the external DDR and the NoC as main bottl
 Although the analysis examined the memory access characteristics of the external DDR and provided notable lessons, a solution for the DDR bottleneck was not examined and practical evaluations were lacking.
 
 % \renewcommand{\arraystretch}{1.2}
-\begin{table*}[t]
+\begin{table}[t]
   \caption{\label{tb:comparison_platforms}
     Comparison of Many-core to CPU, GPU, DSP, and FPGA}
   \centering
   \scriptsize	                    % text size
-  \tabcolsep = 1.5mm              % side-margin in column
+  \tabcolsep = 0.4mm              % side-margin in column
   \begin{tabular}{c|cccccccccc}
     \hline
     & \multirow{2}{*}{performance} & \multirow{2}{*}{power/heat} & \multirow{2}{*}{reliability} & \multirow{2}{*}{real-time} & software & \multirow{2}{*}{costs} & multiple\\
@@ -812,7 +809,7 @@ Although the analysis examined the memory access characteristics of the external
     \hline
   \end{tabular}
   \vspace{-5mm}
-\end{table*}
+\end{table}
 
 % \renewcommand{\arraystretch}{1.2}
 \begin{table}[t]
