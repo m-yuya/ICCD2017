@@ -245,30 +245,29 @@ First, a hardware model is introduced in Section \ref{sec:hardware_model}, and t
 \subsection{Hardware Model}
 \label{sec:hardware_model}
 The MPPA-256 processor is based on an array of compute clusters (CCs) and I/O subsystems (IOSs) that are connected to nodes of Network-on-Chip (NoC) with a toroidal 2D topology 
-(as shown in Figures \ref{fig:mppa_architecture}, \ref{fig:cc_architecture}, and \ref{fig:noc_map}).
-The MPPA MANYCORE chip integrates 16 compute clusters and 4 IOS on NoC.
+(as shown in Figures \ref{fig:mppa_architecture} and \ref{fig:noc_map}).
+The MPPA MANYCORE chip integrates 16 compute clusters and 4 IOSs on NoC.
 The architecture of Kalray MPPA-256 is presented in this section.
 
 \subsubsection{I/O Subsystems (IOS)}
 \label{sec:ios}
-MPPA-256 has the following four I/O subsystems (IOSes): North, South, East, and West IOSes.
-The North and South IOSes are connected to a DDR interface and an eight-lane PCIe controller.
-The East and West IOSes are connected to a quad 10Gb/s Ethernet controller.
-Two pairs of IOSes organize two I/O clusters (IOCs) as shown in Figure \ref{fig:mppa_architecture}.
+MPPA-256 has the following four I/O subsystems (IOSs): North, South, East, and West IOSs.
+The North and South IOSs are connected to a DDR interface and an eight-lane PCIe controller.
+The East and West IOSs are connected to a quad 10Gb/s Ethernet controller.
+Two pairs of IOSs organize two I/O clusters (IOCs) as shown in Figure \ref{fig:mppa_architecture}.
 
 Each IOS comprises of quad IO cores and a NoC interface.
 
-\textbf{IO cores}: IO cores are connected to a 16-banked parallel shared memory with a total capacity (IO SMEM) of 2 MB, as shown on the left-hand side of Figure \ref{fig:mppa_architecture},
+\textbf{IO cores}: IO cores are connected to a 16-banked parallel shared memory with a total capacity (IO SMEM) of 2 MB, as shown in Figure \ref{fig:mppa_architecture},
 The four IO cores have their own instruction cache 8-way associative corresponding to 32 ($8 \times 4$) KB and share a data cache 8-way with 128 KB and external DDR access.
 The sharing of the data cache of 128 KB allows coherency between the IO cores.
 Additionally, IO cores operate controllers for the PCIe, Ethernet, \colorbox{green}{1-11} and other I/O devices.
 They operate the local peripherals, including the NoC interfaces with DMA.
-It is also possible to conduct an application run on the IO cores.
+% It is also possible to conduct an application run on the IO cores.
 
-\textbf{NoC Interface}: The NoC interface contains four DMA engines (DMA0-3) and four NoC routers as shown in the left side of Figure \ref{fig:mppa_architecture}, and the IOS DMA engine manages transfers between the IO SMEM, the IOS DDR, and the IOS peripherals (e.g., PCIe interface and Ethernet controllers).
-The DMA engine transfers data between routers on NoC through NoC routers.
-The DMA engine has the following three NoC interfaces: a receive (Rx) interface, a transmit (Tx) interface, and a micro core (UC).
-A micro core is a fine-grained multi-threaded engine that can be programed to set threads sending data with a Tx interface
+\textbf{NoC Interface}: The NoC interface contains four DMA engines (DMA1-4) and four NoC routers as shown in Figure \ref{fig:mppa_architecture}, and the IOS DMA engine manages transfers between the IO SMEM, the IOS DDR, and the IOS peripherals (e.g., PCIe interface and Ethernet controllers).
+The DMA engine transfers data between routers on NoC through NoC routers and it has the following three NoC interfaces: a receive (Rx) interface, a transmit (Tx) interface, and a micro core (UC).
+A UC is a fine-grained multi-threaded engine that can be programed to set threads sending data with a Tx interface
 A UC can extract data from memory by using a programed pattern and send the data on the NoC.
 After it is initiated, this continues in an autonomous fashion without using a Processing Element (PE) and an IO core.
 
@@ -282,30 +281,30 @@ After it is initiated, this continues in an autonomous fashion without using a P
 \subsubsection{Compute Clusters (CC)}
 \label{sec:cc}
 In MPPA-256, the 16 inner nodes of the NoC correspond to the CCs.
-Figure \ref{fig:cc_architecture} illustrates the architecture of each CC.
+Figure \ref{fig:mppa_architecture} illustrates the architecture of each CC.
 
 \textbf{Processing Elements and an RM}:
 In a CC, 16 processing elements (PEs) and an RM share 2 MB cluster local memory (SMEM) that is composed of 16 independent memory banks.
-The capacity of each SMEM bank is 128 KB.
+% The capacity of each SMEM bank is 128 KB.
 The PEs are mainly used by users for parallel processing.
 Developers spawn computing threads on PEs.
 The PEs and an RM in CC correspond to the Kalray-1 cores, which implement a 32-bit 5-issue Very Long Instruction Word architecture with 600 MHz (typical) or 800 MHz.
 Each core is fitted with its own instruction and data caches.
-Each cache is a 2-way associative with a capacity of 8 KB.
-Thus, 17 k1-cores (a PE or the RM) share a multi-banked 2 MB SMEM.
+% Each cache is a 2-way associative with a capacity of 8 KB.
+% Thus, 17 k1-cores (a PE or the RM) share a multi-banked 2 MB SMEM.
 
 \textbf{A Debug Support Unit (DSU) and a NoC Interface}:
 In addition to PEs and an RM, bus masters on SMEM correspond to a DSU and a DMA engine in a NoC interface.
 A DMA engine and a NoC router are laid out in a NoC interface.
 In a manner similar to IOS, the CC DMA engine also has the following three interfaces: an Rx, a Tx, and a UC. 
-It is instantiated in every cluster and connected to the SMEM.
+% It is instantiated in every cluster and connected to the SMEM.
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=1.0\linewidth]{../figure/cc_architecture.eps}
-  \caption{\label{fig:cc_architecture}
-    Compute Cluster architecture.}
-\end{figure}
+% \begin{figure}[t]
+%   \centering
+%   \includegraphics[width=1.0\linewidth]{../figure/cc_architecture.eps}
+%   \caption{\label{fig:cc_architecture}
+%     Compute Cluster architecture.}
+% \end{figure}
 
 
 \subsubsection{Network-on-Chip (NoC)}
@@ -318,17 +317,17 @@ Bus network connects nodes (CCs and IOSs) with torus topology \cite{dally2001rou
 which \colorbox{green}{1-13} involves a low average number of hops when compared to mesh topology \cite{vangal200780}, \cite{taylor2002raw}.
 The network is actually composed of the following two parallel NoCs with bi-directional links (denoted by red lines in Figure \ref{fig:noc_map}):
 the data NoC (D-NoC) that is optimized for bulk data transfers and the control NoC (C-NoC) that is optimized for small messages at low latency.
-The NoC is implemented with wormhole switching and source routing.
+% The NoC is implemented with wormhole switching and source routing.
 Data is packaged in variable length packets that circulate between routers in a wormhole manner in which packets are broken into small pieces called flits (flow control digits).
 The NoC traffic is segmented into packets, and each packet includes 1 to 4 header flits and 0 to 62 payload data flits.
 
 \textbf{NoC routers}:
-A node per compute cluster and four nodes per I/O subsystem hold the following two routers of its
-own: a D-NoC router and a C-NoC router
+A node per compute cluster and four nodes per I/O subsystem hold the following two routers of its own: a D-NoC router and a C-NoC router
 Each RM or IO core on NoC node is associated with the fore-mentioned two NoC routers.
 Furthermore, DMA engines in a NoC interface on the CC/IOS send and receive flits through the D-NoC routers with the Rx interface, the Tx interface, and the UC.
-A mailbox component corresponds to the virtual interface for the C-NoC and enables one-to-one, N-to-one, or one-to-N low-latency synchronizations.
-The NoC routers shown in Figures \ref{fig:mppa_architecture} and \ref{fig:cc_architecture} illustrate nodes as R0-15, R128-131, R160-163, R224-227, and R192-195 in Figure \ref{fig:noc_map}.
+% A mailbox component corresponds to the virtual interface for the C-NoC and enables one-to-one, N-to-one, or one-to-N low-latency synchronizations.
+% The NoC routers shown in Figure \ref{fig:mppa_architecture} illustrate nodes as R1-16, R128-131, R160-163, R224-227, and R192-195 in Figure \ref{fig:noc_map}.
+The NoC routers shown in Figure \ref{fig:mppa_architecture} ared illustrated as nodes in Figure \ref{fig:noc_map}.
 For purposes of simplicity, D-NoC/C-NoC routers are illustrated with a NoC router.
 In both D-NoC and C-NoC, each network node (CC or IOS)  includes the following 5-link NoC routers:
 four duplexed links for north/east/west and south neighbors and a duplexed link for local address space attached to the NoC router.
@@ -337,7 +336,7 @@ The data links are four bytes wide in each direction and operate at the CPU cloc
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=1.0\linewidth]{../figure/noc_map.eps}
+  \includegraphics[width=0.8\linewidth]{../figure/noc_map.eps}
   \caption{\label{fig:noc_map}
     NoC connections (both D-NoC and C-NoC).}
 \end{figure}
@@ -345,8 +344,8 @@ The data links are four bytes wide in each direction and operate at the CPU cloc
 \subsection{Software Model}
 \label{sec:software_model}
 Figure \ref{fig:software_stack} shows the software stack used for Kalray MPPA-245 in the present work.
-The Kalray system is an extensible and scalable array of computing cores and memory.
-With respect to this type of a system, it is possible to map several programming models or runtimes such Linux, real-time operating system, POSIX API, OpenCL, and OpenMP.
+% The Kalray system is an extensible and scalable array of computing cores and memory.
+With respect to scalable computing array of the system, it is possible to map several programming models or runtimes such Linux, real-time operating system, POSIX API, OpenCL, and OpenMP.
 Each layer is described in detail.
 
 In the hardware abstraction layer, an abstraction package abstracts hardware of a CC, IOS, and NoC.
@@ -357,16 +356,18 @@ The hardware abstraction is responsible for partitioning hardware resources and 
 It sets-up and controls inter-partition communications as a virtual machine abstraction layer.
 The hardware abstraction runs on the dedicated RM core.
 All the services are commonly provided by a rich operating system (for e.g., virtual memory, interrupts, and schedule) that must be provided by user-space libraries.
-Consequently, each runtime or operating system implements its own services that are optimized to specific needs.
-This is because each programming model or runtime involves different requirements.
+% Consequently, each runtime or operating system implements its own services that are optimized to specific needs.
+% This is because each programming model or runtime involves different requirements.
 A minimal kernel avoids wastage of resources and mismatched needs.
 
 In a low-level library layer, the Kalray system also provides libraries for handling NoC.
 Additionally, NoC features such as routing and quality of service are set by the programmer.
 The Libnoc allows direct access to memory mapped registers for their configurations and uses.
 It is designed to cause a minimum amount of CPU overhead.
-It also serves as a minimal abstraction for resource allocation.
-Librouting offers a minimal set of functions that can be used to route data between any clusters of the MPPA including unicast (one target) modes or multicast (multiple targets) modes.
+% It also serves as a minimal abstraction for resource allocation.
+% Librouting offers a minimal set of functions that can be used to route data between any clusters of the MPPA including unicast (one target) modes or multicast (multiple targets) modes.
+Librouting offers a minimal set of functions that can be used to route data between any clusters of the MPPA.
+
 \colorbox{green}{1-17}
 Routing on the torus network is statically conducted with its own policy.
 The Libpower enables spawning and waiting for the end of execution of a remote cluster.
@@ -376,26 +377,26 @@ The following Real-Time Operating System (RTOS) is introduced:
 
 \textbf{RTEMS}: RTEMS (Real-Time Executive for Multiprocessor Systems) is a full featured RTOS prepared for embedded platforms.
 It supports several APIs and standards, and most notably supports the POSIX API.
-The system provides a rich set of features, and an RTEMS application mostly is a regular C or C++ program that uses the POSIX API.
+% The system provides a rich set of features, and an RTEMS application mostly is a regular C or C++ program that uses the POSIX API.
 \colorbox{green}{1-18}
-Additionally, RTEMS runs on the IOC except for the CC.
+RTEMS runs on the IOC except for the CC.
 
 \textbf{NodeOS}: On CC, the MPPA cluster operating system utilizes a runtime called NodeOS.
 The OS addresses the need for a multicore OS to conform to the maximum possible extent to the standard POSIX API.
 The NodeOS enables a user code by using POSIX API to run on PEs on CC.
-First, NodeOS runtime starts on PE0 prior to calling the user main function.
-Subsequently, \texttt{pthread} is called on other PEs.
+% First, NodeOS runtime starts on PE0 prior to calling the user main function.
+% Subsequently, \texttt{pthread} is called on other PEs.
 
 \textbf{eMCOS}: On both CC and IOS, eMCOS provides minimal programming interfaces and libraries.
 Specifically, eMCOS is a real-time embedded operating system developed by eSOL (a Japanese supplier for RTOS), and eMCOS is the world's first commercially available many-core RTOS for use in embedded systems.
 The OS implements a distributed micro-kernel architecture.
-This compact micro-kernel is equipped with only minimal functions.
+% This compact micro-kernel is equipped with only minimal functions.
 It enables applications to operate priority based message passing, local thread scheduling, and thread management on IOS as well as CC.
-RTMES and NodeOS are provided by Kalray and eMCOS is released by eSOL.
+% RTMES and NodeOS are provided by Kalray and eMCOS is released by eSOL.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=1.0\linewidth]{../figure/softwarestack.eps}
+  \includegraphics[width=0.8\linewidth]{../figure/softwarestack.eps}
   \caption{\label{fig:software_stack}
     The software stack of Kalray MPPA-256.}
 \end{figure}
@@ -407,7 +408,7 @@ RTMES and NodeOS are provided by Kalray and eMCOS is released by eSOL.
 
 In this section, data transfer methods in MPPA-256 are explained.
 For scalability purposes, MPPA-256 accepts clustered architectures in which each cluster contains its own memory.
-16 cores are packed as a cluster and they share 2 MB memory (SMEM) as shown in Figure \ref{fig:cc_architecture}.
+16 cores are packed as a cluster and they share 2 MB memory (SMEM) as shown in Figure \ref{fig:mppa_architecture}.
 This avoids frequent memory contention due to numerous cores and helps in increasing the number of cores.
 However, the architecture constraints memory that can be directly accessed by the cores.
 In order to communicate with cores outside the cluster, it is necessary to transfer data between clusters through the D-NoC with NoC interfaces.
@@ -441,7 +442,7 @@ This evaluation involves clarifying end-to-end latency by considering the relati
 This is achieved by preparing four routes as shown in Figure \ref{fig:noc_routes}.
 The routes on D-NoC map (Figure \ref{fig:noc_map}) contains various connections between routers, namely a direct link, a cross-link, and a flying link.
 With respect to the case of routes from the IOS routers to the CC routers, transmitted data is allocated in DDR or IO SMEM.
-The CC only includes SMEM as shown in Figure \ref{fig:cc_architecture}.
+The CC only includes SMEM as shown in Figure \ref{fig:mppa_architecture}.
 A low-level library is directly used to transfer data with D-NoC.
 The transferred data correspond to 100 B, 1 KB, 10 KB, 100 KB, and 1 MB.
 The buffers are sequentially allocated in DDR or SRAM (IO SMEM or CC SMEM).
@@ -684,7 +685,8 @@ We took an algorithm for vehicle self-localization written in C++ in Autoware, n
 The self-localization adopts the normal-distribution transform matching algorithm \cite{magnusson2009three} implemented in the Point Cloud Library \cite{pcl}.
 
 The self-localization algorithm used in this case study is primarily divided into two processes: \emph{RadiusSearch} which searches for several nearest neighbor points for each query and calculates the distance, and \emph{Derivatives} which calculates the derivative to determine the convergence of the matching operation.
-As shown in Figure \ref{fig:ndt_matching_situation}, this evaluation parallelized \emph{Derivatives} onto 16 CCs and the remainder of the algorithm was executed on the IOS.
+% As shown in Figure \ref{fig:ndt_matching_situation}, 
+This evaluation parallelized \emph{Derivatives} onto 16 CCs and the remainder of the algorithm was executed on the IOS with its four cores.
 To parallelize \emph{RadiusSearch}, the algorithm of the nearest neighbor search needs to be redesigned because the data to be searched exceeds 1 MB.
 Redesigning this algorithm will be part of a future work.
 
@@ -694,26 +696,33 @@ Because the reduction of the execution time of \emph{Derivatives} involves reduc
 The query can be assumed to be 10 Hz in many automated driving systems.
 Therefore, if we succeed in the parallelization of \emph{RadiusSearch}, this goal can be achieved.
 
-\begin{figure*}[t]
-  \tabcolsep = 0.5mm              % side-margin in column
-  \begin{tabular}{cc}
-    \begin{minipage}[t]{0.49\textwidth}
-      \centering
-      \includegraphics[width=0.7\linewidth]{../figure/ndt_matching.eps}
-      \caption{\label{fig:ndt_matching_situation}
-      A situation of vehicle self-localization execution.}
-    \end{minipage}   
-    &
-    % \setcounter{figure}{11}
-    \begin{minipage}[t]{0.49\textwidth}
-      \includegraphics[width=1.0\linewidth]{../figure/BarGraph_ndt_matching.eps}
-      \caption{\label{fig:ndt_matching}
-      Vehicle self-localization of the partially parallelized autonomous driving application.}
-    \end{minipage}
-    \vspace{-3mm}
-  \end{tabular}
-  \vspace{-2mm}
-\end{figure*}
+% \begin{figure*}[t]
+%   \tabcolsep = 0.5mm              % side-margin in column
+%   \begin{tabular}{cc}
+%     \begin{minipage}[t]{0.49\textwidth}
+%       \centering
+%       \includegraphics[width=0.7\linewidth]{../figure/ndt_matching.eps}
+%       \caption{\label{fig:ndt_matching_situation}
+%       A situation of vehicle self-localization execution.}
+%     \end{minipage}   
+%     &
+%     % \setcounter{figure}{11}
+%     \begin{minipage}[t]{0.49\textwidth}
+%       \includegraphics[width=1.0\linewidth]{../figure/BarGraph_ndt_matching.eps}
+%       \caption{\label{fig:ndt_matching}
+%       Vehicle self-localization of the partially parallelized autonomous driving application.}
+%     \end{minipage}
+%     \vspace{-3mm}
+%   \end{tabular}
+%   \vspace{-2mm}
+% \end{figure*}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=1.0\linewidth]{../figure/BarGraph_ndt_matching.eps}
+  \caption{\label{fig:ndt_matching}
+  Vehicle self-localization of the partially parallelized autonomous driving application.}
+\end{figure}
 
 \subsection{Lessons Leared}
 \label{sec:lessons}
