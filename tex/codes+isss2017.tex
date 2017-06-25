@@ -145,8 +145,9 @@ By highlighting many-core computing capabilities, we explore the scalable data a
 
 % \keywords{Many-core; Multicore; Network-on-Chip (NoC); Parallelization; Embedded software}
 
-
+\vspace{-3mm}
 \section{Introduction}
+\vspace{-3mm}
 \colorbox{green}{2-1: To be reduced}
 \colorbox{green}{1-4, 1-5, 1-6}
 The evolution of a next generation computing platform oriented toward multi/many cores is unavoidable to satisfy the demand for increasing computation in conjunction with reasonable power consumption in several domains such as automobiles.
@@ -235,20 +236,24 @@ Second, Section \ref{sec:framework} explains evaluation setup and approach and S
 Subsequently, Section \ref{sec:related_work} examines related studies that focus on multi/many-core systems.
 Finally, Section \ref{sec:conclusion} presents the conclusions and directions for future research.
 
-
+\vspace{-3mm}
 \section{System Model}
 \label{sec:system_model}
+\vspace{-3mm}
 This section presents the system model used throughout the work.
 The many-core model of Kalray MPPA-256 Bostan is considered.
 First, a hardware model is introduced in Section \ref{sec:hardware_model}, and this is followed by a software model in Section \ref{sec:software_model}.
 
+\vspace{-3mm}
 \subsection{Hardware Model}
 \label{sec:hardware_model}
+\vspace{-3mm}
 The MPPA-256 processor is based on an array of compute clusters (CCs) and I/O subsystems (IOSs) that are connected to nodes of Network-on-Chip (NoC) with a toroidal 2D topology 
 (as shown in Figures \ref{fig:mppa_architecture} and \ref{fig:noc_map}).
 The MPPA MANYCORE chip integrates 16 compute clusters and 4 IOSs on NoC.
 The architecture of Kalray MPPA-256 is presented in this section.
 
+\vspace{-3mm}
 \subsubsection{I/O Subsystems (IOS)}
 \label{sec:ios}
 MPPA-256 has the following four I/O subsystems (IOSs): North, South, East, and West IOSs.
@@ -274,10 +279,13 @@ After it is initiated, this continues in an autonomous fashion without using a P
 \begin{figure}[t]
   \centering
   \includegraphics[width=1.0\linewidth]{../figure/mppa_architecture.eps}
+  \vspace{-7mm}
   \caption{\label{fig:mppa_architecture}
     An overview of the architecture of the Kalray MPPA-256 Bostan.}
+  \vspace{-5mm}
 \end{figure}
 
+\vspace{-3mm}
 \subsubsection{Compute Clusters (CC)}
 \label{sec:cc}
 In MPPA-256, the 16 inner nodes of the NoC correspond to the CCs.
@@ -306,7 +314,7 @@ In a manner similar to IOS, the CC DMA engine also has the following three inter
 %     Compute Cluster architecture.}
 % \end{figure}
 
-
+\vspace{-3mm}
 \subsubsection{Network-on-Chip (NoC)}
 \label{sec:noc}
 The 16 CCs and the 4 IOSs are connected by a NoC as shown in Figure \ref{fig:noc_map}.
@@ -337,12 +345,16 @@ The data links are four bytes wide in each direction and operate at the CPU cloc
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.8\linewidth]{../figure/noc_map.eps}
+  \vspace{-4mm}
   \caption{\label{fig:noc_map}
     NoC connections (both D-NoC and C-NoC).}
+  \vspace{-5mm}
 \end{figure}
 
+\vspace{-3mm}
 \subsection{Software Model}
 \label{sec:software_model}
+\vspace{-3mm}
 Figure \ref{fig:software_stack} shows the software stack used for Kalray MPPA-245 in the present work.
 % The Kalray system is an extensible and scalable array of computing cores and memory.
 With respect to scalable computing array of the system, it is possible to map several programming models or runtimes such Linux, real-time operating system, POSIX API, OpenCL, and OpenMP.
@@ -397,13 +409,16 @@ It enables applications to operate priority based message passing, local thread 
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.8\linewidth]{../figure/softwarestack.eps}
+  \vspace{-3mm}
   \caption{\label{fig:software_stack}
     The software stack of Kalray MPPA-256.}
+  \vspace{-5mm}
 \end{figure}
 
-
+\vspace{-3mm}
 \section{Data Transfer Framework}
 \label{sec:framework}
+\vspace{-3mm}
 \colorbox{green}{TBD: 1-19: To be fully refleshed, Add setup and approach}
 
 In this section, data transfer methods in MPPA-256 are explained.
@@ -432,12 +447,16 @@ Additionally, it is necessary to allocate and configure D-NoC UC resources if a 
 % \item \textbf{Tx+UC}:
 % \end{itemize}
 
+\vspace{-3mm}
 \section{Evaluations}
 \label{sec:evaluations}
+\vspace{-3mm}
 This section involves examining two types of evaluations, namely a D-NoC data transfer evaluation in which latency characteristics of interfaces and memory type are explored and a matrix calculation evaluation that demonstrates the parallelization potential of the MPPA-256 and its memory access characteristics while dealing with large data.
 
+\vspace{-3mm}
 \subsection{D-NoC Data Transfer}
 \label{sec:dnoc_eval}
+\vspace{-3mm}
 This evaluation involves clarifying end-to-end latency by considering the relation among interfaces (Tx or UC), routing on NoC, and memory type (DDR or SMEM).
 This is achieved by preparing four routes as shown in Figure \ref{fig:noc_routes}.
 The routes on D-NoC map (Figure \ref{fig:noc_map}) contains various connections between routers, namely a direct link, a cross-link, and a flying link.
@@ -454,8 +473,10 @@ The following evaluations are conducted on eMCOS.
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.8\linewidth]{../figure/noc_routes.eps}
+  \vspace{-3mm}
   \caption{\label{fig:noc_routes}
     Four D-NoC routes used in the evaluation.}
+  \vspace{-5mm}
 \end{figure}
 
 Data transfer latencies between IOS and CC are not influenced by routing.
@@ -506,7 +527,7 @@ In order to facilitate intuitive recognition, two kinds of figures are arranged,
     \end{minipage}
     \vspace{-3mm}
   \end{tabular}
-  \vspace{+3mm}
+  \vspace{-3mm}
 \end{figure*}
 
 In the Tx interface, DDR causes a large increase in latency.
@@ -549,14 +570,16 @@ In a manner similar to the Tx interface, the speed of the data transfer latency 
 \begin{figure}[t]
   \centering
   \includegraphics[width=1.0\linewidth]{../../R/mppa/graph/eps/BoxPlot_Tx_vs_UC_log.eps}
+  \vspace{-5mm}
   \caption{\label{fig:tx_uc_log}
     Data transfer with Tx/UC }
+  \vspace{-5mm}
 \end{figure}
 
-
+\vspace{-3mm}
 \subsection{Matrix Calculation}
 \label{sec:martix_eval}
-
+\vspace{-3mm}
 \subsubsection{Situations and Assumptions}
 \label{sec:situations_and_assumptions}
 In the evaluation, matrix calculation time and parallelization potential of MPPA-256 are clarified.
@@ -588,10 +611,13 @@ The following evaluations are conducted on eMCOS.
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.8\linewidth]{../figure/matrix_calculation.eps}
+  \vspace{-4mm}
   \caption{\label{fig:mat_calc}
     Matrix calculation situations.}
+  \vspace{-5mm}
 \end{figure}
 
+\vspace{-5mm}
 \subsubsection{Influence of Cache and Memory}
 \label{sec:cache_and_memory}
 First, matrix calculation time with the cache in IOS and CC is depicted in Figure \ref{fig:mat_calc_cash}.
@@ -616,7 +642,7 @@ A small data cache (8 KB) in CC does not function adequately and direct assembly
   \begin{tabular}{cc}
     \begin{minipage}[t]{0.49\textwidth}
     \includegraphics[width=1.0\linewidth]{../figure/BarGraph_matrix_with_cache.eps}
-      % \vspace{-7mm}
+      \vspace{-7mm}
       \caption{Matrix calculations in IOS and CC with cache.}
       \label{fig:mat_calc_cash}
     \end{minipage}   
@@ -624,7 +650,7 @@ A small data cache (8 KB) in CC does not function adequately and direct assembly
     % \setcounter{figure}{11}
     \begin{minipage}[t]{0.49\textwidth}
       \includegraphics[width=1.0\linewidth]{../figure/BarGraph_matrix_without_cache.eps}
-      % \vspace{-7mm}
+      \vspace{-7mm}
       \caption{Matrix calculations in IOS and CC without cache.}
       \label{fig:mat_calc_uncash}
     \end{minipage}
@@ -633,6 +659,7 @@ A small data cache (8 KB) in CC does not function adequately and direct assembly
   \vspace{-2mm}
 \end{figure*}
 
+\vspace{-3mm}
 \subsubsection{Four CCs Parallelization}
 \label{sec:four_CCs}
 Finally, matrix calculation with offload-computing in IOS and CCs is shown in Figure \ref{fig:mat_calc_offload_314}.
@@ -661,7 +688,7 @@ Note that above evaluation results when matrix C is allocated in DDR.
   \begin{tabular}{cc}
     \begin{minipage}[t]{0.49\textwidth}
       \includegraphics[width=1.0\linewidth]{../figure/BarGraph_matrix_with_CCs_314.eps}
-      % \vspace{-7mm}
+      \vspace{-7mm}
       \caption{Matrix calculations with offload-computing (314 KB matrix x 3).}
       \label{fig:mat_calc_offload_314}
     \end{minipage}   
@@ -669,7 +696,7 @@ Note that above evaluation results when matrix C is allocated in DDR.
     % \setcounter{figure}{11}
     \begin{minipage}[t]{0.49\textwidth}
       \includegraphics[width=1.0\linewidth]{../figure/BarGraph_matrix_with_CCs_640.eps}
-      % \vspace{-7mm}
+      \vspace{-7mm}
       \caption{Matrix calculations with offload-computing (640 KB matrix x 3).}
       \label{fig:mat_calc_offload_640}
     \end{minipage}
@@ -678,8 +705,10 @@ Note that above evaluation results when matrix C is allocated in DDR.
   \vspace{-2mm}
 \end{figure*}
 
+\vspace{-3mm}
 \subsection{Case Study}
 \label{sec:case_study}
+\vspace{-3mm}
 The application in this case study is a part of an autonomous driving system and this section demonstrates the parallelization potential of the MPPA-256.
 We took an algorithm for vehicle self-localization written in C++ in Autoware, namely an open-source software for urban autonomous driving \cite{autoware}, \cite{kato2015open}, and parallelized part of it.
 The self-localization adopts the normal-distribution transform matching algorithm \cite{magnusson2009three} implemented in the Point Cloud Library \cite{pcl}.
@@ -720,16 +749,22 @@ Therefore, if we succeed in the parallelization of \emph{RadiusSearch}, this goa
 \begin{figure}[t]
   \centering
   \includegraphics[width=1.0\linewidth]{../figure/BarGraph_ndt_matching.eps}
+  \vspace{-5mm}
   \caption{\label{fig:ndt_matching}
   Vehicle self-localization of the partially parallelized autonomous driving application.}
+  \vspace{-5mm}
 \end{figure}
 
+\vspace{-3mm}
 \subsection{Lessons Leared}
 \label{sec:lessons}
+\vspace{-3mm}
 \colorbox{green}{TBD: 3-4}
 
+\vspace{-3mm}
 \section{Related Work}
 \label{sec:related_work}
+\vspace{-3mm}
 This section compares many-core platforms and discusses previous studies related to multi/many cores.
 First, needs of high-performance computation and comparison of many-core platforms to other platforms are discussed.
 Second, the Kalray MPPA-256 which this work focuses on is compared to other COTS COTS multi/many-core components, and we summarize the features of MPPA-256.
@@ -801,6 +836,7 @@ Although the analysis examined the memory access characteristics of the external
 \begin{table}[t]
   \caption{\label{tb:comparison_platforms}
     Comparison of Many-core to CPU, GPU, DSP, and FPGA}
+  \vspace{-3mm}
   \centering
   \scriptsize	                    % text size
   \tabcolsep = 0.4mm              % side-margin in column
@@ -827,6 +863,7 @@ Although the analysis examined the memory access characteristics of the external
 \begin{table}[t]
   \caption{\label{tb:comparison_manycore}
     Comparison of Many-core Processor Platforms}
+  \vspace{-3mm}
   \centering
   \scriptsize	                    % text size
   \tabcolsep = 1.5mm              % side-margin in column
@@ -849,6 +886,7 @@ Although the analysis examined the memory access characteristics of the external
 \begin{table*}[t]
   \caption{\label{tb:comparison_relatedwork}
     Comparison of Related Work}
+  \vspace{-3mm}
   \centering
   \scriptsize	                    % text size
   \tabcolsep = 1.5mm              % side-margin in column
@@ -867,9 +905,10 @@ Although the analysis examined the memory access characteristics of the external
   \vspace{-5mm}
 \end{table*}
 
-
+\vspace{-3mm}
 \section{Conclusions}
 \label{sec:conclusion}
+\vspace{-3mm}
 This paper has conducted quantitative evaluations that examined end-to-end latencies with many-core computing based on NoC, the scalability of parallelization, and the characteristics of the memory access speed.
 From various experiments, we have evaluated the capabilities of the currently available data transfer methods and the parallelization potential for many-core computing based on NoC.
 Our experimental results will allow system designers to choose appropriate system designs based on the requirements of their latency-sensitive many-core applications beyond an intuitive expectation.
@@ -884,7 +923,10 @@ In future studies, we will port real-time systems software such as that in Ref. 
 % We acknowledge support from eSOL and Kalray.
 % The authors would like to thank Atsushi Matsuo and Masaki Gondo from eSOL, and Gilbert Richard, St\'ephane Cordova, and Beno\^\i t Dupont de Dinechin from Kalray for their support that helped improve this study.
 
+\renewcommand{\baselinestretch}{0.8}
+
 %%
+\vspace{-3mm}
 \bibliographystyle{abbrv}       % ACM
 \bibliography{reference}
 
