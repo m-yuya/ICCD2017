@@ -101,7 +101,7 @@
 %\crdata{0-12345-67-8/90/01}  % Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
 % --- End of Author Metadata ---
 
-\title{\colorbox{green}{TBD: 1-2, 3-2} Scalable Data Allocation and Parallel Computing on NoC-based Embedded Many Cores}
+\title{\colorbox{green}{TBD: 1-2, 3-2} Scalable Data Allocation and Parallel Computing \\ on NoC-based Embedded Many Cores}
 \begin{document}
 
 %% ACM copyright information
@@ -206,11 +206,11 @@ Considering embedded requirements, multi/many cores need NUMA because of scalabi
 Scalable data allocation enhances parallelized high-performance and general-purpose computing with low power consumption.
 MPPA-256 is one of the commercial off-the-shelf (COTS) multi/many-core components targeting embedded system and adopts distributed memory architecture with NoC. (We discusses comparison to other platforms in Section \ref{sec:related_work}.)
 However, its data transfer between distributed memories with NoC, parallelization potential, and memory access characteristics are not fully unrvealed for application developers.
-This study explores above issues with quantitative evaluations and a practical case study.
+This work explores above issues with quantitative evaluations and a practical case study.
 
 \textbf{Contributions:}
 \colorbox{green}{1-1, 3-3: To be clarified}
-This study focuses on examining embedded many-core computing based on NoCs, such as MPPA-256.
+This work focuses on examining embedded many-core computing based on NoCs, such as MPPA-256.
 We conduct evaluations of data transfer methods on NoCs and micro benchmark with matrix calculation to clarify latency characteristics of data transfer, parallel computing, and an influence of data allocation.
 Subsequently, we parallelize localization algorithm which becomes the core of the autonomous driving system.
 We reveal the advantages and disadvantages of embedded many-core computing based on NoC in a quantitative way by leading the following contributions:
@@ -221,15 +221,15 @@ We reveal the advantages and disadvantages of embedded many-core computing based
 \item The evaluations of the parallel processing examine the characteristics of the memory access speed which varies according to where data is allocated and what accesses the memory.
 \end{itemize}
 
-To the best of our knowledge, this is the first study that examines data transfer and data allocation matters for many-core computing beyond an intuitive expectation to allow system designers to choose appropriate data transfer methods.
+To the best of our knowledge, this is the first work that examines data transfer and data allocation matters for many-core computing beyond an intuitive expectation to allow system designers to choose appropriate data transfer methods.
 Additionally, the speed-up result of autonomous driving case study indicates a practical potential for NoC-based embedded many-core computing.
 \colorbox{green}{1-8, 1-9}
 % It is expected that the findings of this study will potentially be applicable to several types of many-core architectures as opposed to just MPPA-256.
 % Therefore, the contributions of this study can be used in low-latency many-core computing.
 
 \textbf{Organization:}
-The remainder of this study is organized as follows.
-First, the system model considered in this study is discussed in Section \ref{sec:system_model} in which the hardware model, namely Kalray MPPA-256 Bostan, and the system model are presented.
+The remainder of this work is organized as follows.
+First, the system model considered in this work is discussed in Section \ref{sec:system_model} in which the hardware model, namely Kalray MPPA-256 Bostan, and the system model are presented.
 \colorbox{green}{1-10}
 Second, Section \ref{sec:framework} explains evaluation setup and approach and Section \ref{sec:evaluations} illustrates experimental evaluations.
 Subsequently, Section \ref{sec:related_work} examines related studies that focus on multi/many-core systems.
@@ -238,7 +238,7 @@ Finally, Section \ref{sec:conclusion} presents the conclusions and directions fo
 
 \section{System Model}
 \label{sec:system_model}
-This section presents the system model used throughout the study.
+This section presents the system model used throughout the work.
 The many-core model of Kalray MPPA-256 Bostan is considered.
 First, a hardware model is introduced in Section \ref{sec:hardware_model}, and this is followed by a software model in Section \ref{sec:software_model}.
 
@@ -344,7 +344,7 @@ The data links are four bytes wide in each direction and operate at the CPU cloc
 
 \subsection{Software Model}
 \label{sec:software_model}
-Figure \ref{fig:software_stack} shows the software stack used for Kalray MPPA-245 in the present study.
+Figure \ref{fig:software_stack} shows the software stack used for Kalray MPPA-245 in the present work.
 The Kalray system is an extensible and scalable array of computing cores and memory.
 With respect to this type of a system, it is possible to map several programming models or runtimes such Linux, real-time operating system, POSIX API, OpenCL, and OpenMP.
 Each layer is described in detail.
@@ -452,7 +452,7 @@ The following evaluations are conducted on eMCOS.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=1.0\linewidth]{../figure/noc_routes.eps}
+  \includegraphics[width=0.8\linewidth]{../figure/noc_routes.eps}
   \caption{\label{fig:noc_routes}
     Four D-NoC routes used in the evaluation.}
 \end{figure}
@@ -686,7 +686,7 @@ The self-localization adopts the normal-distribution transform matching algorith
 The self-localization algorithm used in this case study is primarily divided into two processes: \emph{RadiusSearch} which searches for several nearest neighbor points for each query and calculates the distance, and \emph{Derivatives} which calculates the derivative to determine the convergence of the matching operation.
 As shown in Figure \ref{fig:ndt_matching_situation}, this evaluation parallelized \emph{Derivatives} onto 16 CCs and the remainder of the algorithm was executed on the IOS.
 To parallelize \emph{RadiusSearch}, the algorithm of the nearest neighbor search needs to be redesigned because the data to be searched exceeds 1 MB.
-Redesigning this algorithm will be part of a future study.
+Redesigning this algorithm will be part of a future work.
 
 As shown in Figure \ref{fig:ndt_matching}, the evaluation of parallelized self-localization algorithm indicates the average execution time for each convergence and demonstrates that the parallelization accelerates the \emph{Derivatives} process.
 This acceleration shows the parallelization potential of the MPPA-256.
@@ -723,7 +723,7 @@ Therefore, if we succeed in the parallelization of \emph{RadiusSearch}, this goa
 \label{sec:related_work}
 This section compares many-core platforms and discusses previous studies related to multi/many cores.
 First, needs of high-performance computation and comparison of many-core platforms to other platforms are discussed.
-Second, the Kalray MPPA-256 which this study focuses on is compared to other COTS COTS multi/many-core components, and we summarize the features of MPPA-256.
+Second, the Kalray MPPA-256 which this work focuses on is compared to other COTS COTS multi/many-core components, and we summarize the features of MPPA-256.
 Finally, discussions of previous studies and comparison to them are described.
 
 Recently, studies indicate that the single core processors are characterized by limited computation performance.
@@ -750,7 +750,7 @@ Many-core platforms can potentially replace single/multi core CPU as they posses
 
 Based on the fore-mentioned background, many COTS multi/many-core components are developed and released by several vendors.
 (e.g., Kalray's the Multi-Purpose Processing Array (MPPA) 256, \cite{de2014time}, Tilera's Tile-Gx \cite{schooler2010tile}, \cite{ramey2011tile}, Tilera's Tile64 \cite{bell2008tile64}, and Intel's Xeon Phi \cite{chrysos2014intel}, \cite{chrysos2012intel}, Intel's Single-chip Cloud Computer (SCC) \cite{baron2010single}).
-The present study focuses on the Kalray MPPA-256 that is designed for real-time embedded applications.
+The present work focuses on the Kalray MPPA-256 that is designed for real-time embedded applications.
 Kalray S.A., \cite{de2014time} presented clustered many-core architectures on the NoC which pack 256 general-purpose cores with high energy efficiency.
 
 MPPA-256 is superior to other COTS multi/many-core components in terms of the scalability of the number of cores and the power efficiency as shown in Table \ref{tb:comparison_manycore}.
@@ -785,7 +785,7 @@ However, this report contains few evaluations and does not refer to data transfe
 Data transfer with NoC in MPPA-256 is described, and NoC guaranteed services are analyzed in Refs. \cite{denet2017work} and \cite{deDinechin2014GSN}.
 While the theoretical analysis is thorough in these studies, the practical evaluations are poor and parallel data transfer is not referred to.
 The authors of Ref. \cite{perret2016predictable} focused on the predictable composition of memory accesses.
-An analysis of their study identified the external DDR and the NoC as main bottlenecks for both the average performance and the predictability on platforms such as MPPA-256.
+An analysis of their work identified the external DDR and the NoC as main bottlenecks for both the average performance and the predictability on platforms such as MPPA-256.
 Although the analysis examined the memory access characteristics of the external DDR and provided notable lessons, a solution for the DDR bottleneck was not examined and practical evaluations were lacking.
 
 % \renewcommand{\arraystretch}{1.2}
@@ -808,6 +808,9 @@ Although the analysis examined the memory access characteristics of the external
     Many-core & \(\checkmark\) & \(\checkmark\) & \(\checkmark\) & \(\checkmark\) & \(\checkmark\) & \(\bigtriangleup\) & \(\checkmark\) \\
     \hline
   \end{tabular}
+  \begin{flushright}
+   \textasteriskcentered  \(\bigtriangleup\) means ``limited''.
+  \end{flushright}
   \vspace{-5mm}
 \end{table}
 
