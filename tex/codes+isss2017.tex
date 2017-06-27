@@ -101,7 +101,7 @@
 %\crdata{0-12345-67-8/90/01}  % Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
 % --- End of Author Metadata ---
 
-\title{\colorbox{green}{TBD: 1-2, 3-2} Scalable Data Allocation and Parallel Computing \\ on NoC-based Embedded Many Cores}
+\title{\colorbox{green}{1-2, 3-2} Scalable Data Allocation and Parallel Computing \\ on NoC-based Embedded Many Cores}
 \begin{document}
 
 %% ACM copyright information
@@ -123,6 +123,8 @@
 % \setlength\textfloatsep{18pt}%  between figure and text
 % \setlength\abovecaptionskip{4pt}% between figure and caption
 % \setlength\floatsep{18pt}% between figures
+
+\colorbox{green}{TBD:1-1, 1-14, 2-2, 3-5}
 
 \begin{abstract}
 In embedded systems, high processing requirements and low power consumption need heterogeneous computing platforms.
@@ -148,13 +150,12 @@ By highlighting many-core computing capabilities, we explore the scalable data a
 \vspace{-3mm}
 \section{Introduction}
 \vspace{-3mm}
-\colorbox{green}{2-1: To be reduced}
-\colorbox{green}{1-4, 1-5, 1-6}
+\colorbox{green}{1-4, 1-5, 1-6, 2-1, 2-4}
 The evolution of a next generation computing platform oriented toward multi/many cores is unavoidable to satisfy the demand for increasing computation in conjunction with reasonable power consumption in several domains such as automobiles.
 In embedded systems, this trend is also adapted because high processing requirements are also required.
 For example, an autonomous driving system involves various applications and are sometimes characterized by demands for high-performance computing.
 Considering requirements of high processing, predictability, and significant energy efficiency for autonomous driving systems, its system needs a heterogeneous computing system such as multi/many cores and GPUs. (This is discussed in Section \ref{sec:related_work}.)
-Multi/many-core architecture is an important trend \colorbox{green}{1-3} as it integrates cores to realize high-performance and general-purpose computing with low power consumption.
+\colorbox{green}{1-3} In embedded systems, Multi/many-core architecture is an important trend as it integrates cores to realize high-performance and general-purpose computing with low power consumption \cite{perret2016mapping}, \cite{faragardi2014communication}, \cite{furst2009autosar}, \cite{becker2016contention}.
 % Extant studies have examined several applications of multi/many-core platforms \cite{becker2016contention}, \cite{saidi2015shift}, \cite{perret2016temporal}, \cite{perret2016mapping}, \cite{becker2014mapping}.
 % Recently, the computational ability of single core processors has reached its limit \colorbox{green}{1-3} and thus the applicability of Moore's law \cite{moore2006cramming} is unclear.
 % Multi/many core architecture is an important trend in \colorbox{green}{1-3} recent years as it integrates cores to realize high-performance and general-purpose computing with low power consumption.
@@ -292,6 +293,7 @@ In MPPA-256, the 16 inner nodes of the NoC correspond to the CCs.
 Figure \ref{fig:mppa_architecture} illustrates the architecture of each CC.
 
 \textbf{Processing Elements and an RM}:
+\colorbox{green}{2-3}
 In a CC, 16 processing elements (PEs) and an RM share 2 MB cluster local memory (SMEM) that is composed of 16 independent memory banks.
 % The capacity of each SMEM bank is 128 KB.
 The PEs are mainly used by users for parallel processing.
@@ -452,6 +454,8 @@ Additionally, it is necessary to allocate and configure D-NoC UC resources if a 
 \label{sec:evaluations}
 \vspace{-3mm}
 This section involves examining two types of evaluations, namely a D-NoC data transfer evaluation in which latency characteristics of interfaces and memory type are explored and a matrix calculation evaluation that demonstrates the parallelization potential of the MPPA-256 and its memory access characteristics while dealing with large data.
+Subsequently, we conduct autonomous driving case study to examine practicality of NUMA many cores.
+The following all evaluations are conducted on eMCOS.
 
 \vspace{-3mm}
 \subsection{D-NoC Data Transfer}
@@ -462,13 +466,12 @@ This is achieved by preparing four routes as shown in Figure \ref{fig:noc_routes
 The routes on D-NoC map (Figure \ref{fig:noc_map}) contains various connections between routers, namely a direct link, a cross-link, and a flying link.
 With respect to the case of routes from the IOS routers to the CC routers, transmitted data is allocated in DDR or IO SMEM.
 The CC only includes SMEM as shown in Figure \ref{fig:mppa_architecture}.
-A low-level library is directly used to transfer data with D-NoC.
+% A low-level library is directly used to transfer data with D-NoC.
 The transferred data correspond to 100 B, 1 KB, 10 KB, 100 KB, and 1 MB.
 The buffers are sequentially allocated in DDR or SRAM (IO SMEM or CC SMEM).
 The capacity of CC SMEM is 2 MB, and thus it is assumed that the appropriate communication buffer size is 1 MB.
 Given the assumption, the other memory area corresponds to the application, library, and operating system.
-End-to-end latencies are measured 1,000 times in numerous situations as shown in Figures \ref{fig:DDR_tx}, \ref{fig:DDR_uc}, \ref{fig:IO_SMEM_tx}, and boxplots are obtained as depicted in Figures \ref{fig:IO_SMEM_uc}, \ref{fig:tx_uc_log} and \ref{fig:tx_uc}.
-The following evaluations are conducted on eMCOS.
+End-to-end latencies are measured 1,000 times in numerous situations as shown in Figures \ref{fig:DDR_tx}, \ref{fig:DDR_uc}, \ref{fig:IO_SMEM_tx}, and boxplots are obtained as depicted in Figures \ref{fig:IO_SMEM_uc}, \ref{fig:tx_uc_log}.
 
 \begin{figure}[t]
   \centering
@@ -479,18 +482,18 @@ The following evaluations are conducted on eMCOS.
   \vspace{-5mm}
 \end{figure}
 
+\colorbox{green}{1-20, 1-21}
 Data transfer latencies between IOS and CC are not influenced by routing.
 This involved preparing two interfaces (Tx and UC), three routes(direct link, cross-link, and detour route), and two memory locations in which the transferred data is allocated.
 As shown in Figures \ref{fig:DDR_tx}, \ref{fig:DDR_uc}, \ref{fig:IO_SMEM_tx}, and \ref{fig:IO_SMEM_uc}, 
 end-to-end latency scales exhibit a linear relation with data size, and there are no significant differences between the three routes with respect to data transfer latency.
 This result is important in torus topology NoC because the number of minimum steps exceeds those in the mesh topology. 
 It is observed that queuing in the NoC routers and hardware distance on the NoC are not dominant factors for latency.
-The time taken by transmitting and receiving transactions exceeds those of other transaction.
+The router latency, the time taken by transmitting and receiving transactions in a RM, exceeds those of other transaction.
 Additionally, it is briefly recognized that the speed of UC exceeds that of Tx.
-The data is arranged as shown in Figures \ref{fig:tx_uc_log} and \ref{fig:tx_uc} to facilitate a precise analysis with
-respect to the interface and memory location.
-In the figures, only the cross-link from IOS to CC5 is accepted because routes do not influence latency.
-In order to facilitate intuitive recognition, two kinds of figures are arranged, namely a logarithmic axis and a linear axis.
+The data is arranged as shown in Figure \ref{fig:tx_uc_log} to facilitate a precise analysis with respect to the interface and memory location.
+In Figure \ref{fig:tx_uc_log}, only the cross-link from IOS to CC5 is accepted because routes do not influence latency.
+% In order to facilitate intuitive recognition, two kinds of figures are arranged, namely a logarithmic axis and a linear axis.
 
 \begin{figure*}[t]
   \tabcolsep = 0.5mm              % side-margin in column
@@ -531,7 +534,7 @@ In order to facilitate intuitive recognition, two kinds of figures are arranged,
 \end{figure*}
 
 In the Tx interface, DDR causes a large increase in latency.
-The time taken by the DDR is twice as that of the IO SMEM as shown in Figure \ref{fig:tx_uc}.
+The time taken by the DDR is twice as that of the IO SMEM as shown in Figure \ref{fig:tx_uc_log}.
 This is due to the memory access speed characteristics of DRAM and SRAM.
 In the case of the Tx interface, it is necessary for an IO core on IOS to operate the DMA in the IOS NoC interface.
 This is attributed to the fact that the core is involved in processing.
@@ -539,9 +542,9 @@ The speed of the data transfer latency between CCs exceeds that between IOS and 
 This result indicates that the MPPA-256 is optimized for communication between the CCs.
 
 With respect to the UC interface, the latency is not significantly affected by the location at which the transferred buffer is allocated (i.e., the DDR or SMEM).
-Similar latency characteristics are observed in Figures \ref{fig:tx_uc_log} and \ref{fig:tx_uc}.
+% Similar latency characteristics are observed in Figure \ref{fig:tx_uc_log}.
 In the case of the UC interface, an IO core on the IOS does not involve a DMA transaction.
-A micro core in the NoC interface executes a programed thread sending data.
+A UC in the NoC interface executes a programed thread sending data.
 This evaluation result suggests that the slow access speed of the DDR is not significant in the case of the UC.
 In a manner similar to the Tx interface, the speed of the data transfer latency between CCs exceeds that between IOS and CC.
 
@@ -591,9 +594,8 @@ The second situation involves computing in CC in which 16 cores are available.
 The third situation involves offload-computing by using an IOS and four CCs.
 Parallelized processing is executed with four CCs' cores and SMEMs.
 A few cores in IOS and CC manage the parallelized transaction.
-The method can handle large data in which one cluster is not
-sufficient because buffer capacity is not limited to 2 MB in SMEM.
-Parallelized processing and the total capacity of SMEM are superior to IOS or CC computations. 
+The method can handle large data in which one cluster is not sufficient because buffer capacity is not limited to 2 MB in SMEM.
+% Parallelized processing and the total capacity of SMEM are superior to IOS or CC computations. 
 With respect to the IOS, the application can handle large capacity data only in the DDR.
 However, in this method, distributed memories are used to deal with large capacity data in SMEM.
 Thus, it is necessary for IOS and CC cores to access matrix buffers without cache to avoid cache coherency trouble.
@@ -604,9 +606,8 @@ Additionally, the influence of cache is analyzed because cache coherency is an i
 There are several cases in which applications must access specific memory space without a cache.
 With respect to the given assumptions, maximum total buffer size is 1 MB, and thus three matrices buffers are prepared, and each size is 314 KB.
 Matrix A and matrix B are multiplied, and the result is stored in matrix C.
-The total of the three matrices is set as approximately 1 MB.
-In CC, we assume that the remainder of SMEM (1 MB) is occupied with system software and applications.
-The following evaluations are conducted on eMCOS.
+% The total of the three matrices is set as approximately 1 MB.
+We assume that the remainder of SMEM (1 MB) is occupied with system software and applications in CC.
 
 \begin{figure}[t]
   \centering
@@ -617,25 +618,26 @@ The following evaluations are conducted on eMCOS.
   \vspace{-5mm}
 \end{figure}
 
-\vspace{-5mm}
+\vspace{-3mm}
 \subsubsection{Influence of Cache and Memory}
 \label{sec:cache_and_memory}
-First, matrix calculation time with the cache in IOS and CC is depicted in Figure \ref{fig:mat_calc_cash}.
+First, matrix calculation time with the cache in IOS and CC is depicted in Figure \ref{fig:cat_calc_cache}.
 There are almost no differences between IO DDR, IO SMEM, and CC SMEM due to the cache.
-Furthermore, 128 KB data cache in the IOS works well and compensates for the DDR delay.
+128 KB data cache in the IOS works well and compensates for the DDR delay.
 Additionally, it is observed that calculation time scales exhibit a linear relation with the number of threads.
 This corresponds to ideal behavior with respect to parallelization.
 
-Second, matrix calculation time without a cache in the IOS and CC is shown in Figure \ref{fig:mat_calc_uncash}.
+Second, matrix calculation time without a cache in the IOS and CC is shown in Figure \ref{fig:mat_calc_uncache}.
 The absence of a cache, results in a fourfold increase in the DDR and a high difference arises with respect to the SMEM.
 Another notable result is that calculation speed in CC SMEM exceeds that of the IO SMEM.
 This characteristic is hidden in the calculation with the cache.
-The computing cores involve the same k1-cores in IOS and CC, and thus it is considered that the characteristics and physical arrangement of SMEM exert a significant effect.
+The computing cores physically involvethe same cores in IOS and CC, and thus it is considered that the characteristics and physical arrangement of SMEM exert a significant effect.
 This is an interesting result since a high difference that cannot be ignored exists.
 It is also observed that calculation time exhibits a linear relation with the number of threads.
 Furthermore, the calculation speed without the cache in CC SMEM exceeds that with cache.
-This result is contrary to intuition, and the two factors are conceivable.
-A small data cache (8 KB) in CC does not function adequately and direct assembly instruction for uncached access optimizes memory access.
+This result is contrary to intuition, and a cache line problem are conceivable.
+When a small data cache (8 KB) in a PE of CC does not function adequately and an application always accesses data which are not in the cache memory, memory access will pay the time for a non-cached data access and the cost to refill the cache line.
+As a result, the memory access speed without the cache exceeds that with cache.
 
 \begin{figure*}[t]
   \tabcolsep = 0.5mm              % side-margin in column
@@ -644,7 +646,7 @@ A small data cache (8 KB) in CC does not function adequately and direct assembly
     \includegraphics[width=1.0\linewidth]{../figure/BarGraph_matrix_with_cache.eps}
       \vspace{-7mm}
       \caption{Matrix calculations in IOS and CC with cache.}
-      \label{fig:mat_calc_cash}
+      \label{fig:cat_calc_cache}
     \end{minipage}   
     &
     % \setcounter{figure}{11}
@@ -652,7 +654,7 @@ A small data cache (8 KB) in CC does not function adequately and direct assembly
       \includegraphics[width=1.0\linewidth]{../figure/BarGraph_matrix_without_cache.eps}
       \vspace{-7mm}
       \caption{Matrix calculations in IOS and CC without cache.}
-      \label{fig:mat_calc_uncash}
+      \label{fig:mat_calc_uncache}
     \end{minipage}
     \vspace{-3mm}
   \end{tabular}
@@ -665,38 +667,40 @@ A small data cache (8 KB) in CC does not function adequately and direct assembly
 Finally, matrix calculation with offload-computing in IOS and CCs is shown in Figure \ref{fig:mat_calc_offload_314}.
 In this case, it is assumed with respect to the calculation of large matrices that the total capacity exceeds 1 MB.
 The offloading result is compared with IO DDR (cached) due to the fore-mentioned assumption.
-The aggregate calculation is obtained by offloading on the four CC to perform a multiplication of a tile of the transpose of matB and a tile of matC.
+The aggregate calculation is obtained by offloading on the four CC to perform a multiplication of a tile of matA and a tile of the transpose of matB.
 This produces an overhead irrespective of the number of threads as shown in Figures \ref{fig:mat_calc_offload_314} and \ref{fig:mat_calc_offload_640}.
 However, the speed involved in offloading result exceeds that of IO DDR (cached).
 The result indicates several important facts.
 First, D-NoC data transfer produces little overhead latency.
-Second, the speed of DMA memory access to DDR exceeds that of IO core's memory access.
+Second, the speed of DMA memory access to DDR exceeds that of IO core's memory access even if target memory is allocated on DDR.
 In the offloading case, a DMA accesses matrix buffers on DDR and transfers the buffers from IO DDR to each CC SMEM.
 Subsequently, PEs in the CC access matrix buffer the calculation without cache.
 The overhead of data transfer and DMA memory access is small, and thus parallel data transmission and distributed memory are practical in the case of MPPA-256.
 The impact of offloading increases when the matrix size is large as shown in Figure \ref{fig:mat_calc_offload_640}.
-Only a part of matrix is allocated in CC, and thus it is possible to handle larger matrices buffers.
-Additionally, 640 KB matrices are prepared, and matrix calculation calculations are evaluated with offload-computing.
-The speed of the offloading result exceeds that of IO DDR result with respect to the 314 KB matrices in Figure \ref{fig:mat_calc_offload_314}.
+% Only a part of matrix is allocated in CC, and thus it is possible to handle larger matrices buffers.
+% Additionally, 640 KB matrices are prepared, and matrix calculation calculations are evaluated with offload-computing.
+% The speed of the offloading result exceeds that of IO DDR result with respect to the 314 KB matrices in Figure \ref{fig:mat_calc_offload_314}.
 In these offloading evaluations, each CC concurrently transmits calculation results to the IOS.
-When matrix C in which calculation results are stored is allocated in DDR, NoC router's FIFOs sometimes overflow and cause an error.
-To avoid this error, matrix C should be allocated in IO SMEM.
+\colorbox{green}{1-22}
+When matrix C in which calculation results are stored is allocated in DDR, NoC router's FIFOs sometimes overflow and cause an error due to memory access delay of DDR.
+This error should be prevented by transmission protocol, and flow control is future work for MPPA-256.
+Currently, to avoid this error, matrix C should be allocated in IO SMEM.
 Note that above evaluation results when matrix C is allocated in DDR.
 
 \begin{figure*}[t]
   \tabcolsep = 0.5mm              % side-margin in column
   \begin{tabular}{cc}
     \begin{minipage}[t]{0.49\textwidth}
-      \includegraphics[width=1.0\linewidth]{../figure/BarGraph_matrix_with_CCs_314.eps}
-      \vspace{-7mm}
+      \includegraphics[width=0.9\linewidth]{../figure/BarGraph_matrix_with_CCs_314.eps}
+      \vspace{-4mm}
       \caption{Matrix calculations with offload-computing (314 KB matrix x 3).}
       \label{fig:mat_calc_offload_314}
     \end{minipage}   
     &
     % \setcounter{figure}{11}
     \begin{minipage}[t]{0.49\textwidth}
-      \includegraphics[width=1.0\linewidth]{../figure/BarGraph_matrix_with_CCs_640.eps}
-      \vspace{-7mm}
+      \includegraphics[width=0.9\linewidth]{../figure/BarGraph_matrix_with_CCs_640.eps}
+      \vspace{-4mm}
       \caption{Matrix calculations with offload-computing (640 KB matrix x 3).}
       \label{fig:mat_calc_offload_640}
     \end{minipage}
@@ -748,8 +752,8 @@ Therefore, if we succeed in the parallelization of \emph{RadiusSearch}, this goa
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=1.0\linewidth]{../figure/BarGraph_ndt_matching.eps}
-  \vspace{-5mm}
+  \includegraphics[width=0.9\linewidth]{../figure/BarGraph_ndt_matching.eps}
+  \vspace{-4mm}
   \caption{\label{fig:ndt_matching}
   Vehicle self-localization of the partially parallelized autonomous driving application.}
   \vspace{-5mm}
@@ -770,26 +774,29 @@ First, needs of high-performance computation and comparison of many-core platfor
 Second, the Kalray MPPA-256 which this work focuses on is compared to other COTS COTS multi/many-core components, and we summarize the features of MPPA-256.
 Finally, discussions of previous studies and comparison to them are described.
 
-Recently, studies indicate that the single core processors are characterized by limited computation performance.
-Pollack stated that a single core is inefficient \cite{pollack1999new} and that Moore's law \cite{moore2006cramming} is no longer applicable. 
-Therefore, extant CPUs are not sufficient to satisfy increasing computation demands.
-The shift from a single core in real-Time and embedded systems has occurred \cite{saidi2015shift}. 
-Many other platforms including many-core are developed and researched by current studies.
+% Recently, studies indicate that the single core processors are characterized by limited computation performance.
+% Pollack stated that a single core is inefficient \cite{pollack1999new} and that Moore's law \cite{moore2006cramming} is no longer applicable.
+% Therefore, extant CPUs are not sufficient to satisfy increasing computation demands.
+% The shift from a single core in real-Time and embedded systems has occurred \cite{saidi2015shift}. 
+% Many other platforms including many-core are developed and researched by current studies.
 
 Table \ref{tb:comparison_platforms} summarizes the features of many-core platforms with that of other platforms.
 For instance, the GPU is a powerful device to enhance computing performance and it has great potential in specific areas (for e.g., image processing, and learning).
-However, it is mainly used for a specific purpose and its reliability is not suitable for real-time systems.
-It is difficult to use a GPU for a global purpose and to guarantee its reliability due to the GPU architecture.
+\colorbox{green}{1-24}
+However, it is mainly used for a specific purpose and its predictability is not suitable for real-time systems.
+It is difficult to use a GPU for a general purpose and to guarantee its reliability due to the GPU architecture.
 Many-core processors based on CPU or DSP cores are significantly superior to GPU with respect to software programmability and timing predictability.
-Additionally, it is commonly known that many-core involves a reasonable power consumption.
+\colorbox{green}{1-25}
+Additionally, it is commonly known that many-core platforms such as MPPA-256 involve a reasonable power consumption \cite{kanter2015kalray}.
 In contrast, the GPU consumes a significant amount of power and generates considerable heat.
 This is a critical problem for embedded systems.
-Furthermore, DSPs and FPGAs are also high-performance devices when compared to CPUs.
+DSPs and FPGAs are also high-performance devices when compared to CPUs.
 They are efficient in terms of power consumption.
-A DSP is often used for real-time systems and FPGAs guarantee reliability and efficient processing.
+A DSP is often used for real-time systems and FPGAs guarantee predictability and efficient processing.
 They are suitable for time-critical computing \cite{de2015kalray}.
-However, DSPs cannot be used for global purpose and programming.
-Furthermore, FPGAs are difficult for software developers since their software model is significantly different from that of CPU and is not a substitute for CPU.
+\colorbox{green}{1-26}
+However, DSPs cannot be used for general purpose and programming.
+FPGAs are difficult for software developers since their software model is significantly different from that of CPU and is not a substitute for CPU.
 Many-core platforms can potentially replace single/multi core CPU as they possess ease of programming and scalability with high acceleration.
 
 Based on the fore-mentioned background, many COTS multi/many-core components are developed and released by several vendors.
@@ -797,20 +804,23 @@ Based on the fore-mentioned background, many COTS multi/many-core components are
 The present work focuses on the Kalray MPPA-256 that is designed for real-time embedded applications.
 Kalray S.A., \cite{de2014time} presented clustered many-core architectures on the NoC which pack 256 general-purpose cores with high energy efficiency.
 
+\colorbox{green}{1-27}
 MPPA-256 is superior to other COTS multi/many-core components in terms of the scalability of the number of cores and the power efficiency as shown in Table \ref{tb:comparison_manycore}.
+\colorbox{green}{1-28}
 In terms of the scalability, MPPA-256 adopts 256 cores while other COTS multi/many-core components have 64 cores or the number of cores around it.
-This scalability of cores is attributed to the memory architecture; each cluster of 16 cores contains its own local shared memory.
+This scalability of cores is attributed to the NUMA memory architecture; each cluster of 16 cores contains its own local shared memory.
 The precise hardware model is described in Section \ref{sec:hardware_model}.
 When all cores share the global DDR memory as in other platforms excluding MPPA-256, specific bus routes receives extremely large loads and memory access contention frequently occurs.
 Local shared memory reduces the above problems and helps the scalability of the number of cores.
-This is why MPPA-256 has succeeded in scaling up to 256 cores.
-However, the local shared memory architecture restricts the capacity of the memory and requires a data copy from DDR with NoC.
+This is why MPPA-256 has succeeded in scaling up to 256 cores and what the ``scalability'' column of Table \ref{tb:comparison_manycore} means.
+However, the NUMA memory architecture restricts the capacity of the memory and requires a data copy from DDR with NoC.
 This restriction makes the use of existing applications difficult especially in the case of applications that require more memory.
-In terms of power efficiency, MPPA-256 realizes superior energy efficiency despite its large number of cores.
+As a result, due to  NUMA memory architecture, portability of code porting to MPPA-256 is inferior to other COTS platforms as shown in Table \ref{tb:comparison_manycore}.
+In terms of power efficiency, MPPA-256 realizes superior energy efficiency despite its large number of cores \cite{kanter2015kalray}.
 The total clock frequency per watt is the highest of the current COTS multi/many-core components.
 The power consumption of the MPPA processor ranges between 16W at 600 MHz and 24W at 800 MHz.
-While MPPA-256 and TILE64 \cite{bell2008tile64} target the embedded systems, other COTS components consider the HPC accelerator.
-Their clock frequency per core exceeds that of embedded solutions.
+% While MPPA-256 and TILE64 \cite{bell2008tile64} target the embedded systems, other COTS components consider the HPC accelerator.
+% Their clock frequency per core exceeds that of embedded solutions.
 We need to distinguish the COTS multi/many-core components according to their requirements with reference to Table \ref{tb:comparison_manycore}.
 MPPA-256 is typically accepted with respect to many-core platforms and the model has been used in several previous studies \cite{perret2016temporal}, \cite{becker2016contention}, \cite{carle2014static}, \cite{perret2016mapping}, \cite{perret2016predictable}.
 
@@ -842,7 +852,7 @@ Although the analysis examined the memory access characteristics of the external
   \tabcolsep = 0.4mm              % side-margin in column
   \begin{tabular}{c|cccccccccc}
     \hline
-    & \multirow{2}{*}{performance} & \multirow{2}{*}{power/heat} & \multirow{2}{*}{reliability} & \multirow{2}{*}{real-time} & software & \multirow{2}{*}{costs} & multiple\\
+    & \multirow{2}{*}{performance} & \multirow{2}{*}{power/heat} & \multirow{2}{*}{predictability} & \multirow{2}{*}{real-time} & software & \multirow{2}{*}{costs} & multiple\\
     &&&&& development && instruction \\
     \hline
     \hline
@@ -854,7 +864,7 @@ Although the analysis examined the memory access characteristics of the external
     \hline
   \end{tabular}
   \begin{flushright}
-   \textasteriskcentered  \(\bigtriangleup\) means ``limited''.
+     \colorbox{green}{1-23} \textasteriskcentered In a table, ``\(\bigtriangleup\)'' means ``limited''.
   \end{flushright}
   \vspace{-5mm}
 \end{table}
@@ -925,7 +935,8 @@ In future studies, we will port real-time systems software such as that in Ref. 
 
 \renewcommand{\baselinestretch}{0.8}
 
-%%
+\colorbox{green}{2-5}
+\colorbox{green}{TBD: 3-6}
 \vspace{-3mm}
 \bibliographystyle{abbrv}       % ACM
 \bibliography{reference}
