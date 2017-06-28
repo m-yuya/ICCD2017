@@ -2,7 +2,10 @@
 % \documentclass{sig-alternate-05-2015}                
 
 % \usepackage[dvipdfmx]{graphicx} \usepackage{amssymb} \usepackage{multirow} \usepackage{threeparttable} \usepackage{array} \usepackage{color} \usepackage{nidanfloat}
-\usepackage{graphicx} \usepackage{amssymb} \usepackage{multirow} \usepackage{threeparttable} \usepackage{array} \usepackage{color} \usepackage{nidanfloat}\usepackage{setspace} 
+\usepackage{graphicx} \usepackage{amssymb} \usepackage{multirow} \usepackage{threeparttable} \usepackage{array} \usepackage{color} \usepackage{nidanfloat}\usepackage{setspace}
+
+% \newcommand{\comment}[1]{\colorbox{green}{#1}}
+\newcommand{\comment}[1]{}
 
 % *** CITATION PACKAGES ***
 %
@@ -101,7 +104,7 @@
 %\crdata{0-12345-67-8/90/01}  % Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
 % --- End of Author Metadata ---
 
-\title{\colorbox{green}{1-2, 3-2} Scalable Data Allocation and Parallel Computing \\ on NoC-based Embedded Many Cores}
+\title{\comment{1-2, 3-2}Exploring Scalable Data Allocation and Parallel Computing \\ on NoC-based Embedded Many Cores}
 \begin{document}
 
 %% ACM copyright information
@@ -124,15 +127,15 @@
 % \setlength\abovecaptionskip{4pt}% between figure and caption
 % \setlength\floatsep{18pt}% between figures
 
-\colorbox{green}{TBD:1-1, 1-14, 2-2, 3-5}
+\comment{TBD:1-1, 1-14, 2-2, 3-5}
 
 \begin{abstract}
 In embedded systems, high processing requirements and low power consumption need heterogeneous computing platforms.
 % The evolution of a next generation computing platform oriented toward multi/many cores is inevitable.
 Considering embedded requirements, applications need to be designed based on scalable data allocation and parallel computing with non-uniform memory access (NUMA) many cores.
-In this paper, we use one of the embedded commercial off-the-shelf (COTS) multi/many-core components, the Multi-Purpose Processing Array (MPPA) 256 developed by Kalray, and conduct evaluations of data transfer and parallelization micro benchmark.
+In this paper, we use one of the embedded commercial off-the-shelf (COTS) multi/many-core components, the Massively Parallel Processor Arrays (MPPA) 256 developed by Kalray, and conduct evaluations of data transfer and parallelization micro benchmark.
 We investigate currently achievable data transfer latencies between distributed memories on networks-on-chip (NoC), memory access characteristics, and parallelization potential with many cores.
-Subsequently, we run a practical application, the core of the autonomous driving system, on many-core processors and indicate acceleration by parallelization.
+Subsequently, we run a practical application, the core of the autonomous driving system, on many-core processors and acceleration by parallelization indicates practicality of many cores.
 By highlighting many-core computing capabilities, we explore the scalable data allocation and parallel computing on NoC-based embedded many cores.
 % The evolution of a next generation computing platform oriented toward multi/many cores is inevitable because the demand for high-performance computation with reasonable power consumption even in embedded real-time systems is increasing.
 % The Multi-Purpose Processing Array 256 developed by Kalray is a many-core processor platform that includes 256 general-purpose cores with high energy efficiency.
@@ -150,15 +153,15 @@ By highlighting many-core computing capabilities, we explore the scalable data a
 \vspace{-3mm}
 \section{Introduction}
 \vspace{-3mm}
-\colorbox{green}{1-4, 1-5, 1-6, 2-1, 2-4}
+\comment{1-4, 1-5, 1-6, 2-1, 2-4}
 The evolution of a next generation computing platform oriented toward multi/many cores is unavoidable to satisfy the demand for increasing computation in conjunction with reasonable power consumption in several domains such as automobiles.
 In embedded systems, this trend is also adapted because of high processing requirements.
 For example, an autonomous driving system involves various applications and are sometimes characterized by demands for high-performance computing.
-Considering requirements of high processing, predictability, and significant energy efficiency for autonomous driving systems, its system needs a heterogeneous computing system such as multi/many cores and GPUs. (This is discussed in Section \ref{sec:related_work}.)
-\colorbox{green}{1-3} In embedded systems, Multi/many-core architecture is an important trend as it integrates cores to realize high-performance and general-purpose computing with low power consumption \cite{perret2016mapping}, \cite{faragardi2014communication}, \cite{furst2009autosar}, \cite{becker2016contention}.
+Considering requirements of high processing, predictability, and energy efficiency for autonomous driving systems, its system needs a heterogeneous computing system such as multi/many cores and GPUs. (This is discussed in Section \ref{sec:related_work}.)
+\comment{1-3} In embedded systems, Multi/many-core architecture is an important trend as it integrates cores to realize high-performance and general-purpose computing with low power consumption \cite{becker2016contention}, \cite{faragardi2014communication}, \cite{perret2016mapping}.
 % Extant studies have examined several applications of multi/many-core platforms \cite{becker2016contention}, \cite{saidi2015shift}, \cite{perret2016temporal}, \cite{perret2016mapping}, \cite{becker2014mapping}.
-% Recently, the computational ability of single core processors has reached its limit \colorbox{green}{1-3} and thus the applicability of Moore's law \cite{moore2006cramming} is unclear.
-% Multi/many core architecture is an important trend in \colorbox{green}{1-3} recent years as it integrates cores to realize high-performance and general-purpose computing with low power consumption.
+% Recently, the computational ability of single core processors has reached its limit \comment{1-3} and thus the applicability of Moore's law \cite{moore2006cramming} is unclear.
+% Multi/many core architecture is an important trend in \comment{1-3} recent years as it integrates cores to realize high-performance and general-purpose computing with low power consumption.
 % Hence, high energy efficiency is a superior feature of multi/many core platforms.
 
 % As detailed in the preceding paragraph, the demand for increasing computation in conjunction with reasonable power consumption drives the need for multi/many core architecture in several domains.
@@ -171,13 +174,13 @@ Considering requirements of high processing, predictability, and significant ene
 % Moreover, they also require significant energy efficiency and cost reduction.
 % Although modern automotive systems are composed of several Electronic Control Unit (ECU) managing subsystems, there is a shift from numerous scattered ECUs to hierarchical multi/many core Domain Controllers (DC).
 % Evidently, a hybrid scenario is also applicable. 
-% \colorbox{green}{1-4}
+% \comment{1-4}
 % Specifically, DCs combine performance with low power consumption to realize high parallel processing and power efficiency.
-% \colorbox{green}{1-5}
+% \comment{1-5}
 % % Furthermore, flexible scalability of a many-core platform facilitates development efficiency.
 
 % A related example involves avionics systems that also include various applications and require cost efficiency.
-% \colorbox{green}{1-6}
+% \comment{1-6}
 % % Multi/many core platforms can be applied in the avionics domain due to their highly integrated characteristics and increasing processing demands.
 % Low power consumption of cores leads to lower cooling requirements, and this is a critical issue for avionics.
 % Multi/many core platforms reduce energy consumption as well as the costs and weight.
@@ -186,7 +189,7 @@ Considering requirements of high processing, predictability, and significant ene
 
 % Multi/many core platforms are fabricated and released as commercial off-the-shelf (COTS) multicore components.
 % Increasing research attention has focused on multi/many core platforms.
-% The Multi-Purpose Processing Array (MPPA) 256 developed by Kalray, \cite{de2014time}, Single-chip Cloud Computer (SCC) developed by Intel \cite{baron2010single}, and Tile64 developed by Tilera \cite{bell2008tile64} include the clustering of many-core architectures in which cores are \colorbox{green}{1-7} allocated closely.
+% The Multi-Purpose Processing Array (MPPA) 256 developed by Kalray, \cite{de2014time}, Single-chip Cloud Computer (SCC) developed by Intel \cite{baron2010single}, and Tile64 developed by Tilera \cite{bell2008tile64} include the clustering of many-core architectures in which cores are \comment{1-7} allocated closely.
 % The clusters of cores are capable of performing separate independent applications with respect to the desired power envelope of embedded applications.
 % Kalray's MPPA-256 packs 256 general-purpose cores.
 % This significantly exceeds the number of cores in other COTS, and it targets embedded systems, high-performance computing (HPC), image processing, and networking due to the high-performance per watt.
@@ -211,44 +214,48 @@ However, its data transfer between distributed memories with NoC, parallelizatio
 This work explores above issues with quantitative evaluations and a practical application.
 
 \textbf{Contributions:}
-\colorbox{green}{1-1, 3-3: To be clarified}
+\comment{1-1, 3-3: To be clarified}
 This work focuses on examining embedded many-core computing based on NoCs, such as MPPA-256.
 We conduct evaluations of data transfer methods on NoCs and micro benchmark with matrix calculation to clarify latency characteristics of data transfer, parallel computing, and an influence of data allocation.
-Subsequently, we parallelize localization algorithm which becomes the core of the autonomous driving system.
+Subsequently, we parallelize localization algorithm which is the core of the autonomous driving system.
 We reveal the advantages and disadvantages of embedded many-core computing based on NoC in a quantitative way by leading the following contributions:
 
+\vspace{-3mm}
 \begin{itemize}
+\setlength{\leftskip}{-5mm}
 \item The evaluations of the data transfer on DMA-capable NoC quantitatively characterize the end-to-end latencies, which depend on the routing and DMA configurations.
 \item The scalability of parallelization in many-core processors based on NoC is observed in evaluations of matrix calculations in several situations and a real complex application as a part of an autonomous driving system.
 \item The evaluations of the parallel processing examine the characteristics of the memory access speed which varies according to where data is allocated and what accesses the memory.
 \end{itemize}
+\vspace{-3mm}
 
 To the best of our knowledge, this is the first work that examines data transfer and data allocation matters for many-core computing beyond an intuitive expectation to allow system designers to choose appropriate data transfer methods.
 Additionally, the speed-up result of autonomous driving application indicates a practical potential for NoC-based embedded many-core computing.
-\colorbox{green}{1-8, 1-9}
+\comment{1-8, 1-9}
 % It is expected that the findings of this study will potentially be applicable to several types of many-core architectures as opposed to just MPPA-256.
 % Therefore, the contributions of this study can be used in low-latency many-core computing.
 
 \textbf{Organization:}
 The remainder of this work is organized as follows.
 First, the system model considered in this work is discussed in Section \ref{sec:system_model} in which the hardware model, namely Kalray MPPA-256 Bostan, and the system model are presented.
-\colorbox{green}{1-10}
-Second, Section \ref{sec:framework} explains evaluation setup and approach and Section \ref{sec:evaluations} illustrates experimental evaluations.
+\comment{1-10}
+Second, Section \ref{sec:evaluations} explains evaluation setup and approach, and illustrates experimental evaluations.
 Subsequently, Section \ref{sec:related_work} examines related work that focus on multi/many-core systems.
 Finally, Section \ref{sec:conclusion} presents the conclusions and directions for future research.
 
-\vspace{-3mm}
+
+\vspace{-4mm}
 \section{System Model}
 \label{sec:system_model}
-\vspace{-3mm}
+\vspace{-4mm}
 This section presents the system model used throughout the work.
 The many-core model of Kalray MPPA-256 Bostan is considered.
 First, a hardware model is introduced in Section \ref{sec:hardware_model}, and this is followed by a software model in Section \ref{sec:software_model}.
 
-\vspace{-3mm}
+\vspace{-4mm}
 \subsection{Hardware Model}
 \label{sec:hardware_model}
-\vspace{-3mm}
+\vspace{-4mm}
 The MPPA-256 processor is based on an array of compute clusters (CCs) and I/O subsystems (IOSs) that are connected to nodes of Network-on-Chip (NoC) with a toroidal 2D topology 
 (as shown in Figures \ref{fig:mppa_architecture} and \ref{fig:noc_map}).
 The MPPA MANYCORE chip integrates 16 compute clusters and 4 IOSs on NoC.
@@ -261,13 +268,12 @@ MPPA-256 has the following four I/O subsystems (IOSs): North, South, East, and W
 The North and South IOSs are connected to a DDR interface and an eight-lane PCIe controller.
 The East and West IOSs are connected to a quad 10Gb/s Ethernet controller.
 Two pairs of IOSs organize two I/O clusters (IOCs) as shown in Figure \ref{fig:mppa_architecture}.
-
 Each IOS comprises of quad IO cores and a NoC interface.
 
 \textbf{IO cores}: IO cores are connected to a 16-banked parallel shared memory with a total capacity (IO SMEM) of 2 MB, as shown in Figure \ref{fig:mppa_architecture},
 The four IO cores have their own instruction cache 8-way associative corresponding to 32 ($8 \times 4$) KB and share a data cache 8-way with 128 KB and external DDR access.
 The sharing of the data cache of 128 KB allows coherency between the IO cores.
-Additionally, IO cores operate controllers for the PCIe, Ethernet, \colorbox{green}{1-11} and other I/O devices.
+Additionally, IO cores operate controllers for the PCIe, Ethernet, \comment{1-11} and other I/O devices.
 They operate the local peripherals, including the NoC interfaces with DMA.
 % It is also possible to conduct an application run on the IO cores.
 
@@ -293,20 +299,20 @@ In MPPA-256, the 16 inner nodes of the NoC correspond to the CCs.
 Figure \ref{fig:mppa_architecture} illustrates the architecture of each CC.
 
 \textbf{Processing Elements and an RM}:
-\colorbox{green}{2-3}
-In a CC, 16 processing elements (PEs) and an RM share 2 MB cluster local memory (SMEM) that is composed of 16 independent memory banks.
+\comment{2-3}
+In a CC, 16 processing elements (PEs) and an RM share 2 MB cluster local memory (SMEM).
 % The capacity of each SMEM bank is 128 KB.
 The PEs are mainly used by users for parallel processing.
 Developers spawn computing threads on PEs.
-The PEs and an RM in CC correspond to the Kalray-1 cores, which implement a 32-bit 5-issue Very Long Instruction Word architecture with 600 MHz (typical) or 800 MHz.
+The PEs and an RM in CC correspond to the Kalray-1 cores, which implement a 32-bit 5-issue Very Long Instruction Word architecture with 600 or 800 MHz.
 Each core is fitted with its own instruction and data caches.
 % Each cache is a 2-way associative with a capacity of 8 KB.
 % Thus, 17 k1-cores (a PE or the RM) share a multi-banked 2 MB SMEM.
 
-\textbf{A Debug Support Unit (DSU) and a NoC Interface}:
-In addition to PEs and an RM, bus masters on SMEM correspond to a DSU and a DMA engine in a NoC interface.
+\textbf{A Debug Support Unit and a NoC Interface}:
+In addition to PEs and an RM, bus masters on SMEM correspond to a Debug Support Unit and a DMA engine in a NoC interface.
 A DMA engine and a NoC router are laid out in a NoC interface.
-In a manner similar to IOS, the CC DMA engine also has the following three interfaces: an Rx, a Tx, and a UC. 
+The CC DMA engine also has the following three interfaces: an Rx, a Tx, and a UC. 
 % It is instantiated in every cluster and connected to the SMEM.
 
 % \begin{figure}[t]
@@ -320,11 +326,11 @@ In a manner similar to IOS, the CC DMA engine also has the following three inter
 \subsubsection{Network-on-Chip (NoC)}
 \label{sec:noc}
 The 16 CCs and the 4 IOSs are connected by a NoC as shown in Figure \ref{fig:noc_map}.
-Furthermore, a NoC is constructed \colorbox{green}{1-12} as the bus network and has routers on each node.
+Furthermore, a NoC is constructed \comment{1-12} as the bus network and has routers on each node.
 
 \textbf{Bus Network}:
 Bus network connects nodes (CCs and IOSs) with torus topology \cite{dally2001route}
-which \colorbox{green}{1-13} involves a low average number of hops when compared to mesh topology \cite{vangal200780}, \cite{taylor2002raw}.
+which \comment{1-13} involves a low average number of hops when compared to mesh topology \cite{vangal200780}, \cite{taylor2002raw}.
 The network is actually composed of the following two parallel NoCs with bi-directional links (denoted by red lines in Figure \ref{fig:noc_map}):
 the data NoC (D-NoC) that is optimized for bulk data transfers and the control NoC (C-NoC) that is optimized for small messages at low latency.
 % The NoC is implemented with wormhole switching and source routing.
@@ -346,7 +352,7 @@ The data links are four bytes wide in each direction and operate at the CPU cloc
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.8\linewidth]{../figure/noc_map.eps}
+  \includegraphics[width=0.65\linewidth]{../figure/noc_map.eps}
   \vspace{-4mm}
   \caption{\label{fig:noc_map}
     NoC connections (both D-NoC and C-NoC).}
@@ -363,13 +369,13 @@ With respect to scalable computing array of the system, it is possible to map se
 Each layer is described in detail.
 
 In the hardware abstraction layer, an abstraction package abstracts hardware of a CC, IOS, and NoC.
-\colorbox{green}{1-15} % The abstraction package serves as a system that does not provide any services.
+\comment{1-15} % The abstraction package serves as a system that does not provide any services.
 The hardware abstraction is responsible for partitioning hardware resources and controlling access to the resources from the user-space operating system libraries.
-\colorbox{green}{1-16} 
+\comment{1-16} 
 % Additionally, the abstraction package retrieves resources allocated to a partition at any time.
 It sets-up and controls inter-partition communications as a virtual machine abstraction layer.
 The hardware abstraction runs on the dedicated RM core.
-All the services are commonly provided by a rich operating system (for e.g., virtual memory, interrupts, and schedule) that must be provided by user-space libraries.
+All the services are commonly provided by a operating system (e.g., virtual memory and schedule) that must be provided by user-space libraries.
 % Consequently, each runtime or operating system implements its own services that are optimized to specific needs.
 % This is because each programming model or runtime involves different requirements.
 A minimal kernel avoids wastage of resources and mismatched needs.
@@ -382,7 +388,7 @@ It is designed to cause a minimum amount of CPU overhead.
 % Librouting offers a minimal set of functions that can be used to route data between any clusters of the MPPA including unicast (one target) modes or multicast (multiple targets) modes.
 Librouting offers a minimal set of functions that can be used to route data between any clusters of the MPPA.
 
-\colorbox{green}{1-17}
+\comment{1-17}
 Routing on the torus network is statically conducted with its own policy.
 The Libpower enables spawning and waiting for the end of execution of a remote cluster.
 
@@ -392,7 +398,7 @@ The following Real-Time Operating System (RTOS) is introduced:
 \textbf{RTEMS}: RTEMS (Real-Time Executive for Multiprocessor Systems) is a full featured RTOS prepared for embedded platforms.
 It supports several APIs and standards, and most notably supports the POSIX API.
 % The system provides a rich set of features, and an RTEMS application mostly is a regular C or C++ program that uses the POSIX API.
-\colorbox{green}{1-18}
+\comment{1-18}
 RTEMS runs on the IOC except for the CC.
 
 \textbf{NodeOS}: On CC, the MPPA cluster operating system utilizes a runtime called NodeOS.
@@ -417,50 +423,24 @@ It enables applications to operate priority based message passing, local thread 
   \vspace{-5mm}
 \end{figure}
 
-\vspace{-3mm}
-\section{Data Transfer Framework}
-\label{sec:framework}
-\vspace{-3mm}
-\colorbox{green}{TBD: 1-19: To be fully refleshed, Add setup and approach}
-
-In this section, data transfer methods in MPPA-256 are explained.
-For scalability purposes, MPPA-256 accepts clustered architectures in which each cluster contains its own memory.
-16 cores are packed as a cluster and they share 2 MB memory (SMEM) as shown in Figure \ref{fig:mppa_architecture}.
-This avoids frequent memory contention due to numerous cores and helps in increasing the number of cores.
-However, the architecture constraints memory that can be directly accessed by the cores.
-In order to communicate with cores outside the cluster, it is necessary to transfer data between clusters through the D-NoC with NoC interfaces.
-
-An Rx interface exists on the receiving side to receive data with DMA.
-It is necessary to allocate a D-NoC Rx resource and configure it to wait to receive the data.
-A DMA in a NoC interface contains 256 D-NoC Rx resources.
-Two interfaces, namely a Tx interface and a UC interface as explained in Sections \ref{sec:ios} and \ref{sec:cc},
-are present with respect to the sending side for users to send data between clusters.
-The UC is a network processor that is programmed to set threads to send data in DMA.
-It executes programed pattern and sends data through the D-NoC without a PE and an RM.
-The UC interface results in higher data transfer throughput compared to the direct activation of the Tx interface by a RM or PE core.
-However, a DMA in a NoC interface contains only 8 D-NoC UC resources.
-Both interfaces use a DMA engine to access memory and copy data.
-Irrespective of whether or not a UC interface is used, it is necessary to allocate a D-NoC Tx resource and configure it to send data.
-Additionally, it is necessary to allocate and configure D-NoC UC resources if a UC interface is used.
-
-% We list following two data transmit patterns.
-% \begin{itemize}
-% \item \textbf{Tx+PE}: 
-% \item \textbf{Tx+UC}:
-% \end{itemize}
 
 \vspace{-3mm}
 \section{Evaluations}
 \label{sec:evaluations}
 \vspace{-3mm}
-This section involves examining two types of evaluations, namely a D-NoC data transfer evaluation in which latency characteristics of interfaces and memory type are explored and a matrix calculation evaluation that demonstrates the parallelization potential of the MPPA-256 and its memory access characteristics while dealing with large data.
+At First, this section involves examining two types of evaluations, namely a D-NoC data transfer evaluation in which latency characteristics of interfaces and memory type are explored and a matrix calculation evaluation that demonstrates the parallelization potential of the MPPA-256 and its memory access characteristics.
 Subsequently, we conduct practical autonomous driving application to examine practicality of NUMA many cores.
-The following all evaluations are conducted on eMCOS.
+Finally, we arrange lessons learned from above evaluations.
+The following all evaluations are conducted on real hardware board with eMCOS.
 
 \vspace{-3mm}
 \subsection{D-NoC Data Transfer}
 \label{sec:dnoc_eval}
+
 \vspace{-3mm}
+\subsubsection{Situations and Assumptions}
+\label{sec:situations_and_assumptions}
+
 This evaluation involves clarifying end-to-end latency by considering the relation among interfaces (Tx or UC), routing on NoC, and memory type (DDR or SMEM).
 This is achieved by preparing four routes as shown in Figure \ref{fig:noc_routes}.
 The routes on D-NoC map (Figure \ref{fig:noc_map}) contains various connections between routers, namely a direct link, a cross-link, and a flying link.
@@ -482,7 +462,41 @@ End-to-end latencies are measured 1,000 times in numerous situations as shown in
   \vspace{-5mm}
 \end{figure}
 
-\colorbox{green}{1-20, 1-21}
+% \vspace{-3mm}
+% \subsection{Data Transfer Framework}
+% \label{sec:framework}
+% \vspace{-3mm}
+\vspace{-3mm}
+\subsubsection{Data Transfer Methods}
+\label{sec:data_transfer_methods}
+
+\comment{TBD: 1-19: To be fully refleshed, Add setup and approach}
+In this section, data transfer methods in MPPA-256 are explained.
+For scalability purposes, MPPA-256 accepts a clustered architecture which avoids frequent memory contention between numerous cores.
+% For scalability purposes, MPPA-256 accepts clustered architectures in which each cluster contains its own memory.
+% 16 cores are packed as a cluster and they share 2 MB memory (SMEM) as shown in Figure \ref{fig:mppa_architecture}.
+% This avoids frequent memory contention due to numerous cores and helps in increasing the number of cores.
+However, the architecture constraints memory that can be directly accessed by the cores.
+In order to communicate with cores outside the cluster, it is necessary to transfer data between clusters through the D-NoC with NoC interfaces.
+
+An Rx interface exists on the receiving side to receive data with DMA.
+It is necessary to allocate a D-NoC Rx resource and configure it to wait to receive the data.
+A DMA in a NoC interface contains 256 D-NoC Rx resources.
+Two interfaces, namely a Tx interface and a UC interface as explained in Sections \ref{sec:ios} and \ref{sec:cc},
+are present with respect to the sending side for users to send data between clusters.
+The UC is a network processor that is programmed to set threads to send data in DMA.
+It executes programed pattern and sends data through the D-NoC without a PE and an RM.
+% The UC interface results in higher data transfer throughput compared to the direct activation of the Tx interface by a RM or PE core.
+% However, a DMA in a NoC interface contains only 8 D-NoC UC resources.
+% Both interfaces use a DMA engine to access memory and copy data.
+Irrespective of whether or not a UC interface is used, it is necessary to allocate a D-NoC Tx resource and configure it to send data.
+Additionally, it is necessary to allocate and configure D-NoC UC resources if a UC interface is used.
+
+\vspace{-3mm}
+\subsubsection{Influences of Routing and Memory Type}
+\label{sec:routing_and_memory}
+
+\comment{1-20, 1-21}
 Data transfer latencies between IOS and CC are not hardly influenced by routing.
 This involved preparing two interfaces (Tx and UC), three routes(direct link, cross-link, and detour route), and two memory locations in which the transferred data is allocated.
 As shown in Figures \ref{fig:DDR_tx}, \ref{fig:DDR_uc}, \ref{fig:IO_SMEM_tx}, and \ref{fig:IO_SMEM_uc}, 
@@ -536,7 +550,7 @@ In Figure \ref{fig:tx_uc_log}, only the cross-link from IOS to CC5 is accepted b
 In the Tx interface, DDR causes a large increase in latency.
 The time taken by the DDR is twice as that of the IO SMEM as shown in Figure \ref{fig:tx_uc_log}.
 This is due to the memory access speed characteristics of DRAM and SRAM.
-In the case of the Tx interface, it is necessary for an IO core on IOS to operate the DMA in the IOS NoC interface.
+In the Tx interface, it is necessary for an IO core on IOS to operate the DMA in the IOS NoC interface.
 This is attributed to the fact that the core is involved in processing.
 The speed of the data transfer latency between CCs exceeds that between IOS and CC.
 This result indicates that the MPPA-256 is optimized for communication between the CCs.
@@ -582,6 +596,7 @@ In a manner similar to the Tx interface, the speed of the data transfer latency 
 \vspace{-3mm}
 \subsection{Matrix Calculation}
 \label{sec:martix_eval}
+
 \vspace{-3mm}
 \subsubsection{Situations and Assumptions}
 \label{sec:situations_and_assumptions}
@@ -602,7 +617,7 @@ Thus, it is necessary for IOS and CC cores to access matrix buffers without cach
 In order to facilitate faster data transfer, a part of the matrix buffer is transmitted in parallel as shown in Figure \ref{fig:mat_calc}.
 
 Matrix calculation time is analyzed with parallelization and memory allocation.
-Additionally, the influence of cache is analyzed because cache coherency is an important issue in many-core systems.
+Additionally, the influences of cache is analyzed because cache coherency is an important issue in many-core systems.
 There are several cases in which applications must access specific memory space without a cache.
 With respect to the given assumptions, maximum total buffer size is 1 MB, and thus three matrices buffers are prepared, and each size is 314 KB.
 Matrix A and matrix B are multiplied, and the result is stored in matrix C.
@@ -619,9 +634,9 @@ We assume that the remainder of SMEM (1 MB) is occupied with system software and
 \end{figure}
 
 \vspace{-3mm}
-\subsubsection{Influence of Cache and Memory Type}
+\subsubsection{Influences of Cache and Memory Type}
 \label{sec:cache_and_memory}
-First, matrix calculation time with the cache in IOS and CC is depicted in Figure \ref{fig:cat_calc_cache}.
+First, matrix calculation time with the cache in IOS and CC is depicted in Figure \ref{fig:mat_calc_cache}.
 There are almost no differences between IO DDR, IO SMEM, and CC SMEM due to the cache.
 128 KB data cache in the IOS works well and compensates for the DDR delay.
 Additionally, it is observed that calculation time scales exhibit a linear relation with the number of threads.
@@ -636,7 +651,7 @@ This is an interesting result since a high difference that cannot be ignored exi
 It is also observed that calculation time exhibits a linear relation with the number of threads.
 Furthermore, the calculation speed without the cache in CC SMEM exceeds that with cache.
 This result is contrary to intuition, and a cache line problem are conceivable.
-When a small data cache (8 KB) in a PE of CC does not function adequately and an application always accesses data which are not in the cache memory, memory access will pay the time for a non-cached data access and the cost to refill the cache line.
+When a small data cache (8 KB) in a PE of CC does not function adequately and an application always misses cache, memory access will pay the time for a non-cached data access and the cost to refill the cache line.
 As a result, the memory access speed without the cache exceeds that with cache.
 
 \begin{figure*}[t]
@@ -646,7 +661,7 @@ As a result, the memory access speed without the cache exceeds that with cache.
     \includegraphics[width=1.0\linewidth]{../figure/BarGraph_matrix_with_cache.eps}
       \vspace{-7mm}
       \caption{Matrix calculations in IOS and CC with cache.}
-      \label{fig:cat_calc_cache}
+      \label{fig:mat_calc_cache}
     \end{minipage}   
     &
     % \setcounter{figure}{11}
@@ -681,7 +696,7 @@ The impact of offloading increases when the matrix size is large as shown in Fig
 % Additionally, 640 KB matrices are prepared, and matrix calculation calculations are evaluated with offload-computing.
 % The speed of the offloading result exceeds that of IO DDR result with respect to the 314 KB matrices in Figure \ref{fig:mat_calc_offload_314}.
 In these offloading evaluations, each CC concurrently transmits calculation results to the IOS.
-\colorbox{green}{1-22}
+\comment{1-22}
 When matrix C in which calculation results are stored is allocated in DDR, NoC router's FIFOs sometimes overflow and cause an error due to memory access delay of DDR.
 This error should be prevented by transmission protocol, and flow control is future work for MPPA-256.
 Currently, to avoid this error, matrix C should be allocated in IO SMEM.
@@ -760,36 +775,36 @@ Therefore, if we succeed in the parallelization of \emph{RadiusSearch}, this goa
 \end{figure}
 
 \vspace{-3mm}
-\subsection{Lessons Leared}
+\subsection{Lessons Learned}
 \label{sec:lessons}
 \vspace{-3mm}
-\colorbox{green}{TBD: 3-4}
+\comment{TBD: 3-4}
 So far, we have quantitatively clarified characteristic of data transfer and parallel computing on NoC-based embedded many cores in Section \ref{sec:evaluations}.
 We can get insight and guidelines for users and developers of NoC-based embedded many cores through MPPA-256.
 
-From evaluations of D-NoC data transfer, we can get two lessons: influence of NoC routing and DMA.
-First, data transfer latencies between Clusters are not hardly influenced by routing for users as shown in Figures \ref{fig:DDR_tx}, \ref{fig:DDR_uc}, \ref{fig:IO_SMEM_tx}, and \ref{fig:IO_SMEM_uc}.
+From evaluations of D-NoC data transfer, we can get two lessons: influences of NoC routing and DMA.
+First, data transfer latencies between Clusters are hardly influenced by routing for users as shown in Figures \ref{fig:DDR_tx}, \ref{fig:DDR_uc}, \ref{fig:IO_SMEM_tx}, and \ref{fig:IO_SMEM_uc}.
 Software transactions of transmitting and receiving in routers and RM are dominant factors for latencies.
 Second, in the IOS, the latency of UC is not significantly affected by the memory location, the DDR or SMEM, at which the transferred buffer is allocated from the evaluation of Figure \ref{fig:tx_uc_log}.
-This is profitable for user because this is common situations to transfer data from DDR to CC SMEM using UC, especially for large data.
+The merit of UC is profitable for users because it is common situations to transfer data from DDR to CC SMEM using UC, especially for large data.
 
-From micro benchmark of matrix calculation, we can get three lessons of memory access: characteristic of SMEM, influence of cache, and data flow control on D-NoC.
+From micro benchmark of matrix calculation, we can get three lessons of memory access: characteristic of SMEM, influences of cache, and data flow control on D-NoC.
 First, memory access speed of CC SMEM exceeds that of the IO SMEM as shown in Figure \ref{fig:mat_calc_uncache}.
 There is a significant difference, which is a major reason to actively handle in CC.
 Second, we quantitatively indicate that the calculation speed without the cache in CC SMEM in Figure \ref{fig:mat_calc_uncache} exceeds that with cache in Figure \ref{fig:mat_calc_cache}.
-It is generally known that cache overhead exists when the miss hit frequently occurs, but it is notable that there is a big difference which can not be ignored by the influence of cache line.
+It is generally known that cache overhead exists when the miss hit frequently occurs, but it is notable that there is a big difference which can not be ignored by the influences of cache line.
 Third, when data is parallelly transferred from multiple CCs to IO DDR, NoC routers' FIFO sometimes overflows due to memory access delay of DDR.
 This should be prevented by transmission protocol and flow control.
 
-From practical application, we parallelize the vehicle self-localization algorithm of an autonomous driving system and have been shown that it can be practically used.
-We apply parallel data transfer on NoC from IOS to CCs and parallel computing on IOS and CC by using CC SMEM like scratch pad memory.
+From the practical application, since we parallelize the vehicle self-localization algorithm of the autonomous driving system, it can be practically used.
+We apply for parallel data transferfrom IOS to CCs and parallel computing on IOS and CC by using CC SMEM as scratch pad memory.
 
 \vspace{-3mm}
 \section{Related Work}
 \label{sec:related_work}
 \vspace{-3mm}
 This section compares many-core platforms and discusses previous work related to multi/many cores.
-First, needs of high-performance computation and comparison of many-core platforms to other platforms are discussed.
+First, comparison of many-core platforms to other platforms is discussed.
 Second, the Kalray MPPA-256 which this work focuses on is compared to other COTS COTS multi/many-core components, and we summarize the features of MPPA-256.
 Finally, discussions of previous work and comparison to them are described.
 
@@ -801,70 +816,32 @@ Finally, discussions of previous work and comparison to them are described.
 
 Table \ref{tb:comparison_platforms} summarizes the features of many-core platforms with those of other platforms.
 For instance, the GPU is a powerful device to enhance computing performance and it has great potential in specific areas (for e.g., image processing, and learning).
-\colorbox{green}{1-24}
+\comment{1-24}
 However, it is mainly used for a specific purpose and its predictability is not suitable for real-time systems.
 It is difficult to use a GPU for many kinds of applications and to guarantee its reliability due to the GPU architecture.
-Many-core processors based on CPU or DSP cores are significantly superior to GPU with respect to software programmability and timing predictability.
-\colorbox{green}{1-25}
+Many-core processors based on CPU are significantly superior to GPU with respect to software programmability and timing predictability.
+\comment{1-25}
 Additionally, it is commonly known that many-core platforms such as MPPA-256 involve a reasonable power consumption \cite{kanter2015kalray}.
 In contrast, the GPU consumes a significant amount of power and generates considerable heat.
 This is a critical problem for embedded systems.
-DSPs and FPGAs are also high-performance devices when compared to CPUs.
+FPGAs are also high-performance devices when compared to CPUs.
 They are efficient in terms of power consumption.
-A DSP is often used for real-time systems and FPGAs guarantee predictability and efficient processing.
-They are suitable for time-critical computing \cite{de2015kalray}.
-\colorbox{green}{1-26}
-However, DSPs cannot be used for many kinds of applications and programming.
-FPGAs are difficult for software developers and are not a substitute for CPU since their software model is significantly different from that of CPU.
-Many-core platforms can potentially replace single/multi core CPU as they possess ease of programming and scalability with high acceleration.
+FPGAs guarantee predictability and efficient processing.
+% They are suitable for time-critical computing \cite{de2015kalray}.
+\comment{1-26}
+% However, DSPs cannot be used for many kinds of applications and programming.
+However, FPGAs are difficult for software developers and are not a substitute for CPU since their software model is significantly different from that of CPU.
+Many-core platforms can potentially replace single/multi core CPU as they possess ease of programming and scalability.
 
 Based on the fore-mentioned background, many COTS multi/many-core components are developed and released by several vendors.
-(e.g., Kalray's the Multi-Purpose Processing Array (MPPA) 256, \cite{de2014time}, Tilera's Tile-Gx \cite{schooler2010tile}, \cite{ramey2011tile}, Tilera's Tile64 \cite{bell2008tile64}, and Intel's Xeon Phi \cite{chrysos2014intel}, \cite{chrysos2012intel}, Intel's Single-chip Cloud Computer (SCC) \cite{baron2010single}).
+(e.g., Kalray's the Multi-Purpose Processing Array (MPPA) 256, \cite{de2014time}, Tilera's Tile-Gx \cite{ramey2011tile}, \cite{schooler2010tile}, Tilera's Tile64 \cite{bell2008tile64}, and Intel's Xeon Phi \cite{chrysos2014intel}, \cite{chrysos2012intel}, Intel's Single-chip Cloud Computer (SCC) \cite{baron2010single}).
 The present work focuses on the Kalray MPPA-256 that is designed for real-time embedded applications.
 Kalray, \cite{de2014time} presented clustered many-core architectures on the NoC which pack 256 general-purpose cores with high energy efficiency.
-
-\colorbox{green}{1-27}
-MPPA-256 is superior to other COTS multi/many-core components in terms of the scalability of the number of cores and the power efficiency as shown in Table \ref{tb:comparison_manycore}.
-\colorbox{green}{1-28}
-In terms of the scalability, MPPA-256 adopts 256 cores while other COTS multi/many-core components have 64 cores or the number of cores around it.
-This scalability of cores is attributed to the NUMA memory architecture; each cluster of 16 cores contains its own local shared memory.
-The precise hardware model is described in Section \ref{sec:hardware_model}.
-When all cores share the global DDR memory as in other platforms excluding MPPA-256, specific bus routes receives extremely large loads and memory access contention frequently occurs.
-Local shared memory reduces the above problems and helps the scalability of the number of cores.
-This is why MPPA-256 has succeeded in scaling up to 256 cores and what the ``scalability'' column of Table \ref{tb:comparison_manycore} means.
-However, the NUMA memory architecture restricts the capacity of the memory and requires a data copy from DDR with NoC.
-This restriction makes the use of existing applications difficult especially in the case of applications that require more memory.
-As a result, due to  NUMA memory architecture, portability of code porting to MPPA-256 is inferior to other COTS platforms as shown in Table \ref{tb:comparison_manycore}.
-In terms of power efficiency, MPPA-256 realizes superior energy efficiency despite its large number of cores \cite{kanter2015kalray}.
-The total clock frequency per watt is the highest of the current COTS multi/many-core components.
-The power consumption of the MPPA processor ranges between 16W at 600 MHz and 24W at 800 MHz.
-% While MPPA-256 and TILE64 \cite{bell2008tile64} target the embedded systems, other COTS components consider the HPC accelerator.
-% Their clock frequency per core exceeds that of embedded solutions.
-We need to distinguish the COTS multi/many-core components according to their requirements with reference to Table \ref{tb:comparison_manycore}.
-MPPA-256 is typically accepted with respect to many-core platforms and the model has been used in several previous work \cite{perret2016temporal}, \cite{becker2016contention}, \cite{carle2014static}, \cite{perret2016mapping}, \cite{perret2016predictable}.
-
-Several work have examined real-time applications on many-core platforms including MPPA-256.
-In Ref. \cite{saidi2015shift}, multiple opportunities and challenges of multi/many-core platforms are discussed.
-The shift to multi/many cores in real-time and embedded systems is also described. 
-
-Based on the above background, several task mapping algorithms for multi/many-core systems have been proposed \cite{perret2016mapping}, \cite{puffitsch2015off}, \cite{carle2014static}, \cite{becker2014mapping}, \cite{faragardi2014communication}.
-Airbus \cite{perret2016mapping} proposes a method of directed acyclic graph (DAG) scheduling for hard real-time applications using MPPA-256.
-In Ref. \cite{faragardi2014communication}, a mapping framework is proposed on the basis of AUTOSAR which is applied as a standard architecture to develop automotive embedded software systems \cite{furst2009autosar}.
-AUTOSAR task scheduling considering contention in shared resources is presented in Ref. \cite{becker2016contention}.
-
-By examining the above mapping algorithms of real-time applications, several previous work \cite{kanter2015kalray}, \cite{denet2017work}, \cite{deDinechin2014GSN}, \cite{perret2016predictable} have analyzed the potential of MPPA-256 and data transfer with NoC as shown in Table \ref{tb:comparison_relatedwork}.
-MPPA-256 is introduced, and its performance and energy consumption are reported in Ref. \cite{kanter2015kalray}.
-However, this report contains few evaluations and does not refer to data transfer with NoC and memory access characteristics.
-Data transfer with NoC in MPPA-256 is described, and NoC guaranteed services are analyzed in Refs. \cite{denet2017work} and \cite{deDinechin2014GSN}.
-While the theoretical analysis is thorough in these work, the practical evaluations are poor and parallel data transfer is not referred to.
-The authors of Ref. \cite{perret2016predictable} focused on the predictable composition of memory accesses.
-An analysis of their work identified the external DDR and the NoC as main bottlenecks for both the average performance and the predictability on platforms such as MPPA-256.
-Although the analysis examined the memory access characteristics of the external DDR and provided notable lessons, a solution for the DDR bottleneck was not examined and practical evaluations were lacking.
 
 % \renewcommand{\arraystretch}{1.2}
 \begin{table}[t]
   \caption{\label{tb:comparison_platforms}
-    Comparison of Many-core to CPU, GPU, DSP, and FPGA}
+    Comparison of Many-core to CPU, GPU, and FPGA}
   \vspace{-3mm}
   \centering
   \scriptsize	                    % text size
@@ -877,13 +854,13 @@ Although the analysis examined the memory access characteristics of the external
     \hline
     CPU & & L & \(\checkmark\) & \(\checkmark\) & \(\checkmark\) & \(\checkmark\) & L \\
     GPU & \(\checkmark\) &  & L &  & L & \(\checkmark\)\\
-    DSP & L & L & \(\checkmark\) & \(\checkmark\) & L & \(\checkmark\) & \\
+    % DSP & L & L & \(\checkmark\) & \(\checkmark\) & L & \(\checkmark\) & \\
     FPGA & \(\checkmark\) & L & \(\checkmark\) & L &  & L & \\
     Many-core & \(\checkmark\) & \(\checkmark\) & \(\checkmark\) & \(\checkmark\) & \(\checkmark\) & L & \(\checkmark\) \\
     \hline
   \end{tabular}
   \begin{flushright}
-     \colorbox{green}{1-23} \textasteriskcentered In a table, ``L'' means ``limited''.
+     \comment{1-23} \textasteriskcentered In a table, ``L'' means ``limited''.
   \end{flushright}
   \vspace{-5mm}
 \end{table}
@@ -910,6 +887,45 @@ Although the analysis examined the memory access characteristics of the external
   \end{tabular}
   \vspace{-5mm}
 \end{table}
+
+\comment{1-27}
+MPPA-256 is superior to other COTS multi/many-core components in terms of the scalability of the number of cores and the power efficiency as shown in Table \ref{tb:comparison_manycore}.
+\comment{1-28}
+In terms of the scalability, MPPA-256 adopts 256 cores while other COTS multi/many-core components have 64 cores or the number of cores around it.
+This scalability of cores is attributed to the NUMA memory architecture; each cluster of 16 cores contains its own local shared memory.
+The precise hardware model is described in Section \ref{sec:hardware_model}.
+When all cores share the global DDR memory as in other platforms excluding MPPA-256, specific bus routes receives extremely large loads and memory access contention frequently occurs.
+Local shared memory reduces the above problems and helps the scalability of the number of cores.
+This is why MPPA-256 has succeeded in scaling up to 256 cores and what the ``scalability'' column of Table \ref{tb:comparison_manycore} means.
+However, the NUMA memory architecture restricts the capacity of the memory and requires a data copy from DDR with NoC.
+This restriction makes the use of existing applications difficult especially in the case of applications that require more memory.
+As a result, due to  NUMA memory architecture, portability of code porting to MPPA-256 is inferior to other COTS platforms as shown in Table \ref{tb:comparison_manycore}.
+
+In terms of power efficiency, MPPA-256 realizes superior energy efficiency despite its large number of cores \cite{kanter2015kalray}.
+The total clock frequency per watt is the highest of the current COTS multi/many-core components.
+The power consumption of the MPPA processor ranges between 16W at 600 MHz and 24W at 800 MHz.
+% While MPPA-256 and TILE64 \cite{bell2008tile64} target the embedded systems, other COTS components consider the HPC accelerator.
+% Their clock frequency per core exceeds that of embedded solutions.
+We need to distinguish the COTS multi/many-core components according to their requirements with reference to Table \ref{tb:comparison_manycore}.
+MPPA-256 is typically accepted with respect to many-core platforms and the model has been used in previous work \cite{becker2016contention}, \cite{carle2014static}, \cite{perret2016mapping}, \cite{perret2016predictable}.
+
+Previous work have examined real-time applications on many-core platforms including MPPA-256.
+In Ref. \cite{saidi2015shift}, multiple opportunities and challenges of multi/many-core platforms are discussed.
+The shift to multi/many cores in real-time and embedded systems is also described. 
+
+Based on the above background, several task mapping algorithms for multi/many-core systems have been proposed \cite{carle2014static}, \cite{faragardi2014communication}, \cite{perret2016mapping}.
+Airbus \cite{perret2016mapping} proposes a method of directed acyclic graph (DAG) scheduling for hard real-time applications using MPPA-256.
+In Ref. \cite{faragardi2014communication}, a mapping framework is proposed on the basis of AUTOSAR which is applied as a standard architecture to develop automotive embedded software systems \cite{furst2009autosar}.
+AUTOSAR task scheduling considering contention in shared resources is presented in Ref. \cite{becker2016contention}.
+
+By examining the above mapping algorithms of real-time applications, previous work \cite{deDinechin2014GSN}, \cite{denet2017work}, \cite{kanter2015kalray}, \cite{perret2016predictable} have analyzed the potential of MPPA-256 and data transfer with NoC as shown in Table \ref{tb:comparison_relatedwork}.
+MPPA-256 is introduced, and its performance and energy consumption are reported in Ref. \cite{kanter2015kalray}.
+However, this report contains few evaluations and does not refer to data transfer with NoC and memory access characteristics.
+Data transfer with NoC in MPPA-256 is described, and NoC guaranteed services are analyzed in Refs. \cite{deDinechin2014GSN} and \cite{denet2017work}.
+While the theoretical analysis is thorough in these work, the practical evaluations are poor and parallel data transfer is not referred to.
+The authors of Ref. \cite{perret2016predictable} focused on the predictable composition of memory accesses.
+An analysis of their work identified the external DDR and the NoC as main bottlenecks for both the average performance and the predictability on platforms such as MPPA-256.
+Although the analysis examined the memory access characteristics of the external DDR and provided notable lessons, a solution for the DDR bottleneck was not examined and practical evaluations were lacking.
 
 % \renewcommand{\arraystretch}{1.2}
 \begin{table*}[t]
@@ -938,9 +954,13 @@ Although the analysis examined the memory access characteristics of the external
 \section{Conclusions}
 \label{sec:conclusion}
 \vspace{-3mm}
-This paper has conducted quantitative evaluations that examined end-to-end latencies with many-core computing based on NoC, the scalability of parallelization, and the characteristics of the memory access speed.
-From various experiments, we have evaluated the capabilities of the currently available data transfer methods and the parallelization potential for many-core computing based on NoC.
-Our experimental results will allow system designers to choose appropriate system designs based on the requirements of their latency-sensitive many-core applications beyond an intuitive expectation.
+% This paper has conducted quantitative evaluations that examined end-to-end latencies with embedded many-cores based on NoC, the scalability of parallelization, and the characteristics of the memory access speed.
+% From various experiments, we have evaluated the capabilities of the currently available data transfer methods and the parallelization potential for many-core computing based on NoC.
+% Our experimental results will allow system designers to choose appropriate system designs based on the requirements of their latency-sensitive many-core applications beyond an intuitive expectation.
+This work has conducted quantitative evaluations of data transfer methods on NoCs, micro benchmark with matrix calculation and practical application with NUMA many cores such as MPPA-256.
+Evaluations indicate latency characteristics on NoC, influence of data allocation, and the scalability of parallelization.
+Our experimental results will allow system designers to choose appropriate system designs.
+At the last, parallelization of real application proofs practicality of NoC-based embedded NUMA many-cores.
 
 In future work, we will port real-time systems software such as that in Ref. \cite{maruyama2016ros2} and propose the parallelization of memory intensive algorithms such as the nearest neighbor search in Section \ref{sec:practical_application}.
 
@@ -954,8 +974,8 @@ In future work, we will port real-time systems software such as that in Ref. \ci
 
 \renewcommand{\baselinestretch}{0.8}
 
-\colorbox{green}{2-5}
-\colorbox{green}{TBD: 3-6}
+\comment{2-5}
+\comment{TBD: 3-6}
 \vspace{-3mm}
 \bibliographystyle{abbrv}       % ACM
 \bibliography{reference}
