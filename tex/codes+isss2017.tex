@@ -732,17 +732,22 @@ This wotk adopts a part of an autonomous driving system and this section demonst
 We took an algorithm for vehicle self-localization written in C++ in Autoware, namely an open-source software for urban autonomous driving \cite{autoware}, \cite{kato2015open}, and parallelized part of it.
 The self-localization adopts the normal-distribution transform matching algorithm \cite{magnusson2009three} implemented in the Point Cloud Library \cite{pcl}.
 
-The self-localization algorithm is primarily divided into two processes: \emph{RadiusSearch} which searches for several nearest neighbor points for each query and calculates the distance, and \emph{Derivatives} which calculates the derivative to determine the convergence of the matching operation.
+% The self-localization algorithm is primarily divided into two processes: \emph{RadiusSearch} which searches for several nearest neighbor points for each query and calculates the distance, and \emph{Derivatives} which calculates the derivative to determine the convergence of the matching operation.
 % As shown in Figure \ref{fig:ndt_matching_situation}, 
-This evaluation parallelized \emph{Derivatives} onto 16 CCs and the remainder of the algorithm was executed on the IOS with its four cores.
-To parallelize \emph{RadiusSearch}, the algorithm of the nearest neighbor search needs to be redesigned because the data to be searched exceeds 1 MB.
-Redesigning this algorithm will be part of a future work.
+% This evaluation parallelized \emph{Derivatives} onto 16 CCs and the remainder of the algorithm was executed on the IOS with its four cores.
+% To parallelize \emph{RadiusSearch}, the algorithm of the nearest neighbor search needs to be redesigned because the data to be searched exceeds 1 MB.
+% Redesigning this algorithm will be part of a future work.
 
-As shown in Figure \ref{fig:ndt_matching}, the evaluation of parallelized self-localization algorithm indicates the average execution time for each convergence and demonstrates that the parallelization accelerates the \emph{Derivatives} process.
-This acceleration shows the parallelization potential of the MPPA-256.
-Because the reduction of the execution time of \emph{Derivatives} involves reducing the number of loops for convergence, the execution times of \emph{RadiusSearch} and other parts are also shortened.
+The self-localization algorithm is primarily composed of \emph{computeTransform} function which searches for several nearest neighbor points for each scan query and calculates matching transformation.
+This evaluation parallelized a part of \emph{computeTransform} onto 16 CCs and the remainder of the algorithm was parallelly executed on the IOS with its four cores.
+To parallelize remainder of \emph{computeTransform} in CCs, the algorithm of the nearest neighbor search needs to be redesigned because the data to be searched exceeds 1 MB.
+Redesigning this algorithm will be part of a future work and there are room for improvement by the parallelization potential of the MPPA-256.
+
+As shown in Figure \ref{fig:ndt_matching}, the evaluation of parallelized self-localization algorithm indicates the average execution time for each convergence and demonstrates that the parallelization accelerates the \emph{computeTransform} process.
+% Because the reduction of the execution time of \emph{computeTransform} involves reducing the number of loops for convergence, the execution times of \emph{RadiusSearch} and other parts are also shortened.
 The query can be assumed to be 10 Hz in many automated driving systems.
-Therefore, if we succeed in the parallelization of \emph{RadiusSearch}, this goal can be achieved.
+Thus, this tuning successfully achieves the deadline.
+This parallelized algorithm is executed on simulation and real car experiments in our test course and worked successfully.
 
 % \begin{figure*}[t]
 %   \tabcolsep = 0.5mm              % side-margin in column
