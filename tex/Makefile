@@ -3,7 +3,7 @@
 # Name:  Yuya, Takuro
 
 # Target file name
-TARGET = codes+isss2017
+TARGET = iccd2017
 # BIB file
 REFDIR = ./
 # REFDIR = ../../bib/
