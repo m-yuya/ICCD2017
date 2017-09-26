@@ -48,6 +48,7 @@ $(PDFOBJ): $(TARGET).dvi $(BIBOBJS)
 .PHONY: adjust
 adjust: 
 	sed -i -e '2i \\\footnotesize' $(TARGET).bbl
+	sed -i -e '3i \\\vspace{-2mm}' $(TARGET).bbl	
 
 .PHONY: simple
 simple: 
