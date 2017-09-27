@@ -135,8 +135,8 @@
 In embedded systems, high processing requirements and low power consumption need heterogeneous computing platforms.
 % The evolution of a next generation computing platform oriented toward multi/many cores is inevitable.
 Considering embedded requirements, applications need to be designed based on scalable data allocation and parallel computing with non-uniform memory access (NUMA) many cores.
-In this paper, we use one of the embedded commercial off-the-shelf (COTS) multi/many-core components, the Massively Parallel Processor Arrays (MPPA) 256 developed by Kalray, and conduct evaluations of data transfer and parallelization of practical application.
-We investigate currently achievable data transfer latencies between distributed memories on networks-on-chip (NoC), memory access characteristics, and parallelization potential with many cores.
+In this paper, we use one of the embedded commercial off-the-shelf (COTS) multi/many-core components, the Massively Parallel Processor Arrays (MPPA) 256 developed by Kalray, and conduct evaluations of data transfer and parallelization of a practical application.
+We investigate currently achievable data transfer latencies between distributed memories on network-on-chip (NoC), memory access characteristics, and parallelization potential with many cores.
 Subsequently, we run a practical application, the core of the autonomous driving system, on many-core processors and acceleration by parallelization indicates practicality of many cores.
 By highlighting many-core computing capabilities, we explore the scalable data allocation and parallel computing on NoC-based embedded many cores.
 % The evolution of a next generation computing platform oriented toward multi/many cores is inevitable because the demand for high-performance computation with reasonable power consumption even in embedded real-time systems is increasing.
@@ -204,9 +204,9 @@ Parallelized processes share memories, which leads to the frequent occurrence of
 % Shared resources also disturb predictable timing behavior and software analysis.
 % Cache coherency is also a critical problem owing to their numerous cores.
 % Although it is possible to connect a large memory and all the cores with wide-bandwidth buses, it will lose its scaleability due to bus competition and it will require a large power consumption.
-MPPA-256 \cite{de2014time} is one of the commercial off-the-shelf (COTS) multi/many-core components targeting embedded system
+MPPA-256 \cite{de2014time} is one of the commercial off-the-shelf (COTS) multi/many-core components targeting embedded system.
 It is developed by Kalray and adopt non-uniform memory access (NUMA) using network-on-chip (NoC), and realize numerous cores and low power consumption.
-However, its data transfer between distributed memories with NoC, parallelization potential, and memory access characteristics are not fully unrvealed for application developers.
+However, its data transfer between distributed memories with NoC, parallelization potential, and memory access characteristics are not fully unrevealed for application developers.
 This work explores above issues with quantitative evaluations and a practical application.
 % The timing requirement of real-time embedded systems continues to warrant solutions.
 % The impact of integrating applications in multi/many-core platforms is not completely understood to date.
@@ -222,7 +222,7 @@ This work explores above issues with quantitative evaluations and a practical ap
 \comment{1-1, 3-3: To be clarified}
 This work focuses on examining embedded many-core computing based on NoCs, such as MPPA-256.
 We conduct evaluations of data transfer methods on NoCs to clarify latency characteristics of data transfer and an influence of data allocation.
-Subsequently, we parallelize localization algorithm which is the core of the autonomous driving system.
+Subsequently, we parallelize a localization algorithm which is the core of the autonomous driving system.
 We reveal the advantages and disadvantages of embedded many-core computing based on NoC in a quantitative way by leading the following contributions:
 
 \vspace{-3mm}
@@ -298,7 +298,7 @@ After it is initiated, this continues in an autonomous fashion without using a P
 \end{figure}
 
 \vspace{-2mm}
-\subsubsection{Compute Clusters (CC)}
+\subsubsection{Compute Clusters (CCs)}
 \label{sec:cc}
 In MPPA-256, the 16 inner nodes of the NoC correspond to the CCs.
 Figure \ref{fig:mppa_architecture} illustrates the architecture of each CC.
@@ -370,24 +370,24 @@ The NoC routers are illustrated as nodes in Figure \ref{fig:noc_map}.
 \vspace{-3mm}
 % Figure \ref{fig:software_stack} shows the software stack used for Kalray MPPA-256 in the present work.
 % The Kalray system is an extensible and scalable array of computing cores and memory.
-The software stack used for Kalray MPPA-256 is composed of hardware abstraction layer, low-level layer, OS, and user application.
-With respect to scalable computing array of the system, it is possible to map several programming models or runtimes such Linux, real-time operating system, POSIX API, OpenCL, and OpenMP.
+The software stack used for Kalray MPPA-256 is composed of a hardware abstraction layer, a low-level layer, an OS, and an user application.
+With respect to scalable computing array of the system, it is possible to map several programming models or runtimes such Linux, a real-time operating system, POSIX API, OpenCL, and OpenMP.
 % Each layer is described in detail.
 
-In the hardware abstraction layer, an abstraction package abstracts hardware of a CC, IOS, and NoC.
+In the hardware abstraction layer, an abstraction package abstracts hardware of a CC, an IOS, and NoC.
 \comment{1-15} % The abstraction package serves as a system that does not provide any services.
 The hardware abstraction is responsible for partitioning hardware resources and controlling access to the resources from the user-space operating system libraries.
 \comment{1-16} 
 % Additionally, the abstraction package retrieves resources allocated to a partition at any time.
 It sets-up and controls inter-partition communications as a virtual machine abstraction layer.
 The hardware abstraction runs on the dedicated RM core.
-All the services are commonly provided by a operating system (e.g., virtual memory and schedule) that must be provided by user-space libraries.
+All the services are commonly provided by an operating system (e.g., virtual memory and schedule) that must be provided by user-space libraries.
 % Consequently, each runtime or operating system implements its own services that are optimized to specific needs.
 % This is because each programming model or runtime involves different requirements.
 A minimal kernel avoids wastage of resources and mismatched needs.
 
-In a low-level library layer, the Kalray system also provides libraries for handling NoC.
-Additionally, NoC features such as routing and quality of service are set by the programmer.
+In a low-level library layer, the Kalray system also provides Libnoc and Librouting for handling NoC.
+% Additionally, NoC features such as routing and quality of service are set by the programmer.
 The Libnoc allows direct access to memory mapped registers for their configurations and uses.
 It is designed to cause a minimum amount of CPU overhead.
 % It also serves as a minimal abstraction for resource allocation.
@@ -436,7 +436,7 @@ Routing on the network is statically conducted with its own policy.
 \label{sec:evaluations}
 \vspace{-3mm}
 At First, this section involves examining two types of evaluations, namely a D-NoC data transfer evaluation in which latency characteristics of interfaces and memory type are explored.
-Subsequently, we conduct practical autonomous driving application to examine practicality of NUMA many cores.
+Subsequently, we conduct a practical autonomous driving application to examine the practicality of NUMA many cores.
 % Finally, we arrange lessons learned from above evaluations.
 The following all evaluations are conducted on real hardware board with eMCOS which is a real-time embedded operating system developed by eSOL (a Japanese supplier for RTOS).
 
@@ -457,7 +457,7 @@ The CC only includes SMEM as shown in Figure \ref{fig:mppa_architecture}.
 The transferred data correspond to 100 B, 1 KB, 10 KB, 100 KB, and 1 MB.
 The buffers are sequentially allocated in DDR or SRAM (IO SMEM or CC SMEM).
 The capacity of CC SMEM is 2 MB, and thus it is assumed that the appropriate communication buffer size is 1 MB.
-Given the assumption, the other memory area corresponds to the application, library, and operating system.
+Given the assumption, the other memory area corresponds to the application, libraries, and an operating system.
 End-to-end latencies are measured 1,000 times in numerous situations as shown in Figures \ref{fig:DDR_tx}, \ref{fig:DDR_uc}, \ref{fig:IO_SMEM_tx}, and boxplots are obtained as depicted in Figures \ref{fig:IO_SMEM_uc} and \ref{fig:tx_uc_log}.
 
 \begin{figure}[t]
@@ -504,16 +504,16 @@ Additionally, it is necessary to allocate and configure D-NoC UC resources if a 
 \label{sec:routing_and_memory}
 
 \comment{1-20, 1-21}
-Data transfer latencies between IOS and CC are not hardly influenced by routing.
+Data transfer latencies between an IOS and a CC are not hardly influenced by routing.
 This involved preparing two interfaces (Tx and UC), three routes(direct link, cross-link, and detour route), and two memory locations in which the transferred data is allocated.
 As shown in Figures \ref{fig:DDR_tx}, \ref{fig:DDR_uc}, \ref{fig:IO_SMEM_tx}, and \ref{fig:IO_SMEM_uc}, 
 end-to-end latency scales exhibit a linear relation with data size, and there are no significant differences between the three routes with respect to data transfer latency.
 This result is important in torus topology NoC because the number of minimum steps exceeds those in the mesh topology. 
 It is observed that queuing in the NoC routers and hardware distance on the NoC are not dominant factors for latency.
-The router latency, the time taken by transmitting and receiving transactions in a RM, exceeds those of other transaction.
+The router latency, the time taken by transmitting and receiving transactions in an RM, exceeds those of other transaction.
 Additionally, it is briefly recognized that the speed of UC exceeds that of Tx.
 The data is arranged as shown in Figure \ref{fig:tx_uc_log} to facilitate a precise analysis with respect to the interface and memory location.
-In Figure \ref{fig:tx_uc_log}, only the cross-link from IOS to CC5 is accepted because routes do not influence latency.
+In Figure \ref{fig:tx_uc_log}, only the cross-link from the IOS to CC5 is accepted because routes do not influence latency.
 % In order to facilitate intuitive recognition, two kinds of figures are arranged, namely a logarithmic axis and a linear axis.
 
 \begin{figure*}[t]
@@ -557,9 +557,9 @@ In Figure \ref{fig:tx_uc_log}, only the cross-link from IOS to CC5 is accepted b
 In the Tx interface, DDR causes a large increase in latency.
 The time taken by the DDR is twice as that of the IO SMEM as shown in Figure \ref{fig:tx_uc_log}.
 This is due to the memory access speed characteristics of DRAM and SRAM.
-In the Tx interface, it is necessary for an IO core on IOS to operate the DMA in the IOS NoC interface.
+In the Tx interface, it is necessary for an IO core on an IOS to operate the DMA in the IOS NoC interface.
 This is attributed to the fact that the core is involved in processing.
-The speed of the data transfer latency between CCs exceeds that between IOS and CC.
+The speed of the data transfer latency between CCs exceeds that between an IOS and a CC.
 This result indicates that the MPPA-256 is optimized for communication between the CCs.
 
 With respect to the UC interface, the latency is not significantly affected by the location at which the transferred buffer is allocated (i.e., the DDR or SMEM).
@@ -567,7 +567,7 @@ With respect to the UC interface, the latency is not significantly affected by t
 In the case of the UC interface, an IO core on the IOS does not involve a DMA transaction.
 A UC in the NoC interface executes a programed thread sending data.
 This evaluation result suggests that the slow access speed of the DDR is not significant in the case of the UC.
-In a manner similar to the Tx interface, the speed of the data transfer latency between CCs exceeds that between IOS and CC.
+In a manner similar to the Tx interface, the speed of the data transfer latency between CCs exceeds that between an IOS and a CC.
 
 % \begin{figure*}[t]
 %   \tabcolsep = 0.5mm              % side-margin in column
@@ -593,7 +593,7 @@ In a manner similar to the Tx interface, the speed of the data transfer latency 
 % \end{figure*}
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.95\linewidth]{../../R/mppa/graph/eps/BoxPlot_Tx_vs_UC_log.eps}
+  \includegraphics[width=0.9\linewidth]{../../R/mppa/graph/eps/BoxPlot_Tx_vs_UC_log.eps}
   \vspace{-2mm}
   \caption{\label{fig:tx_uc_log}
     Data transfer with Tx/UC }
@@ -737,7 +737,7 @@ In a manner similar to the Tx interface, the speed of the data transfer latency 
 \label{sec:practical_application}
 \vspace{-3mm}
 This wotk adopts a part of an autonomous driving system and this section demonstrates the parallelization potential of the MPPA-256.
-We took an algorithm for vehicle self-localization written in C++ in Autoware, namely an open-source software for urban autonomous driving \cite{autoware}, \cite{kato2015open}, and parallelized part of it.
+We took an algorithm for vehicle self-localization written in C++ in Autoware, namely an open-source software for urban autonomous driving \cite{autoware}, and parallelized part of it.
 The self-localization adopts the normal-distribution transform matching algorithm \cite{magnusson2009three} implemented in the Point Cloud Library.
 
 % The self-localization algorithm is primarily divided into two processes: \emph{RadiusSearch} which searches for several nearest neighbor points for each query and calculates the distance, and \emph{Derivatives} which calculates the derivative to determine the convergence of the matching operation.
@@ -749,7 +749,7 @@ The self-localization adopts the normal-distribution transform matching algorith
 The self-localization algorithm is primarily composed of \emph{computeTransform} function which searches for several nearest neighbor points for each scan query and calculates matching transformation.
 This evaluation parallelized a part of \emph{computeTransform} onto 16 CCs and the remainder of the algorithm was parallelly executed on the IOS with its four cores.
 To parallelize remainder of \emph{computeTransform} in CCs, the algorithm of the nearest neighbor search needs to be redesigned because the data to be searched exceeds 1 MB.
-Redesigning this algorithm will be part of a future work and there are room for improvement by the parallelization potential of the MPPA-256.
+Redesigning this algorithm will be part of a future work and there is room for improvement by the parallelization potential of the MPPA-256.
 
 As shown in Figure \ref{fig:ndt_matching}, the evaluation of parallelized self-localization algorithm indicates the average execution time for each convergence and demonstrates that the parallelization accelerates the \emph{computeTransform} process.
 % Because the reduction of the execution time of \emph{computeTransform} involves reducing the number of loops for convergence, the execution times of \emph{RadiusSearch} and other parts are also shortened.
@@ -970,14 +970,12 @@ This parallelized algorithm is executed on simulation and real car experiments i
 % This paper has conducted quantitative evaluations that examined end-to-end latencies with embedded many-cores based on NoC, the scalability of parallelization, and the characteristics of the memory access speed.
 % From various experiments, we have evaluated the capabilities of the currently available data transfer methods and the parallelization potential for many-core computing based on NoC.
 % Our experimental results will allow system designers to choose appropriate system designs based on the requirements of their latency-sensitive many-core applications beyond an intuitive expectation.
-This work has conducted quantitative evaluations of data transfer methods on NoCs and practical application with NUMA many cores such as MPPA-256.
+This work has conducted quantitative evaluations of data transfer methods on NoCs and a practical application with NUMA many cores such as MPPA-256.
 Evaluations indicate latency characteristics on NoC, influence of data allocation, and the scalability of parallelization.
 Our experimental results will allow system designers to choose appropriate system designs.
-At the last, parallelization of real application proofs 
-cality of NoC-based embedded NUMA many-cores.
+At the last, parallelization of a real application proofs practicality of NoC-based embedded NUMA many-cores.
 
-In future work, we will port real-time systems on CC and propose the parallelization of memory intensive algorithms such as the nearest neighbor search in Section \ref{sec:practical_application}.
-
+In future work, we will port real-time systems such as that in Ref. \cite{maruyama2016ros2} on CCs and propose the parallelization of memory intensive algorithms such as the nearest neighbor search in Section \ref{sec:practical_application}.
 \vspace{-3mm}
 \section*{Acknowledgments}
 \vspace{-3mm}
